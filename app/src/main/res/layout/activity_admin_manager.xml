@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ActivityAdminManager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/nfc_marks_editor_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/poins_table" />
+
+        <Button
+            android:id="@+id/register_editor_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/registration_table" />
+
+        <Button
+            android:id="@+id/results_table_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/results" />
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/back" />
+
+        <TextView
+            android:id="@+id/gpsPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/GPSnowhere" />
+
+        <TextView
+            android:id="@+id/userLogger"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/Actions"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

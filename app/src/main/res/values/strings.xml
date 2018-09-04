@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">RaceTracker</string>
+
+    <!-- Main Activity -->
+    <string name="GPSnowhere">GPS координат нет!</string>
+    <string name="gps_label">GPS координаты: </string>
+    <string name="Actions">События: </string>
+    <string name="GPS_enabled">GPS активировано: </string>
+    <string name="gps_no_rights">У приложения нет прав на использование GPS датчика!</string>
+    <string name="Enable_GPS">Необходимо активировать GPS! </string>
+    <string name="nfcMarkslist">Список меток:</string>
+    <string name="regTypeLabel">Вы войдёте как:</string>
+    <string name="WriteNFC">Записать в метку</string>
+    <string name="CommitButton">Сохранить на сервер</string>
+
+
+    <!-- User Manager Activity -->
+    <string name="nfc_button_on">NFC активен</string>
+    <string name="nfc_button_off">NFC не активен</string>
+    <string name="text_nfc_log">Это текст логов NFC датчика</string>
+    <string name="NFCrecived">NFC метка считана:</string>
+    <string name="results_download">Скачать таблицу результатов</string>
+    <string name="setter">Назначить</string>
+
+    <string name="ServMainLog">Список с сервера:</string>
+
+
+
+
+    <!-- Buttons -->
+    <string name="exit">Выход</string>
+    <string name="enter">Вход</string>
+    <string name="back">Назад</string>
+
+
+    <!-- Radio -->
+    <string name="register">Регистрация</string>
+    <string name="radio_guest">Гость</string>
+    <string name="radio_user"> Участник</string>
+    <string name="radio_admin">Администратор</string>
+
+
+    <!-- Edit -->
+    <string name="phone">Номер телефона</string>
+    <string name="password">Пароль</string>
+    <string name="title_activity_user_manager">activity_userManager</string>
+
+
+    <!-- User Activity -->
+    <string name="race_off">Событие не активно</string>
+    <string name="race_on">Событие стартовало</string>
+    <string name="nfc_log">NFC события</string>
+
+    <!-- Admin -->
+    <string name="registration_table">Таблица регистрации</string>
+    <string name="users_table">Таблица участников</string>
+
+    <string name="race_table">Таблица участников</string>
+    <string name="map">Карта участников</string>
+    <string name="poins_table">Редактор NFC точек</string>
+    <string name="results">Результаты</string>
+
+
+
+
+</resources>

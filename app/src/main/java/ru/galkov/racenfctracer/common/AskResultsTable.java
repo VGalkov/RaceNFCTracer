@@ -19,13 +19,13 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-
-        return Utilites.getMainLogJSON_ZAGLUSHKA();
+// запрашиваем всю таблицу результатов участников.
+        return Utilites.getUsersResultsJSON_ZAGLUSHKA();
     }
 
     @Override
     protected void onPostExecute(String result) {
-//выброс всех пользователей.
+// отображаем таблицу результатов пользователей ... кстати не понятно поака как ..
         ARTC.userLogger.setText(result);
     }
 

@@ -17,11 +17,6 @@ public class SendNewLoginLevel extends AsyncTask<String, Void, String> {
 
     }
 
-    public void setPassword(TextView password1) {
-        this.password = password1;
-
-    }
-
     public void setLevel(MainActivity.registrationLevel level1) {
         this.level = level1;
 
@@ -29,7 +24,15 @@ public class SendNewLoginLevel extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        return null;
+        // пишем запрос серверу на смену логина тут и обрабатываем его ответ
+        return Utilites.getLoginLevelChangingJSON_ZAGLUSHKA();
 
     }
+
+    @Override
+    protected void onPostExecute(String result) {
+     // обработка ответа о смене админом уровня доступа логину.
+    }
+
+
 }

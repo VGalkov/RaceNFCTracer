@@ -20,13 +20,13 @@ public class AskMarkslist extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-
-        return Utilites.getMainLogJSON_ZAGLUSHKA();
+// список NFC меток на сервере.
+        return Utilites.getNFC_MarksListJSON_ZAGLUSHKA();
     }
 
     @Override
     protected void onPostExecute(String result) {
-//выброс всех пользователей.
+// отображение меток
         ANFCMRC.NFC_ConfigurationLog.setText(result);
     }
 

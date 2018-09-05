@@ -10,12 +10,13 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        return null;
+        // отправляем на сервер уведомление о считывании участником NFC  метки
+        return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA();
 
     }
 
     @Override
     protected void onPostExecute(String result) {
-
+// обработка ответа сервера на сохранение считывания метки участником.
     }
 }

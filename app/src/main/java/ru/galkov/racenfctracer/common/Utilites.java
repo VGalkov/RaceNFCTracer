@@ -1,5 +1,8 @@
 package ru.galkov.racenfctracer.common;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,12 +17,56 @@ public class Utilites {
         if (key1.equals(KEY)) 	{ return true; }
         else 					{ return false; }
     }
+//кот запросов в JSON_Examples1.java на гитхабе и в BackendController в серверном коде.
+
+    public static String getNFC_MarksListJSON_ZAGLUSHKA() {
+        // возвращает список NFC меток с сервера.
+
+        return  getUserLogin_ZAGLUSHKA();
+    }
+
+
+    public static String getUsersResultsJSON_ZAGLUSHKA() {
+        // возвращает результаты участников, интерпратация запроса к main_log
+
+        return  getUserLogin_ZAGLUSHKA();
+    }
+
+
+    public static String getUserListJSON_ZAGLUSHKA() {
+        // возвращает список пользователей и их прав с сервера
+
+        return  getUserLogin_ZAGLUSHKA();
+    }
+
+
+    public static String getUserHaveReadNFCJSON_ZAGLUSHKA() {
+        // возвращает ответ сервера на считывание метки пользователем
+
+        return  "";
+    }
+
+    public static String getNewNFCMarkResultJSON_ZAGLUSHKA() {
+        // возвращает ответ сервера на сохранение новой NFC метки там
+
+        return  "";
+    }
+
+    public static String getLoginLevelChangingJSON_ZAGLUSHKA() {
+        // возвращает ответ сервера на смену уровня доступа логина.
+
+        return  "";
+    }
+
 
 
     public static String ErrorJSON() {
         return "{\"Error\" : \"ошибка в построении JSON!\"}";
     }
 
+    public static void messager(Context cont1, String str2) {
+        Toast.makeText(cont1, str2, Toast.LENGTH_LONG).show();
+    }
 
     public static String getUserLogin_ZAGLUSHKA() {
         // json with result тут заглушка

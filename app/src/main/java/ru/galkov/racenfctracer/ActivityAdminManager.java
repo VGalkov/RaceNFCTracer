@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskMainLogAdmin;
 import ru.galkov.racenfctracer.common.GPS;
+import ru.galkov.racenfctracer.common.Utilites;
 
 public class ActivityAdminManager  extends Activity {
     private ActivityAdminManagerController AAMC;
@@ -99,7 +99,7 @@ public class ActivityAdminManagerController{
     }
 
     public void messager(String str1) {
-        Toast.makeText(ActivityAdminManager.this, str1, Toast.LENGTH_LONG).show();
+        Utilites.messager(ActivityAdminManager.this, str1);
     }
     // ============================
     private void setDefaultFace() {

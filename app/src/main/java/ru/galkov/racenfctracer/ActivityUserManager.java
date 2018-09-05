@@ -13,7 +13,6 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -26,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 
 import ru.galkov.racenfctracer.common.AskMainLogUser;
 import ru.galkov.racenfctracer.common.GPS;
+import ru.galkov.racenfctracer.common.Utilites;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
     public class ActivityUserManager  extends Activity {
@@ -108,7 +108,7 @@ import ru.galkov.racenfctracer.common.GPS;
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+            Utilites.messager(this, "This device doesn't support NFC.");
             finish();
         }
     }
@@ -142,7 +142,7 @@ import ru.galkov.racenfctracer.common.GPS;
             try {
                 text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
             } catch (UnsupportedEncodingException e) {
-                Log.e("UnsupportedEncoding", e.toString());
+                Utilites.messager( this, "UnsupportedEncoding "+ e.toString());
             }
 // В лог записываем, TextView тут !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             NFC_ConfigurationLog.append(R.string.NFCrecived + text);
@@ -235,6 +235,7 @@ import ru.galkov.racenfctracer.common.GPS;
             User_Monitor =  findViewById(R.id.User_Monitor);
         }
 
+        // !
         public void messager(String str1) {
             Toast.makeText(ActivityUserManager.this, str1, Toast.LENGTH_LONG).show();
         }

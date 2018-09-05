@@ -9,11 +9,12 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        return null;
+        // отправляем серверу новую NFC метку и получаем ответ
+        return Utilites.getNewNFCMarkResultJSON_ZAGLUSHKA();
     }
 
     @Override
     protected void onPostExecute(String result) {
-
+// обработка ответа сервера о сохранении новой метки
     }
 }

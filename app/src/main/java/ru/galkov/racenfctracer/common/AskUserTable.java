@@ -24,13 +24,14 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-
-        return Utilites.getMainLogJSON_ZAGLUSHKA();
+// запрос полной таблицы пользователей для пользовательского интерфейса раздачи уровня доступа
+        return Utilites.getUserListJSON_ZAGLUSHKA();
     }
 
     @Override
     protected void onPostExecute(String result) {
-//выброс всех пользователей.
+// обработка списка полученных пользователей (создание объекта на каждого)
+
         ALRRC.userLogger.setText(result);
     }
 

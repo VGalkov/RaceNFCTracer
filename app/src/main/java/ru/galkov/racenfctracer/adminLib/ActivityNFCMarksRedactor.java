@@ -13,11 +13,9 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,6 +23,8 @@ import java.io.UnsupportedEncodingException;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMarkslist;
 import ru.galkov.racenfctracer.common.GPS;
+import ru.galkov.racenfctracer.common.Utilites;
+
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
 public class ActivityNFCMarksRedactor  extends Activity {
 
@@ -94,7 +94,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+            Utilites.messager(this, "This device doesn't support NFC.");
             finish();
         }
     }
@@ -134,16 +134,16 @@ public class ActivityNFCMarksRedactor  extends Activity {
             public void onClick(View v) {
                 try {
                     if(myTag ==null) {
-                        Toast.makeText(context, ERROR_DETECTED, Toast.LENGTH_LONG).show();
+                        Utilites.messager(context, ERROR_DETECTED);
                     } else {
                         write(NfS_Mark_Editor.getText().toString(), myTag);
-                        Toast.makeText(context, WRITE_SUCCESS, Toast.LENGTH_LONG ).show();
+                        Utilites.messager(context, WRITE_SUCCESS);
                     }
                 } catch (IOException e) {
-                    Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG ).show();
+                    Utilites.messager(context, WRITE_ERROR);
                     e.printStackTrace();
                 } catch (FormatException e) {
-                    Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG ).show();
+                    Utilites.messager(context, WRITE_ERROR);
                     e.printStackTrace();
                 }
             }
@@ -206,7 +206,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
             // Get the Text
             text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
-            Log.e("UnsupportedEncoding", e.toString());
+            Utilites.messager(this,"UnsupportedEncoding " + e.toString());
         }
 
         CurrentNFC_Label.setText("NFC Content: " + text);

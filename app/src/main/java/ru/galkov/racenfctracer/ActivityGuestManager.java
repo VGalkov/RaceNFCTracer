@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.galkov.racenfctracer.common.AskMainLogGuest;
 import ru.galkov.racenfctracer.common.GPS;
+import ru.galkov.racenfctracer.common.Utilites;
 
 
 public class ActivityGuestManager  extends Activity {
@@ -72,9 +72,9 @@ public class ActivityGuestManager  extends Activity {
                 });
             }
 
-
+// !
             public void messager(String str1) {
-                Toast.makeText(ActivityGuestManager.this, str1, Toast.LENGTH_LONG).show();
+                Utilites.messager(ActivityGuestManager.this, str1);
             }
         }
 

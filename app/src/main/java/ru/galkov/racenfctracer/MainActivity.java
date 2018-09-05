@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ru.galkov.racenfctracer.common.AskForLogin;
+import ru.galkov.racenfctracer.common.Utilites;
 
 
 public class MainActivity extends Activity {
@@ -209,7 +210,7 @@ public class MainActivity extends Activity {
                         setRegistredFace();
                     }
                     else {
-                        Toast.makeText(MainActivity.this, ERROR_MSG, Toast.LENGTH_LONG).show();
+                        Utilites.messager(MainActivity.this, ERROR_MSG);
                     }
                 }
             });
@@ -228,15 +229,16 @@ public class MainActivity extends Activity {
                             startActivityForResult(new Intent(view.getContext(), ActivityGuestManager.class), 0);
                         }
                         else {
-                            messager("Ошибка распознавания Avtivity to show из-за ");
+                            Utilites.messager(MainActivity.this,"Ошибка распознавания Avtivity to show из-за ");
                         }
                     }
                 }
             });
         }
 
+        // выкинуть в Utilites из всего кода.
         public void messager(String str1) {
-            Toast.makeText(MainActivity.this, str1, Toast.LENGTH_LONG).show();
+            Utilites.messager(MainActivity.this, str1);
         }
 
         private registrationLevel getLevel(){

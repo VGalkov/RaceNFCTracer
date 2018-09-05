@@ -27,6 +27,7 @@ public class ActivityGuestManager  extends Activity {
         AGMC = new ActivityGuestManagereController();
         AGMC.setDefaultView();
 
+        // в отдельный поток опрашивать сервер о новых данных
         new AskMainLogGuest(AGMC).execute();; //опросчик на лог main_log сервера.
 
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );

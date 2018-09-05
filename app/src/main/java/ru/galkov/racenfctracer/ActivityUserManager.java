@@ -59,6 +59,7 @@ import ru.galkov.racenfctracer.common.Utilites;
 
             AMLU = new AskMainLogUser(AUMC); //опросчик на лог main_log сервера.
 
+// опрашиваем 1 раз прив ходе дале по определению метки. или отдельному запросу (пока не предусмотрен)
             new AskMainLogUser(AUMC).execute(); //опросчик на лог main_log сервера.
 
             GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );

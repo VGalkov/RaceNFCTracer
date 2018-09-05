@@ -27,6 +27,7 @@ public class ActivityAdminManager  extends Activity {
         ActivityAdminManagerController AAMC = new ActivityAdminManagerController();
         AAMC.setDefaultView();
 
+        // в отдельный поток опрашивать сервер о новых данных
         new AskMainLogAdmin(AAMC).execute();
 
         // конфигуратор сюда. или WD долько для main_log

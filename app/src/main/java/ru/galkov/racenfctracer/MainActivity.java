@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.galkov.racenfctracer.common.AskForLogin;
+import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.Utilites;
 
 
@@ -61,6 +61,7 @@ public class MainActivity extends Activity {
         private RadioButton         AdminRadioButton;
         private RadioButton         UserRadioButton;
         private RadioButton         GuestRadioButton;
+        public TextView             ServerTimeText;
 
         //      Constructor; ============================================
         MainActivityFaceController() {
@@ -97,6 +98,10 @@ public class MainActivity extends Activity {
             setRadioSystem(LoginType_radio_group, false);
             setTextFields(password, false);
             setTextFields(phone, false);
+
+            AskServerTime ServerTime = new AskServerTime(ServerTimeText);
+            ServerTime.setLogin(phone.getText().toString());
+            ServerTime.execute();
         }
 
         // =======================================================================================
@@ -112,6 +117,7 @@ public class MainActivity extends Activity {
             RegAsLabel =            findViewById(R.id.RegAsLabel);
             phone =                 findViewById(R.id.phone);
             password =              findViewById(R.id.password);
+            ServerTimeText =        findViewById(R.id.ServerTime);
         }
 
 
@@ -239,6 +245,7 @@ public class MainActivity extends Activity {
         // выкинуть в Utilites из всего кода.
         public void messager(String str1) {
             Utilites.messager(MainActivity.this, str1);
+
         }
 
         private registrationLevel getLevel(){

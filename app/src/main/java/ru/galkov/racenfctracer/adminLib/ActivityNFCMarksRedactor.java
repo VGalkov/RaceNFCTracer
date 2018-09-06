@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMarkslist;
 import ru.galkov.racenfctracer.common.GPS;
+import ru.galkov.racenfctracer.common.SendNewNFCMark;
 import ru.galkov.racenfctracer.common.Utilites;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
@@ -42,7 +43,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
     private Button CommitButton;
     private TextView NfS_Mark_Editor;
     private TextView CurrentNFC_Label;
-    private TextView NFC_ConfigurationLog;
+    public TextView NFC_ConfigurationLog;
     private ActivityNFCMarksRedactorController ANFCMRC;
 
     public static final String ERROR_DETECTED = "No NFC tag detected!";
@@ -210,6 +211,12 @@ public class ActivityNFCMarksRedactor  extends Activity {
         }
 
         CurrentNFC_Label.setText("NFC Content: " + text);
+        SendNewNFCMark NFC = new SendNewNFCMark(ANFCMRC);
+        NFC.setAdmin("+79272006036"); // заглушка
+        NFC.setMark(text);
+        NFC.execute();
+
+
     }
 
 

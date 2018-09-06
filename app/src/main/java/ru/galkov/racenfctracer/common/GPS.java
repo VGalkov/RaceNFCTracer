@@ -38,14 +38,14 @@ public class GPS implements LocationListener {
             setGPSString("Координаты: " + Latitude + ", " + Longitude + ", " + Altitude);
         }
     }
-
-    private Double getLongitude() {
+// округлить до 4 после запятой.
+    public Double getLongitude() {
         return Longitude;
     }
-    private Double gettLatitude() {
+    public Double gettLatitude() {
         return Latitude;
     }
-    private Double getAltitude() {
+    public Double getAltitude() {
         return Altitude;
     }
 

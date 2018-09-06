@@ -25,6 +25,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
         new AskUserTable(ALRRC).execute();
 
+
     }
 
     @Override

@@ -19,12 +19,41 @@ public class Utilites {
     }
 //кот запросов в JSON_Examples1.java на гитхабе и в BackendController в серверном коде.
 
-    public static String getNFC_MarksListJSON_ZAGLUSHKA() {
+    public static String getNFC_MarksListJSON_ZAGLUSHKA(String str1) {
         // возвращает список NFC меток с сервера.
+        JSONArray arr = new JSONArray();
 
-        return  getUserLogin_ZAGLUSHKA();
+        Date Dt2 = new Date();
+        try {
+            for(int i = 0 ; i< 10 ; i++) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("key", "sgfsdfg");
+                obj.put("Mark", "1234567890");
+                arr.put(obj);
+            }
+        }
+        catch (JSONException e) {	e.printStackTrace();}
+
+        return arr.toString();
     }
 
+
+
+    public static String getServerTimeJSON_ZAGLUSHKA(String obj1) {
+        // возвращает результаты участников, интерпратация запроса к main_log
+        Date Dt2 = new Date();
+        // ЗАГЛУШКА!!!!!!!!!!!!!!
+        JSONObject obj = new JSONObject();
+        try {
+                obj.put("Status", "TRUE");
+                obj.put("date", Dt2);
+                obj.put("key", KEY);
+        }
+        catch (JSONException e) {	e.printStackTrace();}
+
+        return  obj.toString();
+    }
 
     public static String getUsersResultsJSON_ZAGLUSHKA() {
         // возвращает результаты участников, интерпратация запроса к main_log
@@ -35,27 +64,70 @@ public class Utilites {
 
     public static String getUserListJSON_ZAGLUSHKA() {
         // возвращает список пользователей и их прав с сервера
+        JSONArray arr = new JSONArray();
 
-        return  getUserLogin_ZAGLUSHKA();
+        // ЗАГЛУШКА!!!!!!!!!!!!!!
+        try {
+            for(int i = 0 ; i< 10 ; i++) {
+                JSONObject obj = new JSONObject();
+                obj.put("user", "+79272006026");
+                obj.put("key", KEY);
+                obj.put("level", "Guest");
+                arr.put(obj);
+            }
+
+        }
+        catch (JSONException e) {	e.printStackTrace();}
+
+        return arr.toString();
     }
 
 
-    public static String getUserHaveReadNFCJSON_ZAGLUSHKA() {
+    public static String getUserHaveReadNFCJSON_ZAGLUSHKA(JSONObject obj1) {
         // возвращает ответ сервера на считывание метки пользователем
+        JSONObject obj = new JSONObject();
+        try{
+            Date Dt2 = new Date();
+            obj.put("user", "+79272006026");
+            obj.put("key", "sgfsdfg");
+            obj.put("Mark", "1234567890");
+            obj.put("gpsX", "50.21341243");
+            obj.put("gpsY", "50.21341243");
+            obj.put("gpsAlt", "50.21341243");
+            obj.put("Date", Dt2); // время серверное!
+            obj.put("Status", "TRUE"); // TRUE|FALSE
+        }
+        catch (JSONException e) {	e.printStackTrace();}
 
-        return  "";
+        return  obj.toString();
     }
 
-    public static String getNewNFCMarkResultJSON_ZAGLUSHKA() {
+    public static String getNewNFCMarkResultJSON_ZAGLUSHKA(JSONObject obj) {
+        // Mark, key, Admin
         // возвращает ответ сервера на сохранение новой NFC метки там
+        JSONObject Answer = new JSONObject();
+        try {
+            Answer.put("Mark","????");
+            Answer.put("Status", "TRUE"); // TRUE|FALSE
+            Answer.put("key",KEY);
+        } catch (JSONException e) {	e.printStackTrace();}
 
-        return  "";
+
+        return Answer.toString();
     }
 
-    public static String getLoginLevelChangingJSON_ZAGLUSHKA() {
-        // возвращает ответ сервера на смену уровня доступа логина.
+    public static String getLoginLevelChangingJSON_ZAGLUSHKA(JSONObject obj) {
+        // возвращает ответ сервера на смену уровня доступа логина. obj - это запрос на сервер
+        // {login, user, level, key}
+        JSONObject Answer = new JSONObject();
+        try {
+            Answer.put("login","TRUE");    // TRUE|FALSE
+            Answer.put("key",KEY);
+            Answer.put("Msg","описываем ошибку");
+        } catch (JSONException e) {	e.printStackTrace();}
 
-        return  "";
+
+        return Answer.toString();
     }
 
 
@@ -111,4 +183,7 @@ public class Utilites {
 
         return arr.toString();
     }
+
+
+
 }

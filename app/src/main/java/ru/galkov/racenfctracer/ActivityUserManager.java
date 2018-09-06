@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 
 import ru.galkov.racenfctracer.common.AskMainLogUser;
 import ru.galkov.racenfctracer.common.GPS;
+import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 import ru.galkov.racenfctracer.common.Utilites;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
@@ -145,14 +146,17 @@ import ru.galkov.racenfctracer.common.Utilites;
             } catch (UnsupportedEncodingException e) {
                 Utilites.messager( this, "UnsupportedEncoding "+ e.toString());
             }
-// В лог записываем, TextView тут !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            NFC_ConfigurationLog.append(R.string.NFCrecived + text);
 
+// В лог записываем, TextView тут !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            NFC_ConfigurationLog.append(R.string.NFC_To_Server + text);
+            SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC);
+            NFC.setGPS_System(GPS_System);
+            NFC.setMark(text);
+            NFC.setUser("+79272006026");  // заглушка
+            NFC.execute();
         }
 
-
         //   **********************************Write to NFC Tag****************************
-
         private void write(String text, Tag tag) throws IOException, FormatException {
             NdefRecord[] records = { createRecord(text) };
             NdefMessage message = new NdefMessage(records);

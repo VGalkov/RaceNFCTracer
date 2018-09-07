@@ -12,6 +12,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
@@ -22,11 +23,16 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import ru.galkov.racenfctracer.common.AskMainLogUser;
+import ru.galkov.racenfctracer.common.AskForMainLog;
+import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 import ru.galkov.racenfctracer.common.Utilites;
+
+import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
     public class ActivityUserManager  extends Activity {
@@ -34,11 +40,10 @@ import ru.galkov.racenfctracer.common.Utilites;
 
         private GPS GPS_System;
         private NfcAdapter nfcAdapter;
-        private AskMainLogUser AMLU;
         private Tag myTag;
         private boolean writeMode;
         private Switch race_status;
-
+        private Timer ServerTimer;
         PendingIntent pendingIntent;
         IntentFilter writeTagFilters[];
         Context context;
@@ -57,11 +62,6 @@ import ru.galkov.racenfctracer.common.Utilites;
 
             AUMC = new ActivityUserManagereController();
             AUMC.setDefaultView();
-
-            AMLU = new AskMainLogUser(AUMC); //опросчик на лог main_log сервера.
-
-// опрашиваем 1 раз прив ходе дале по определению метки. или отдельному запросу (пока не предусмотрен)
-            new AskMainLogUser(AUMC).execute(); //опросчик на лог main_log сервера.
 
             GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
@@ -90,7 +90,28 @@ import ru.galkov.racenfctracer.common.Utilites;
         public void onResume(){
             super.onResume();
             WriteModeOn();
+            startTimeSync();
         }
+
+    private void startTimeSync() {
+        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        final Handler uiHandler = new Handler();
+
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(AUMC.ServerTime);
+                new AskForMainLog(AUMC.User_Monitor).execute();; //опросчик на лог main_log сервера.
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {                  String srt  = "";                 }
+                });
+            }
+        }, 0L, TimerTimeout);
+
+    }
 
         // ====================================================================================
 
@@ -235,9 +256,16 @@ import ru.galkov.racenfctracer.common.Utilites;
     public class ActivityUserManagereController{
 
         public TextView User_Monitor;
+        public TextView ServerTime;
+
+        ActivityUserManagereController() {
+            setDefaultView();
+        }
+
 
         public void setDefaultView() {
             User_Monitor =  findViewById(R.id.User_Monitor);
+            ServerTime =  findViewById(R.id.ServerTime);
         }
 
         // !

@@ -12,6 +12,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
@@ -19,12 +20,17 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskMarkslist;
+import ru.galkov.racenfctracer.common.AskMarksList;
+import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendNewNFCMark;
 import ru.galkov.racenfctracer.common.Utilites;
+
+import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
 public class ActivityNFCMarksRedactor  extends Activity {
@@ -34,7 +40,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
     private NfcAdapter nfcAdapter;
     private Tag myTag;
     private boolean writeMode;
-
+    private Timer ServerTimer;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
     Context context;
@@ -63,16 +69,37 @@ public class ActivityNFCMarksRedactor  extends Activity {
         initClassVaribles();
         addlisteners();
         configureNFC();
-        new AskMarkslist(ANFCMRC).execute();
+        startTimeSync(); // опросчик серверных данных
+    }
+
+    private void startTimeSync() {
+        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        final Handler uiHandler = new Handler();
+
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(ANFCMRC.ServerTime);
+                new AskMarksList(ANFCMRC).execute();
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {                  String srt  = "";                 }
+                });
+            }
+        }, 0L, TimerTimeout);
 
     }
 
 
     public class ActivityNFCMarksRedactorController{
         public TextView NFC_ConfigurationLog;
+        public TextView ServerTime;
 
         ActivityNFCMarksRedactorController() {
             NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
+            ServerTime = findViewById(R.id.ServerTime);
         }
     }
 

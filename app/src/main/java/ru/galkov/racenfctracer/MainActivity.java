@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -23,6 +27,8 @@ public class MainActivity extends Activity {
     public static final String KEY = "xzcv4ewattaswrf";
     public static final String SERVER_URL = "https://mb-samara.ru";
     public static final int HTTP_TIMEOUT = 15000; // milliseconds
+    public static final int TimerTimeout = 60000;
+    private Timer ServerTimer;
 
 
     @Override
@@ -37,11 +43,34 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        startTimeSync();
+
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+// вынести в отдельный класс для всех со списком запуска.
+    private void startTimeSync() {
+    // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        final Handler uiHandler = new Handler();
+
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(MAFC.ServerTimeText);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {                  String srt  = "";                 }
+                });
+            }
+        }, 0L, TimerTimeout);
+
     }
 
 

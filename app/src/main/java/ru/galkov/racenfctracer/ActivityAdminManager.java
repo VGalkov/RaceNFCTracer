@@ -3,21 +3,28 @@ package ru.galkov.racenfctracer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
-import ru.galkov.racenfctracer.common.AskMainLogAdmin;
+import ru.galkov.racenfctracer.common.AskForMainLog;
+import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.Utilites;
+
+import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityAdminManager  extends Activity {
     private ActivityAdminManagerController AAMC;
     private GPS GPS_System;
-    private AskMainLogAdmin AMLA;
+    private Timer ServerTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +34,6 @@ public class ActivityAdminManager  extends Activity {
         ActivityAdminManagerController AAMC = new ActivityAdminManagerController();
         AAMC.setDefaultView();
 
-        // в отдельный поток опрашивать сервер о новых данных
-        new AskMainLogAdmin(AAMC).execute();
-
-        // конфигуратор сюда. или WD долько для main_log
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
     }
@@ -38,11 +41,33 @@ public class ActivityAdminManager  extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        startTimeSync();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    private void startTimeSync() {
+        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        final Handler uiHandler = new Handler();
+
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(AAMC.ServerTime);
+                // прашивать сервер о новых данных
+                new AskForMainLog(AAMC.UserLogger).execute(); //опросчик на лог main_log сервера.
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {                  String srt  = "";                 }
+                });
+            }
+        }, 0L, TimerTimeout);
+
     }
 
 // ==============================================================
@@ -51,7 +76,9 @@ public class ActivityAdminManagerController{
         private Button results_table_button;
         private Button register_editor_button;
         private Button nfc_marks_editor_button;
-        public TextView userLogger;
+        public TextView UserLogger;
+        public TextView ServerTime;
+
 
         ActivityAdminManagerController() {
             setDefaultView();
@@ -68,7 +95,10 @@ public class ActivityAdminManagerController{
         results_table_button =              findViewById(R.id.results_table_button);
         register_editor_button =            findViewById(R.id.register_editor_button);
         nfc_marks_editor_button =           findViewById(R.id.nfc_marks_editor_button);
-        userLogger =                findViewById(R.id.userLogger);
+        UserLogger =                        findViewById(R.id.UserLogger);
+        ServerTime =                        findViewById(R.id.ServerTime);
+
+
     }
 
     private void addListeners() {

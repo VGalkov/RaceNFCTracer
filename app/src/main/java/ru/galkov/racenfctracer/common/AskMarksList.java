@@ -10,7 +10,7 @@ import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
-public class AskMarkslist extends AsyncTask<String, Void, String> {
+public class AskMarksList extends AsyncTask<String, Void, String> {
 
 
 
@@ -22,7 +22,7 @@ public class AskMarkslist extends AsyncTask<String, Void, String> {
         this.admin = admin1;
     }
 
-    public AskMarkslist (ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC1) {
+    public AskMarksList(ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC1) {
         ANFCMRC = ANFCMRC1;
 
     }

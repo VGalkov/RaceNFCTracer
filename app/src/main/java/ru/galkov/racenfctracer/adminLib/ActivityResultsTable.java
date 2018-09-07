@@ -3,17 +3,25 @@ package ru.galkov.racenfctracer.adminLib;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskResultsTable;
+import ru.galkov.racenfctracer.common.AskServerTime;
+
+import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityResultsTable  extends Activity {
 
     private ActivityResultsTableController ARTC;
     private AskResultsTable ART;
+    private Timer ServerTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +30,9 @@ public class ActivityResultsTable  extends Activity {
         setContentView(R.layout.activity_admin_results_table);
         ARTC = new ActivityResultsTableController();
         ARTC.setDefaultView();
-        new AskResultsTable(ARTC).execute();;
+        new AskResultsTable(ARTC).execute();
+
+        startTimeSync();
     }
 
     @Override
@@ -35,12 +45,33 @@ public class ActivityResultsTable  extends Activity {
         super.onPause();
     }
 
+    private void startTimeSync() {
+        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        final Handler uiHandler = new Handler();
+
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(ARTC.ServerTime);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {                  String srt  = "";                 }
+                });
+            }
+        }, 0L, TimerTimeout);
+
+    }
+
+
 // =======================================================
 
     public class ActivityResultsTableController{
         private Button back_button;
         private Button DownLoadResults;
         public TextView userLogger;
+        public TextView ServerTime;
 
         ActivityResultsTableController() {
             setDefaultView();
@@ -56,6 +87,7 @@ public class ActivityResultsTable  extends Activity {
             back_button =      findViewById(R.id.back_button);
             userLogger =       findViewById(R.id.userLogger);
             DownLoadResults = findViewById(R.id.DownLoadResults);
+            ServerTime = findViewById(R.id.ServerTime);
 
         }
 

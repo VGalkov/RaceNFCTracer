@@ -12,14 +12,12 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -32,6 +30,7 @@ import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 import ru.galkov.racenfctracer.common.Utilites;
 
+import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
@@ -68,6 +67,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             initClassVaribles();
             addlisteners();
             configureNFC();
+
         }
 
         @Override
@@ -90,28 +90,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         public void onResume(){
             super.onResume();
             WriteModeOn();
-            startTimeSync();
         }
 
-    private void startTimeSync() {
-        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
 
-        ServerTimer = new Timer(); // Создаем таймер
-        final Handler uiHandler = new Handler();
-
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(AUMC.ServerTime);
-                new AskForMainLog(AUMC.User_Monitor).execute();; //опросчик на лог main_log сервера.
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {                  String srt  = "";                 }
-                });
-            }
-        }, 0L, TimerTimeout);
-
-    }
 
         // ====================================================================================
 
@@ -266,13 +247,20 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         public void setDefaultView() {
             User_Monitor =  findViewById(R.id.User_Monitor);
             ServerTime =  findViewById(R.id.ServerTime);
+            startTimeSync();
         }
 
-        // !
-        public void messager(String str1) {
-            Toast.makeText(ActivityUserManager.this, str1, Toast.LENGTH_LONG).show();
-        }
+        private void startTimeSync() {
+            ServerTimer = new Timer(); // Создаем таймер
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskServerTime(AUMC.ServerTime);
+                    new AskForMainLog(AUMC.User_Monitor).execute();; //опросчик на лог main_log сервера.
+                }
+            }, TimerDelay, TimerTimeout);
 
+        }
     }
 
     }

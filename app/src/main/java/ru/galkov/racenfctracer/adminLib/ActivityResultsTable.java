@@ -3,7 +3,6 @@ package ru.galkov.racenfctracer.adminLib;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +14,7 @@ import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
+import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityResultsTable  extends Activity {
@@ -32,7 +32,6 @@ public class ActivityResultsTable  extends Activity {
         ARTC.setDefaultView();
         new AskResultsTable(ARTC).execute();
 
-        startTimeSync();
     }
 
     @Override
@@ -43,25 +42,6 @@ public class ActivityResultsTable  extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    private void startTimeSync() {
-        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-        ServerTimer = new Timer(); // Создаем таймер
-        final Handler uiHandler = new Handler();
-
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(ARTC.ServerTime);
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {                  String srt  = "";                 }
-                });
-            }
-        }, 0L, TimerTimeout);
-
     }
 
 
@@ -81,6 +61,7 @@ public class ActivityResultsTable  extends Activity {
             initViewObjects();
             addListeners();
             setDefaultFace();
+            startTimeSync();
         }
 
         private void initViewObjects() {
@@ -106,6 +87,16 @@ public class ActivityResultsTable  extends Activity {
             });
         }
 
+
+        private void startTimeSync() {
+
+            ServerTimer = new Timer(); // Создаем таймер
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {      new AskServerTime(ARTC.ServerTime);      }
+            }, TimerDelay, TimerTimeout);
+
+        }
 
         // ============================
         private void setDefaultFace() {

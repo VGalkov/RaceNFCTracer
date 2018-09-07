@@ -3,7 +3,6 @@ package ru.galkov.racenfctracer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,8 +16,8 @@ import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
-import ru.galkov.racenfctracer.common.Utilites;
 
+import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityAdminManager  extends Activity {
@@ -41,7 +40,6 @@ public class ActivityAdminManager  extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        startTimeSync();
     }
 
     @Override
@@ -49,26 +47,6 @@ public class ActivityAdminManager  extends Activity {
         super.onPause();
     }
 
-    private void startTimeSync() {
-        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-        ServerTimer = new Timer(); // Создаем таймер
-        final Handler uiHandler = new Handler();
-
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(AAMC.ServerTime);
-                // прашивать сервер о новых данных
-                new AskForMainLog(AAMC.UserLogger).execute(); //опросчик на лог main_log сервера.
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {                  String srt  = "";                 }
-                });
-            }
-        }, 0L, TimerTimeout);
-
-    }
 
 // ==============================================================
 public class ActivityAdminManagerController{
@@ -88,6 +66,7 @@ public class ActivityAdminManagerController{
         initViewObjects();
         addListeners();
         setDefaultFace();
+        startTimeSync();
     }
 
     private void initViewObjects() {
@@ -129,9 +108,23 @@ public class ActivityAdminManagerController{
         });
     }
 
-    public void messager(String str1) {
-        Utilites.messager(ActivityAdminManager.this, str1);
+
+
+    private void startTimeSync() {
+        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(AAMC.ServerTime);
+                // прашивать сервер о новых данных
+                new AskForMainLog(AAMC.UserLogger).execute(); //опросчик на лог main_log сервера.
+            }
+        }, TimerDelay, TimerTimeout);
+
     }
+
     // ============================
     private void setDefaultFace() {
 

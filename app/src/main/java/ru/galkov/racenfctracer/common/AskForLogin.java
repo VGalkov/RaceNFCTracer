@@ -60,7 +60,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
                     else if ((JOAnswer.get("level")).equals((MainActivity.registrationLevel.User).toString())) {
                         REGLEVEL = MainActivity.registrationLevel.User;
                     }
-                }
+                }// сменить на Utility
                 else { MAFC.messager("авторизация пройдена на уровне Guest"); }
             }
             else { MAFC.messager("сбой протокола шифрования или всего запроса!"); }

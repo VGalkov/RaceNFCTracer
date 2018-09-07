@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
@@ -28,8 +27,8 @@ public class MainActivity extends Activity {
     public static final String SERVER_URL = "https://mb-samara.ru";
     public static final int HTTP_TIMEOUT = 15000; // milliseconds
     public static final int TimerTimeout = 60000;
+    public static final int TimerDelay = 0;
     private Timer ServerTimer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,39 +37,17 @@ public class MainActivity extends Activity {
 
         MAFC = new MainActivityFaceController();
         MAFC.setDefaultView();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startTimeSync();
-
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-// вынести в отдельный класс для всех со списком запуска.
-    private void startTimeSync() {
-    // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-        ServerTimer = new Timer(); // Создаем таймер
-        final Handler uiHandler = new Handler();
-
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(MAFC.ServerTimeText);
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {                  String srt  = "";                 }
-                });
-            }
-        }, 0L, TimerTimeout);
-
     }
 
 
@@ -90,7 +67,7 @@ public class MainActivity extends Activity {
         private RadioButton         AdminRadioButton;
         private RadioButton         UserRadioButton;
         private RadioButton         GuestRadioButton;
-        public TextView             ServerTimeText;
+        public TextView             ServerTime;
 
         //      Constructor; ============================================
         MainActivityFaceController() {
@@ -102,10 +79,21 @@ public class MainActivity extends Activity {
             initViewObjects();
             addListeners();
             setDefaultFace();
+            startTimeSync();
         }
 
 
+        // вынести в отдельный класс для всех со списком запуска и ссылками на экраны отображения ддля каждого Async.
+        private void startTimeSync() {
+            ServerTimer = new Timer(); // Создаем таймер
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskServerTime(MAFC.ServerTime);
+                }
+            }, TimerDelay, TimerTimeout);
 
+        }
 
         // ======================================================================================
         private void setDefaultFace() {
@@ -127,10 +115,6 @@ public class MainActivity extends Activity {
             setRadioSystem(LoginType_radio_group, false);
             setTextFields(password, false);
             setTextFields(phone, false);
-
-            AskServerTime ServerTime = new AskServerTime(ServerTimeText);
-            ServerTime.setLogin(phone.getText().toString());
-            ServerTime.execute();
         }
 
         // =======================================================================================
@@ -146,7 +130,7 @@ public class MainActivity extends Activity {
             RegAsLabel =            findViewById(R.id.RegAsLabel);
             phone =                 findViewById(R.id.phone);
             password =              findViewById(R.id.password);
-            ServerTimeText =        findViewById(R.id.ServerTime);
+            ServerTime =            findViewById(R.id.ServerTime);
         }
 
 

@@ -30,11 +30,10 @@ public class ActivityAdminManager  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_manager);
 
-        ActivityAdminManagerController AAMC = new ActivityAdminManagerController();
-        AAMC.setDefaultView();
+        AAMC = new ActivityAdminManagerController();
+        startTimeSync();
 
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
-
     }
 
     @Override
@@ -46,6 +45,20 @@ public class ActivityAdminManager  extends Activity {
     protected void onPause() {
         super.onPause();
     }
+
+    private void startTimeSync() {
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(AAMC.ServerTime).execute();
+                //  опрашивать сервер о новых данных и времени
+                new AskForMainLog(AAMC.UserLogger).execute(); //опросчик на лог main_log сервера.
+            }
+        }, TimerDelay, TimerTimeout);
+
+    }
+
 
 
 // ==============================================================
@@ -66,7 +79,6 @@ public class ActivityAdminManagerController{
         initViewObjects();
         addListeners();
         setDefaultFace();
-        startTimeSync();
     }
 
     private void initViewObjects() {
@@ -109,21 +121,6 @@ public class ActivityAdminManagerController{
     }
 
 
-
-    private void startTimeSync() {
-        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-        ServerTimer = new Timer(); // Создаем таймер
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(AAMC.ServerTime);
-                // прашивать сервер о новых данных
-                new AskForMainLog(AAMC.UserLogger).execute(); //опросчик на лог main_log сервера.
-            }
-        }, TimerDelay, TimerTimeout);
-
-    }
 
     // ============================
     private void setDefaultFace() {

@@ -58,7 +58,7 @@ public class Utilites {
     public static String getUsersResultsJSON_ZAGLUSHKA() {
         // возвращает результаты участников, интерпратация запроса к main_log
 
-        return  getUserLogin_ZAGLUSHKA();
+        return  getMainLogJSON_ZAGLUSHKA();
     }
 
 
@@ -140,14 +140,19 @@ public class Utilites {
         Toast.makeText(cont1, str2, Toast.LENGTH_LONG).show();
     }
 
-    public static String getUserLogin_ZAGLUSHKA() {
+    public static String getUserLogin_ZAGLUSHKA(String toServer) {
         // json with result тут заглушка
         // view - {level":"Admin","login":"TRUE|FALSE","key":"sgfsdfg"}
+        JSONObject loginAnswer = new JSONObject();
 
-            JSONObject loginAnswer = new JSONObject();
-            try {
+        try {
+                JSONObject ServerJSON = new JSONObject(toServer);
+
+
+
                 loginAnswer.put("login","TRUE");
-                loginAnswer.put("level", "Admin");
+//                loginAnswer.put("level", "Admin");
+                loginAnswer.put("level", ServerJSON.get("level")); // это для дебага
                 loginAnswer.put("key",KEY);
             } catch (JSONException e) {	e.printStackTrace();}
 

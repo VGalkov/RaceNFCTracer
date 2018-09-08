@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import ru.galkov.racenfctracer.MainActivity;
 
+import static ru.galkov.racenfctracer.MainActivity.KEY;
+
 public class AskForLogin extends AsyncTask<String, Void, String> {
 
     private final String SERVER_URL = MainActivity.SERVER_URL + "/MainActivity/";
@@ -42,7 +44,16 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
     // возвращает json с сервера  {level":"Admin","login":"TRUE|FALSE","key":"sgfsdfg"}
     protected String doInBackground(String... arg0) {
-           return Utilites.getUserLogin_ZAGLUSHKA();
+
+        JSONObject toServer = new JSONObject();
+        try {
+                toServer.put("login",login.getText());
+                toServer.put("password", password.getText());
+                toServer.put("level", level.toString());
+                toServer.put("key",KEY);
+        } catch (JSONException e) {	e.printStackTrace();}
+
+        return Utilites.getUserLogin_ZAGLUSHKA(toServer.toString());
     }
 
     @Override

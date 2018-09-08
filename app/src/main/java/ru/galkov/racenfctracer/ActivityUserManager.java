@@ -43,6 +43,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         private boolean writeMode;
         private Switch race_status;
         private Timer ServerTimer;
+        private TextView User_Monitor;
         PendingIntent pendingIntent;
         IntentFilter writeTagFilters[];
         Context context;
@@ -60,13 +61,13 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             setContentView(R.layout.activity_user_manager);
 
             AUMC = new ActivityUserManagereController();
-            AUMC.setDefaultView();
 
             GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
             initClassVaribles();
             addlisteners();
             configureNFC();
+            startTimeSync();
 
         }
 
@@ -92,7 +93,19 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             WriteModeOn();
         }
 
+    private void startTimeSync() {
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(AUMC.ServerTime).execute();
+                if (race_status.isChecked())  {
+                    new AskForMainLog(AUMC.User_Monitor).execute();
+                }
+            }
+        }, TimerDelay, TimerTimeout);
 
+    }
 
         // ====================================================================================
 
@@ -109,6 +122,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         back_button =           findViewById(R.id.back_button);
         NFC_ConfigurationLog =  findViewById(R.id.NFC_ConfigurationLog);
         race_status =           findViewById(R.id.race_status);
+        User_Monitor =          findViewById(R.id.User_Monitor);
+
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -150,8 +165,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             }
 
 // В лог записываем, TextView тут !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            NFC_ConfigurationLog.append(R.string.NFC_To_Server + text);
-            SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC);
+            NFC_ConfigurationLog.setText(R.string.NFC_To_Server + text);
+            SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(User_Monitor);
             NFC.setGPS_System(GPS_System);
             NFC.setMark(text);
             NFC.setUser("+79272006026");  // заглушка
@@ -227,7 +242,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
                 back_button.setActivated(!bChecked);
                 back_button.setFocusable(!bChecked);
 
-                if (bChecked) {  race_status.setText(R.string.race_on); } else { race_status.setText(R.string.race_off); }
+                if (bChecked) {  race_status.setText(R.string.race_on); }
+                else { race_status.setText(R.string.race_off); }
             }
         });
 
@@ -247,20 +263,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         public void setDefaultView() {
             User_Monitor =  findViewById(R.id.User_Monitor);
             ServerTime =  findViewById(R.id.ServerTime);
-            startTimeSync();
         }
 
-        private void startTimeSync() {
-            ServerTimer = new Timer(); // Создаем таймер
-            ServerTimer.schedule(new TimerTask() { // Определяем задачу
-                @Override
-                public void run() {
-                    new AskServerTime(AUMC.ServerTime);
-                    new AskForMainLog(AUMC.User_Monitor).execute();; //опросчик на лог main_log сервера.
-                }
-            }, TimerDelay, TimerTimeout);
-
-        }
     }
 
     }

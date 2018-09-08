@@ -50,7 +50,8 @@ public class ActivityNFCMarksRedactor  extends Activity {
     private TextView NfS_Mark_Editor;
     private TextView CurrentNFC_Label;
     public TextView NFC_ConfigurationLog;
-    private ActivityNFCMarksRedactorController ANFCMRC;
+    public TextView ServerTime;
+//    private ActivityNFCMarksRedactorController ANFCMRC;
 
     public static final String ERROR_DETECTED = "No NFC tag detected!";
     public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
@@ -62,45 +63,51 @@ public class ActivityNFCMarksRedactor  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_nfc_marks_redactor);
 
-        ActivityNFCMarksRedactorController ANFCMRC = new ActivityNFCMarksRedactorController();
+//        ANFCMRC = new ActivityNFCMarksRedactorController();
 
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
         initClassVaribles();
         addlisteners();
         configureNFC();
+        startTimeSync();
     }
 
 
+
+
+
+/*
     public class ActivityNFCMarksRedactorController{
-        public TextView NFC_ConfigurationLog;
-        public TextView ServerTime;
+//        public TextView NFC_ConfigurationLog;
+//        public TextView ServerTime;
 
         ActivityNFCMarksRedactorController() {
             setDefaultView();
+
         }
 
         private void setDefaultView() {
-            NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
-            ServerTime = findViewById(R.id.ServerTime);
-            startTimeSync(); // опросчик серверных данных
-        }
-
-        private void startTimeSync() {
-
-            ServerTimer = new Timer(); // Создаем таймер
-            ServerTimer.schedule(new TimerTask() { // Определяем задачу
-                @Override
-                public void run() {
-                    new AskServerTime(ANFCMRC.ServerTime);
-                    new AskMarksList(ANFCMRC).execute();
-                }
-            }, TimerDelay, TimerTimeout);
 
         }
+
 
     }
+*/
 
+
+    private void startTimeSync() {
+
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(ServerTime).execute();
+                new AskMarksList(NFC_ConfigurationLog).execute();
+            }
+        }, TimerDelay, TimerTimeout);
+
+    }
 
     private void configureNFC() {
         readFromIntent(getIntent());
@@ -117,6 +124,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
         back_button =       findViewById(R.id.back_button);
         CommitButton =      findViewById(R.id.CommitButton);
         NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
+        ServerTime = findViewById(R.id.ServerTime);
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -236,7 +244,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
         }
 
         CurrentNFC_Label.setText("NFC Content: " + text);
-        SendNewNFCMark NFC = new SendNewNFCMark(ANFCMRC);
+        SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
         NFC.setAdmin("+79272006036"); // заглушка
         NFC.setMark(text);
         NFC.execute();

@@ -29,7 +29,7 @@ public class ActivityResultsTable  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_results_table);
         ARTC = new ActivityResultsTableController();
-        ARTC.setDefaultView();
+        startTimeSync();
         new AskResultsTable(ARTC).execute();
 
     }
@@ -44,7 +44,16 @@ public class ActivityResultsTable  extends Activity {
         super.onPause();
     }
 
+    private void startTimeSync() {
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(ARTC.ServerTime).execute();
+            }
+        }, TimerDelay, TimerTimeout);
 
+    }
 // =======================================================
 
     public class ActivityResultsTableController{

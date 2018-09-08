@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
     public static final String KEY = "xzcv4ewattaswrf";
     public static final String SERVER_URL = "https://mb-samara.ru";
     public static final int HTTP_TIMEOUT = 15000; // milliseconds
-    public static final int TimerTimeout = 60000;
+    public static final int TimerTimeout = 6000;//0;
     public static final int TimerDelay = 0;
     private Timer ServerTimer;
 
@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         MAFC = new MainActivityFaceController();
-        MAFC.setDefaultView();
+        startTimeSync();
 
     }
 
@@ -48,6 +48,18 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    // вынести в отдельный класс для всех со списком запуска и ссылками на экраны отображения ддля каждого Async.
+    private void startTimeSync() {
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(MAFC.ServerTime).execute();
+            }
+        }, TimerDelay, TimerTimeout);
+
     }
 
 
@@ -79,21 +91,10 @@ public class MainActivity extends Activity {
             initViewObjects();
             addListeners();
             setDefaultFace();
-            startTimeSync();
-        }
-
-
-        // вынести в отдельный класс для всех со списком запуска и ссылками на экраны отображения ддля каждого Async.
-        private void startTimeSync() {
-            ServerTimer = new Timer(); // Создаем таймер
-            ServerTimer.schedule(new TimerTask() { // Определяем задачу
-                @Override
-                public void run() {
-                    new AskServerTime(MAFC.ServerTime);
-                }
-            }, TimerDelay, TimerTimeout);
 
         }
+
+
 
         // ======================================================================================
         private void setDefaultFace() {

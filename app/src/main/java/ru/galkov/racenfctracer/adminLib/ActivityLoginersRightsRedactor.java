@@ -29,9 +29,9 @@ public class ActivityLoginersRightsRedactor  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_loginers_rights_redactor);
         ALRRC = new ActivityLoginersRightsRedactorController();
-        ALRRC.setDefaultView();
 
         new AskUserTable(ALRRC).execute();
+        startTimeSync(); // или в onResume?
     }
 
     @Override
@@ -44,7 +44,16 @@ public class ActivityLoginersRightsRedactor  extends Activity {
         super.onPause();
     }
 
+    private void startTimeSync() {
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(ALRRC.ServerTime).execute();
+            }
+        }, TimerDelay, TimerTimeout);
 
+    }
 
 // ==========================================================
 
@@ -61,7 +70,6 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             initViewObjects();
             addListeners();
             setDefaultFace();
-            startTimeSync(); // или в onResume?
         }
 
         private void initViewObjects() {
@@ -79,18 +87,6 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             });
         }
 
-        private void startTimeSync() {
-            // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-            ServerTimer = new Timer(); // Создаем таймер
-            ServerTimer.schedule(new TimerTask() { // Определяем задачу
-                @Override
-                public void run() {
-                    new AskServerTime(ALRRC.ServerTime);
-                }
-            }, TimerDelay, TimerTimeout);
-
-        }
 
         // ============================
         private void setDefaultFace() {

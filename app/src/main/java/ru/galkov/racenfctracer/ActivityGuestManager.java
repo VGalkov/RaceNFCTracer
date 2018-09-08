@@ -30,9 +30,9 @@ public class ActivityGuestManager  extends Activity {
         setContentView(R.layout.activity_guest_manager);
 
         AGMC = new ActivityGuestManagereController();
-        AGMC.setDefaultView();
 
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
+        startTimeSync(); // или в onResume?
 
     }
 
@@ -49,6 +49,21 @@ public class ActivityGuestManager  extends Activity {
         }
 
 
+    private void startTimeSync() {
+        // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                new AskServerTime(AGMC.ServerTime).execute();
+                //  опрашивать сервер о новых данных и времени
+                new AskForMainLog(AGMC.UserLogger).execute(); //опросчик на лог main_log сервера.
+            }
+        }, TimerDelay, TimerTimeout);
+
+    }
+
 
         public class ActivityGuestManagereController {
             private Button back_button;
@@ -62,7 +77,6 @@ public class ActivityGuestManager  extends Activity {
             public void setDefaultView() {
                 initViewObjects();
                 addListeners();
-                startTimeSync(); // или в onResume?
             }
 
             private void initViewObjects() {
@@ -80,21 +94,6 @@ public class ActivityGuestManager  extends Activity {
                 });
             }
 
-
-            private void startTimeSync() {
-                // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-                ServerTimer = new Timer(); // Создаем таймер
-                ServerTimer.schedule(new TimerTask() { // Определяем задачу
-                    @Override
-                    public void run() {
-                        new AskServerTime(AGMC.ServerTime);
-                        //  опрашивать сервер о новых данных и времени
-                        new AskForMainLog(AGMC.UserLogger).execute();; //опросчик на лог main_log сервера.
-                    }
-                }, TimerDelay, TimerTimeout);
-
-            }
 
         }
 

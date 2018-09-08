@@ -1,11 +1,11 @@
 package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ru.galkov.racenfctracer.ActivityUserManager;
 import ru.galkov.racenfctracer.MainActivity;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
@@ -16,10 +16,10 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private GPS GPS_System;
     private String user;
     private String mark;
-    private ActivityUserManager.ActivityUserManagereController AUMC;
+    private TextView User_Monitor;
 
-    public SendUserNFCDiscovery(ActivityUserManager.ActivityUserManagereController AUMC1) {
-        AUMC = AUMC1;
+    public SendUserNFCDiscovery(TextView User_Monitor1) {
+        User_Monitor = User_Monitor1;
     }
 
     public void setGPS_System(GPS GPS_System1) {
@@ -60,10 +60,10 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
 // пишем, что ок. и помещаем регистрационные данные в монитор в админа c датой с сервера.
                     String regRecord ="Зарегистрировано: " + JOAnswer.get("Date") + ", " +JOAnswer.get("user") +", "+ JOAnswer.get("Mark");
-                    AUMC.User_Monitor.append(regRecord);
+                    User_Monitor.append(regRecord);
                 }
                 else {
-                    AUMC.User_Monitor.append(JOAnswer.get("Error").toString());
+                    User_Monitor.append(JOAnswer.get("Error").toString());
                 }
 
             }

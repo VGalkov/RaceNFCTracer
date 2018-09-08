@@ -1,12 +1,12 @@
 package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ru.galkov.racenfctracer.MainActivity;
-import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
@@ -16,10 +16,11 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private String login;
     private String mark;
     private String admin;
-    private ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC;
+    //private ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC;
+    private TextView NFC_ConfigurationLog;
 
-    public SendNewNFCMark(ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC1) {
-        ANFCMRC = ANFCMRC1;
+    public SendNewNFCMark(TextView NFC_ConfigurationLog1) {
+        this.NFC_ConfigurationLog = NFC_ConfigurationLog1;
     }
 
     public void setLogin(String login1) {
@@ -59,10 +60,10 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
 // пишем, что ок. и помещаем регистрационные данные в монитор в админа
                     String regRecord ="Зарегистрировано: " + JOAnswer.get("Mark");
-                    ANFCMRC.NFC_ConfigurationLog.append(regRecord);
+                    NFC_ConfigurationLog.append(regRecord);
                 }
                 else {
-                    ANFCMRC.NFC_ConfigurationLog.append(JOAnswer.get("Error").toString());
+                    NFC_ConfigurationLog.append(JOAnswer.get("Error").toString());
                 }
 
             }

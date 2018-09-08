@@ -16,7 +16,6 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private String login;
     private String mark;
     private String admin;
-    //private ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC;
     private TextView NFC_ConfigurationLog;
 
     public SendNewNFCMark(TextView NFC_ConfigurationLog1) {
@@ -48,21 +47,19 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             SendThis.put("key",KEY);
         } catch (JSONException e) {	e.printStackTrace();}
 
-        return Utilites.getNewNFCMarkResultJSON_ZAGLUSHKA(SendThis);
+        return Utilites.getNewNFCMarkResultJSON_ZAGLUSHKA(SendThis.toString());
     }
 
     @Override
     protected void onPostExecute(String result) {
 // обработка ответа сервера о сохранении новой метки
         NFC_ConfigurationLog.append(result);
-        /*
         try {
             JSONObject JOAnswer = new JSONObject(result);
+
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-// пишем, что ок. и помещаем регистрационные данные в монитор в админа
-                    String regRecord ="Зарегистрировано: " + JOAnswer.get("Mark");
-                    NFC_ConfigurationLog.append(regRecord);
+                    NFC_ConfigurationLog.append("Зарегистрирована метка: " + JOAnswer.get("Mark"));
                 }
                 else {
                     NFC_ConfigurationLog.append(JOAnswer.get("Error").toString());
@@ -70,6 +67,6 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
             }
         }
-        catch (JSONException e) {	e.printStackTrace();}*/
+        catch (JSONException e) {	e.printStackTrace();}
     }
 }

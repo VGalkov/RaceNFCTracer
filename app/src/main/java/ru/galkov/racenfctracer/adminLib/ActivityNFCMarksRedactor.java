@@ -51,6 +51,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
     private TextView CurrentNFC_Label;
     public TextView NFC_ConfigurationLog;
     public TextView ServerTime;
+    public String markContent;
 //    private ActivityNFCMarksRedactorController ANFCMRC;
 
     public static final String ERROR_DETECTED = "No NFC tag detected!";
@@ -64,7 +65,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
         setContentView(R.layout.activity_admin_nfc_marks_redactor);
 
 //        ANFCMRC = new ActivityNFCMarksRedactorController();
-
+        new AskMarksList(NFC_ConfigurationLog).execute();
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
         initClassVaribles();
@@ -103,7 +104,6 @@ public class ActivityNFCMarksRedactor  extends Activity {
             @Override
             public void run() {
                 new AskServerTime(ServerTime).execute();
-                new AskMarksList(NFC_ConfigurationLog).execute();
             }
         }, TimerDelay, TimerTimeout);
 
@@ -137,9 +137,13 @@ public class ActivityNFCMarksRedactor  extends Activity {
 
         CommitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-// сохраняем метку на сервер
-                NFC_ConfigurationLog.append(CurrentNFC_Label.getText()+"/n");
 
+                NFC_ConfigurationLog.append("Сохраняется метка - " + CurrentNFC_Label.getText());
+
+                SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
+                NFC.setAdmin("+79272006036"); // заглушка
+                NFC.setMark(markContent);
+                NFC.execute();
             }
         });
 
@@ -157,10 +161,10 @@ public class ActivityNFCMarksRedactor  extends Activity {
             public void onClick(View v) {
                 try {
                     if((myTag ==null) || ((NfS_Mark_Editor.getText()).toString().length()<1)) {
-//                        Utilites.messager(context, ERROR_DETECTED);
+                        // Utilites.messager(context, ERROR_DETECTED);
                     } else {
                         write((NfS_Mark_Editor.getText()).toString(), myTag);
-//                        Utilites.messager(context, WRITE_SUCCESS);
+                       // Utilites.messager(context, WRITE_SUCCESS);
                     }
                 } catch (IOException e) {
                     Utilites.messager(context, WRITE_ERROR);
@@ -218,7 +222,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
     private void buildTagViews(NdefMessage[] msgs) {
         if (msgs == null || msgs.length == 0) return;
 
-        String text = "";
+        markContent = "";
 //        String tagId = new String(msgs[0].getRecords()[0].getType());
         byte[] payload = msgs[0].getRecords()[0].getPayload();
         String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
@@ -227,18 +231,12 @@ public class ActivityNFCMarksRedactor  extends Activity {
 
         try {
             // Get the Text
-            text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+            markContent = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
             Utilites.messager(this,"UnsupportedEncoding " + e.toString());
         }
 
-        CurrentNFC_Label.setText("NFC Content: " + text);
-        SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
-        NFC.setAdmin("+79272006036"); // заглушка
-        NFC.setMark(text);
-        NFC.execute();
-
-
+        CurrentNFC_Label.setText("NFC Content: " + markContent);
     }
 
 

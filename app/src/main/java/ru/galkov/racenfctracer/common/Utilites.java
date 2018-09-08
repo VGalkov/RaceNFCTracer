@@ -23,11 +23,9 @@ public class Utilites {
         // возвращает список NFC меток с сервера.
         JSONArray arr = new JSONArray();
 
-        Date Dt2 = new Date();
         try {
             for(int i = 0 ; i< 10 ; i++) {
                 JSONObject obj = new JSONObject();
-
                 obj.put("key", "sgfsdfg");
                 obj.put("Mark", "1234567890");
                 arr.put(obj);
@@ -102,12 +100,14 @@ public class Utilites {
         return  obj.toString();
     }
 
-    public static String getNewNFCMarkResultJSON_ZAGLUSHKA(JSONObject obj) {
+    public static String getNewNFCMarkResultJSON_ZAGLUSHKA(String obj1) {
         // Mark, key, Admin
         // возвращает ответ сервера на сохранение новой NFC метки там
+
         JSONObject Answer = new JSONObject();
         try {
-            Answer.put("Mark","????");
+            JSONObject obj = new JSONObject(obj1);
+            Answer.put("Mark",obj.get("Mark")); // данны из запроса.
             Answer.put("Status", "TRUE"); // TRUE|FALSE
             Answer.put("key",KEY);
         } catch (JSONException e) {	e.printStackTrace();}

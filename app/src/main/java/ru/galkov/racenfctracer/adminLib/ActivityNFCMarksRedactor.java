@@ -139,18 +139,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
             public void onClick(View view) {
 // сохраняем метку на сервер
                 NFC_ConfigurationLog.append(CurrentNFC_Label.getText()+"/n");
-/*
-                ServerConnection SC = new ServerConnection(new RecordNFCLababel());
-                SC.calculate();
-                String str;
-                if (SC.isPassed()) {
-                            str = R.string.NFC_MarkRemembered
-                    }
-                else {
-                        str = R.string.NFC_MarkError
-                }
-                RegAsLabel.setText(str);
-*/
+
             }
         });
 
@@ -167,11 +156,11 @@ public class ActivityNFCMarksRedactor  extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    if(myTag ==null) {
-                        Utilites.messager(context, ERROR_DETECTED);
+                    if((myTag ==null) || ((NfS_Mark_Editor.getText()).toString().length()<1)) {
+//                        Utilites.messager(context, ERROR_DETECTED);
                     } else {
-                        write(NfS_Mark_Editor.getText().toString(), myTag);
-                        Utilites.messager(context, WRITE_SUCCESS);
+                        write((NfS_Mark_Editor.getText()).toString(), myTag);
+//                        Utilites.messager(context, WRITE_SUCCESS);
                     }
                 } catch (IOException e) {
                     Utilites.messager(context, WRITE_ERROR);

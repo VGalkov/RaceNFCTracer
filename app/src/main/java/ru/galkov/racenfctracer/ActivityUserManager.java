@@ -165,12 +165,15 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             }
 
 // В лог записываем, TextView тут !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            NFC_ConfigurationLog.setText(R.string.NFC_To_Server + text);
+//            NFC_ConfigurationLog.setText(R.string.NFC_To_Server + text);
             SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(User_Monitor);
+
             NFC.setGPS_System(GPS_System);
             NFC.setMark(text);
             NFC.setUser("+79272006026");  // заглушка
+
             NFC.execute();
+
         }
 
         //   **********************************Write to NFC Tag****************************

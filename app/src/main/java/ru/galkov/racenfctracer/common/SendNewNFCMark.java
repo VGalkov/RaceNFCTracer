@@ -54,6 +54,8 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // обработка ответа сервера о сохранении новой метки
+        NFC_ConfigurationLog.append(result);
+        /*
         try {
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
@@ -68,6 +70,6 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
             }
         }
-        catch (JSONException e) {	e.printStackTrace();}
+        catch (JSONException e) {	e.printStackTrace();}*/
     }
 }

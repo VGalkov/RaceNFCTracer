@@ -17,13 +17,34 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private String user;
     private String mark;
     private TextView User_Monitor;
+    private Double Latitude;
+    private Double Longitude;
+    private Double Altitude;
+
+
 
     public SendUserNFCDiscovery(TextView User_Monitor1) {
         User_Monitor = User_Monitor1;
     }
 
     public void setGPS_System(GPS GPS_System1) {
+
         this.GPS_System = GPS_System1;
+        // не знаю нужно ли это вот...
+        if (GPS_System.gettLatitude() != null) {
+            Latitude = GPS_System.gettLatitude();
+        }
+        else { Latitude = 0.0; }
+
+        if (GPS_System.getLongitude() != null) {
+            Longitude = GPS_System.getLongitude();
+        }
+        else { Longitude = 0.0; }
+
+        if (GPS_System.getAltitude() != null) {
+            Altitude = GPS_System.getAltitude();
+        }
+        else { Altitude = 0.0; }
     }
 
     public void setMark(String mark1) {
@@ -43,9 +64,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             SendThis.put("Mark",mark);
             SendThis.put("user",user);
             SendThis.put("key",KEY);
-            SendThis.put("geoLatitude", GPS_System.gettLatitude());
-            SendThis.put("geoLongitude", GPS_System.getLongitude());
-            SendThis.put("geoAltitude", GPS_System.getAltitude());
+            SendThis.put("geoLatitude", Latitude);
+            SendThis.put("geoLongitude", Longitude);
+            SendThis.put("geoAltitude", Altitude);
         } catch (JSONException e) {	e.printStackTrace();}
 
         return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA(SendThis);
@@ -54,7 +75,8 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // обработка ответа сервера на сохранение считывания метки участником.
-        try {
+        User_Monitor.append(result);
+/*        try {
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
@@ -68,7 +90,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
             }
         }
-        catch (JSONException e) {	e.printStackTrace();}
+        catch (JSONException e) {	e.printStackTrace();}*/
     }
 }
 

@@ -46,11 +46,7 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         // почему-то включение этого вызывает ошибку.
-/*        Ekran.append("Список меток в системе:");
-        Ekran.append(result);*/
-//        Ekran.setText(result);
+      //  Ekran.setText("вот");
     }
-
-
 
 }

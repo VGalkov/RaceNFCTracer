@@ -66,6 +66,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
 
 //        ANFCMRC = new ActivityNFCMarksRedactorController();
         new AskMarksList(NFC_ConfigurationLog).execute();
+
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
         initClassVaribles();

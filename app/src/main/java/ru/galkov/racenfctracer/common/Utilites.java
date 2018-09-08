@@ -17,7 +17,6 @@ public class Utilites {
         if (key1.equals(KEY)) 	{ return true; }
         else 					{ return false; }
     }
-//кот запросов в JSON_Examples1.java на гитхабе и в BackendController в серверном коде.
 
     public static String getNFC_MarksListJSON_ZAGLUSHKA(String str1) {
         // возвращает список NFC меток с сервера.
@@ -175,9 +174,9 @@ public class Utilites {
                 obj.put("user", "+79272006026");
                 obj.put("key", "sgfsdfg");
                 obj.put("Mark", "1234567890");
-                obj.put("gpsX", "50.21341243");
-                obj.put("gpsY", "50.21341243");
-                obj.put("gpsAlt", "50.21341243");
+                obj.put("gpsX", "50.2134");
+                obj.put("gpsY", "50.2134");
+                obj.put("gpsZ", "50.2143");
                 obj.put("Date", Dt2);
 
                 arr.put(obj);

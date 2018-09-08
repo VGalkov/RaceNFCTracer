@@ -7,6 +7,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 
 public class GPS implements LocationListener {
 
@@ -16,6 +18,7 @@ public class GPS implements LocationListener {
     private int minTime = 1;
     private Double Longitude, Latitude, Altitude;
     private TextView gps_monitor;
+    DecimalFormat df = new DecimalFormat("#.#####");
 
     public GPS(Context this_, TextView gps_nowhere2) {
 
@@ -35,7 +38,8 @@ public class GPS implements LocationListener {
             Latitude = location.getLatitude();
             Longitude = location.getLongitude();
             Altitude = location.getAltitude();
-            setGPSString("Координаты: " + Latitude + ", " + Longitude + ", " + Altitude);
+
+            setGPSString("Координаты: " + df.format(Latitude) + ", " + df.format(Longitude) + ", " + df.format(Altitude));
         }
     }
 // округлить до 4 после запятой.

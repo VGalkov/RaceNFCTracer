@@ -3,6 +3,10 @@ package ru.galkov.racenfctracer.common;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AskForMainLog extends AsyncTask<String, Void, String> {
 
     private String URL_Extention;
@@ -25,13 +29,14 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-        if (result == null) {
-
-        }
-        else {
-            // очеловечить вывод. сейчас это гольный son массив
-            ResultEkran.setText(result);
-        }
-
+        try {
+                JSONArray arr = new JSONArray(result);
+                for(int i = 0 ; i< arr.length() ; i++) {
+                    JSONObject obj = arr.getJSONObject(i);
+                    String str = obj.getString("user") + ": " + obj.getString("Mark") + "(" + obj.getString("Date") + ")" +"["+obj.getString("gpsX")+", "+obj.getString("gpsY")+", "+obj.getString("gpsZ")+"]\n";
+                    ResultEkran.append(str);
+                }
+        } catch (JSONException e) {	e.printStackTrace();}
     }
 }
+

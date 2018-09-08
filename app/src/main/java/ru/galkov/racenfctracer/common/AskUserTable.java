@@ -1,7 +1,10 @@
 package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
+import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
@@ -14,12 +17,12 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 
     private ActivityLoginersRightsRedactor.ActivityLoginersRightsRedactorController ALRRC;
     private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityGuestManager/";
+    private TextView userLogger;
 
 
 
-    public AskUserTable(ActivityLoginersRightsRedactor.ActivityLoginersRightsRedactorController ALRRC1) {
-        ALRRC = ALRRC1;
-
+    public AskUserTable(TextView userLogger1) {
+        userLogger = userLogger1;
     }
 
     @Override
@@ -31,8 +34,13 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // обработка списка полученных пользователей (создание объекта на каждого)
-
-        ALRRC.userLogger.setText(result);
+        try {
+            JSONArray arr = new JSONArray(result);
+            for(int i = 0 ; i< arr.length() ; i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                userLogger.setText("Login:" + obj.get("user") + "/" + obj.get("level") + "\n");
+            }
+        } catch (JSONException e) {	e.printStackTrace();}
     }
 
 

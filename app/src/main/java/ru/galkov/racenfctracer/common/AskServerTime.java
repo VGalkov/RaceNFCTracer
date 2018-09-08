@@ -6,6 +6,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 
@@ -14,6 +16,7 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 public class AskServerTime extends AsyncTask<String, Void, String> {
 
     private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityGuestManager/";
+    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
     private ActivityResultsTable.ActivityResultsTableController ARTC;
     private TextView TimeLabel;
     private String login;
@@ -50,6 +53,7 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
 // пишем, что ок. и помещаем регистрационные данные в монитор в админа c датой с сервера.
+// formatForDateNow.format(Dt2)
                     String regRecord = JOAnswer.get("date").toString();
                     TimeLabel.setText(regRecord);
                 }

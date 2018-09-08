@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,11 +25,13 @@ public class MainActivity extends Activity {
     public enum registrationLevel {Guest,User,Admin}
     private MainActivityFaceController MAFC;
     public static final String KEY = "xzcv4ewattaswrf";
+    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
     public static final String SERVER_URL = "https://mb-samara.ru";
     public static final int HTTP_TIMEOUT = 15000; // milliseconds
     public static final int TimerTimeout = 6000;//0;
     public static final int TimerDelay = 0;
     private Timer ServerTimer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

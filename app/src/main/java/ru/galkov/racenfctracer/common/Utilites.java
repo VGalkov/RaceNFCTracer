@@ -7,11 +7,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+// import static ru.galkov.racenfctracer.MainActivity.formatForDateNow;
+
 
 public class Utilites {
+
+   public static SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
     public static boolean chkKey(String key1) {
         if (key1.equals(KEY)) 	{ return true; }
@@ -44,7 +49,7 @@ public class Utilites {
         JSONObject obj = new JSONObject();
         try {
                 obj.put("Status", "TRUE");
-                obj.put("date", Dt2);
+                obj.put("date", formatForDateNow.format(Dt2));
                 obj.put("key", KEY);
         }
         catch (JSONException e) {	e.printStackTrace();}
@@ -80,19 +85,23 @@ public class Utilites {
     }
 
 
-    public static String getUserHaveReadNFCJSON_ZAGLUSHKA(JSONObject obj1) {
+    public static String getUserHaveReadNFCJSON_ZAGLUSHKA(String MessageIN1) {
         // возвращает ответ сервера на считывание метки пользователем
+        Date Dt2 = new Date();
         JSONObject obj = new JSONObject();
-        try{
-            Date Dt2 = new Date();
-            obj.put("user", "+79272006026");
-            obj.put("key", "sgfsdfg");
-            obj.put("Mark", "1234567890");
-            obj.put("gpsX", "50.21341243");
-            obj.put("gpsY", "50.21341243");
-            obj.put("gpsAlt", "50.21341243");
-            obj.put("Date", Dt2); // время серверное!
-            obj.put("Status", "TRUE"); // TRUE|FALSE
+        try {
+                JSONObject MessageIN = new JSONObject(MessageIN1);
+                obj.put("date", formatForDateNow.format(Dt2)); // время серверное!
+                obj.put("Status", "TRUE"); // TRUE|FALSE
+                obj.put("Error", "Нет ошибок");
+                obj.put("user", "+79272006026");
+                obj.put("key", KEY);
+
+                obj.put("geoLatitude", MessageIN.get("geoLatitude").toString());
+                obj.put("geoLongitude", MessageIN.get("geoLongitude").toString());
+                obj.put("geoAltitude", MessageIN.get("geoAltitude").toString());
+
+                obj.put("mark", MessageIN.get("mark").toString());
         }
         catch (JSONException e) {	e.printStackTrace();}
 
@@ -173,11 +182,11 @@ public class Utilites {
                 obj.put("Id", i);
                 obj.put("user", "+79272006026");
                 obj.put("key", "sgfsdfg");
-                obj.put("Mark", "1234567890");
+                obj.put("mark", "1234567890");
                 obj.put("gpsX", "50.2134");
                 obj.put("gpsY", "50.2134");
                 obj.put("gpsZ", "50.2143");
-                obj.put("Date", Dt2);
+                obj.put("date", formatForDateNow.format(Dt2));
 
                 arr.put(obj);
             }

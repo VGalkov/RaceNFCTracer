@@ -139,7 +139,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
         CommitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                NFC_ConfigurationLog.append("Сохраняется метка - " + CurrentNFC_Label.getText());
+                NFC_ConfigurationLog.append("Сохраняется метка: \n ");
 
                 SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
                 NFC.setAdmin("+79272006036"); // заглушка

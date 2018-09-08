@@ -22,7 +22,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
     private ActivityLoginersRightsRedactorController ALRRC;
     private AskUserTable AUT;
-    private Timer ServerTimer;
+//    private Timer ServerTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,8 @@ public class ActivityLoginersRightsRedactor  extends Activity {
         setContentView(R.layout.activity_admin_loginers_rights_redactor);
         ALRRC = new ActivityLoginersRightsRedactorController();
 
-        new AskUserTable(ALRRC).execute();
         startTimeSync(); // или в onResume?
+        new AskUserTable(ALRRC.userLogger).execute();
     }
 
     @Override
@@ -45,14 +45,11 @@ public class ActivityLoginersRightsRedactor  extends Activity {
     }
 
     private void startTimeSync() {
-        ServerTimer = new Timer(); // Создаем таймер
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
+//        ServerTimer = new Timer(); // Создаем таймер
+        new Timer().schedule(new TimerTask() { // Определяем задачу
             @Override
-            public void run() {
-                new AskServerTime(ALRRC.ServerTime).execute();
-            }
+            public void run() {new AskServerTime(ALRRC.ServerTime).execute();}
         }, TimerDelay, TimerTimeout);
-
     }
 
 // ==========================================================

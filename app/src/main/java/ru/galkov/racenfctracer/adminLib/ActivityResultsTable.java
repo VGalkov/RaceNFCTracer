@@ -30,7 +30,7 @@ public class ActivityResultsTable  extends Activity {
         setContentView(R.layout.activity_admin_results_table);
         ARTC = new ActivityResultsTableController();
         startTimeSync();
-        new AskResultsTable(ARTC).execute();
+        new AskResultsTable(ARTC.userLogger).execute();
 
     }
 

@@ -53,13 +53,12 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // обработка ответа сервера о сохранении новой метки
-        NFC_ConfigurationLog.append(result);
         try {
             JSONObject JOAnswer = new JSONObject(result);
 
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-                    NFC_ConfigurationLog.append("Зарегистрирована метка: " + JOAnswer.get("Mark"));
+                    NFC_ConfigurationLog.append("Зарегистрирована метка: " + JOAnswer.get("Mark") +"\n");
                 }
                 else {
                     NFC_ConfigurationLog.append(JOAnswer.get("Error").toString());

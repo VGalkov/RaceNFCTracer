@@ -33,7 +33,7 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
                 JSONArray arr = new JSONArray(result);
                 for(int i = 0 ; i< arr.length() ; i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    String str = obj.getString("user") + ": " + obj.getString("Mark") + "(" + obj.getString("Date") + ")" +"["+obj.getString("gpsX")+", "+obj.getString("gpsY")+", "+obj.getString("gpsZ")+"]\n";
+                    String str = obj.getString("user") + ": " + obj.getString("mark") + "(" + obj.getString("date") + ")" +"["+obj.getString("gpsX")+", "+obj.getString("gpsY")+", "+obj.getString("gpsZ")+"]\n";
                     ResultEkran.append(str);
                 }
         } catch (JSONException e) {	e.printStackTrace();}

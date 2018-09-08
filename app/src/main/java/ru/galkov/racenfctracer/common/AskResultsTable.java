@@ -1,19 +1,23 @@
 package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import ru.galkov.racenfctracer.MainActivity;
-import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 
 public class AskResultsTable extends AsyncTask<String, Void, String> {
 
 
     private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityGuestManager/";
-    private ActivityResultsTable.ActivityResultsTableController ARTC;
+    private TextView userLogger;
 
 
-    public AskResultsTable(ActivityResultsTable.ActivityResultsTableController ARTC1) {
-        ARTC = ARTC1;
+    public AskResultsTable(TextView userLogger1) {
+        this.userLogger = userLogger1;
 
     }
 
@@ -26,7 +30,16 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // отображаем таблицу результатов пользователей ... кстати не понятно поака как ..
-        ARTC.userLogger.setText(result);
+        // userLogger.setText(result);
+        try {
+            JSONArray arr = new JSONArray(result);
+            for(int i = 0 ; i< arr.length() ; i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                String str = obj.getString("user") + ": " + obj.getString("mark") + "(" + obj.getString("date") + ")" +"["+obj.getString("gpsX")+", "+obj.getString("gpsY")+", "+obj.getString("gpsZ")+"]\n";
+                userLogger.append(str);
+            }
+        } catch (JSONException e) {	e.printStackTrace();}
+
     }
 
 

@@ -61,7 +61,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
         JSONObject SendThis = new JSONObject();
         try {
-            SendThis.put("Mark",mark);
+            SendThis.put("mark",mark);
             SendThis.put("user",user);
             SendThis.put("key",KEY);
             SendThis.put("geoLatitude", Latitude);
@@ -69,28 +69,28 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             SendThis.put("geoAltitude", Altitude);
         } catch (JSONException e) {	e.printStackTrace();}
 
-        return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA(SendThis);
+        return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA(SendThis.toString());
     }
 
     @Override
     protected void onPostExecute(String result) {
-// обработка ответа сервера на сохранение считывания метки участником.
-        User_Monitor.append(result);
-/*        try {
+        try {
+
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-// пишем, что ок. и помещаем регистрационные данные в монитор в админа c датой с сервера.
-                    String regRecord ="Зарегистрировано: " + JOAnswer.get("Date") + ", " +JOAnswer.get("user") +", "+ JOAnswer.get("Mark");
+                    String regRecord ="Зарегистрировано: \n" + JOAnswer.get("date") + ", " +JOAnswer.get("user") +", "+ JOAnswer.get("mark") +"\n";
                     User_Monitor.append(regRecord);
                 }
                 else {
                     User_Monitor.append(JOAnswer.get("Error").toString());
                 }
 
-            }
+            }else {
+                    User_Monitor.append(JOAnswer.get("Error").toString());
+                }
         }
-        catch (JSONException e) {	e.printStackTrace();}*/
+        catch (JSONException e) {	e.printStackTrace();}
     }
 }
 

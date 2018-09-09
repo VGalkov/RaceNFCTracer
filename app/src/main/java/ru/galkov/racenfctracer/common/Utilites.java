@@ -64,11 +64,11 @@ public class Utilites {
     }
 
 
-    public static String getUserListJSON_ZAGLUSHKA() {
+    public static String getUserListJSON_ZAGLUSHKA(String json) {
         // возвращает список пользователей и их прав с сервера
         JSONArray arr = new JSONArray();
 
-        // ЗАГЛУШКА!!!!!!!!!!!!!!
+
         try {
             for(int i = 0 ; i< 10 ; i++) {
                 JSONObject obj = new JSONObject();
@@ -134,7 +134,6 @@ public class Utilites {
             Answer.put("Msg","описываем ошибку");
         } catch (JSONException e) {	e.printStackTrace();}
 
-
         return Answer.toString();
     }
 
@@ -147,6 +146,26 @@ public class Utilites {
     public static void messager(Context cont1, String str2) {
         Toast.makeText(cont1, str2, Toast.LENGTH_LONG).show();
     }
+
+
+
+    public static String getONEUserLogin_ZAGLUSHKA(String toServer) {
+
+        // в ServerJSON.get("login") сидит логин и уровень в скобках login(level)
+        JSONObject loginAnswer = new JSONObject();
+        try {
+            JSONObject ServerJSON = new JSONObject(toServer);
+
+            loginAnswer.put("login",ServerJSON.get("login"));
+            loginAnswer.put("level", ServerJSON.get("level")); // это для дебага
+            loginAnswer.put("key",KEY);
+        } catch (JSONException e) {	e.printStackTrace();}
+
+
+        return loginAnswer.toString();
+    }
+
+
 
     public static String getUserLogin_ZAGLUSHKA(String toServer) {
         // json with result тут заглушка

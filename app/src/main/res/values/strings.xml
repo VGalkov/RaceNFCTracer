@@ -12,6 +12,7 @@
     <string name="regTypeLabel">Вы войдёте как:</string>
     <string name="WriteNFC">Записать в метку</string>
     <string name="CommitButton">Сохранить на сервер</string>
+    <string name="LoginToChangeLabel">Кому меняем:</string>
 
 
     <!-- User Manager Activity -->
@@ -26,6 +27,7 @@
     <string name="NFC_To_Server">Метка отправлена на сервер -</string>
 
 
+    <string name="LoginLevel"> Уровень доступа:</string>
     <string name="ServerTime"> 00:00:00</string>
     <string name="ServerTimeLabel">Время на сервере</string>
 

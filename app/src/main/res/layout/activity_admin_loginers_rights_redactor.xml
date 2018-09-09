@@ -46,7 +46,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="97dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -55,29 +55,14 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Spinner
+                    android:id="@+id/spinnerUsers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/UserPhone"
-                        android:layout_width="88dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TextView" />
-
-                    <TextView
-                        android:id="@+id/UserAcceessReqest"
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TextView" />
-                </LinearLayout>
+                    android:layout_weight="1"></Spinner>
 
                 <Spinner
-                    android:id="@+id/UserAsseptedLevelspinner"
+                    android:id="@+id/spinnerLevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"></Spinner>
@@ -90,13 +75,56 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/setter" />
+
+
         </LinearLayout>
 
         <TextView
             android:id="@+id/userLogger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/Actions"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/LoginLevelLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/LoginLevel" />
+
+            <TextView
+                android:id="@+id/LoginLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/LoginToChangeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/LoginToChangeLabel" />
+
+            <TextView
+                android:id="@+id/LoginToChng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
 
     </LinearLayout>
 

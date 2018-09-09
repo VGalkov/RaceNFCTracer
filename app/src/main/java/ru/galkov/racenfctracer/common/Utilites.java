@@ -35,14 +35,19 @@ public class Utilites {
                 arr.put(obj);
 
             // 2
+            obj = new JSONObject();
             obj.put("key", KEY);
             obj.put("mark", "00000asd2W2");
             arr.put(obj);
+
             //3
+            obj = new JSONObject();
             obj.put("key", KEY);
             obj.put("mark", "00000asd3");
             arr.put(obj);
+
             //4
+            obj = new JSONObject();
             obj.put("key", KEY);
             obj.put("mark", "0000ASDasd01");
             arr.put(obj);
@@ -92,34 +97,39 @@ public class Utilites {
                 arr.put(obj);
 
 //2
+            obj = new JSONObject();
             obj.put("user", "+79272000001");
             obj.put("key", KEY);
             obj.put("level", "Guest");
             arr.put(obj);
 
             //3
-
+            obj = new JSONObject();
             obj.put("user", "+79272000004");
             obj.put("key", KEY);
             obj.put("level", "User");
             arr.put(obj);
             //4
+            obj = new JSONObject();
             obj.put("user", "+79272000009");
             obj.put("key", KEY);
             obj.put("level", "Guest");
             arr.put(obj);
             //5
+            obj = new JSONObject();
             obj.put("user", "+79272009999");
             obj.put("key", KEY);
             obj.put("level", "Guest");
             arr.put(obj);
             //6
+            obj = new JSONObject();
             obj.put("user", "+79272047546");
             obj.put("key", KEY);
             obj.put("level", "Admin");
             arr.put(obj);
 
             //7
+            obj = new JSONObject();
             obj.put("user", "+79272077777");
             obj.put("key", KEY);
             obj.put("level", "User");
@@ -143,11 +153,11 @@ public class Utilites {
                 obj.put("user", "+79272006026");
                 obj.put("key", KEY);
 
-                obj.put("geoLatitude", MessageIN.get("geoLatitude").toString());
-                obj.put("geoLongitude", MessageIN.get("geoLongitude").toString());
-                obj.put("geoAltitude", MessageIN.get("geoAltitude").toString());
-
                 obj.put("mark", MessageIN.get("mark").toString());
+                obj.put("latitude", MessageIN.get("latitude").toString());
+                obj.put("longitude", MessageIN.get("longitude").toString());
+                obj.put("altitude", MessageIN.get("altitude").toString());
+
         }
         catch (JSONException e) {	e.printStackTrace();}
 

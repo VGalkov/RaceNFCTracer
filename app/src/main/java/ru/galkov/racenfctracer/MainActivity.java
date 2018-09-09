@@ -272,6 +272,7 @@ public class MainActivity extends Activity {
                     else if (phone.getText().length()>12) {
                         String str = phone.getText().toString();
                         phone.setText(str.substring(0, 12));
+                        password.requestFocus();
                     }
                     else
                         phone.setTextColor(ContextCompat.getColor(activity, R.color.Black));

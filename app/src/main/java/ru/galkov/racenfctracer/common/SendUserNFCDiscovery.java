@@ -77,9 +77,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             SendThis.put("mark",mark);
             SendThis.put("user",user);
             SendThis.put("key",KEY);
-            SendThis.put("Latitude", Latitude);
-            SendThis.put("Longitude", Longitude);
-            SendThis.put("Altitude", Altitude);
+            SendThis.put("latitude", Latitude);
+            SendThis.put("longitude", Longitude);
+            SendThis.put("altitude", Altitude);
         } catch (JSONException e) {	e.printStackTrace();}
 
         return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA(SendThis.toString());
@@ -92,7 +92,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-                    String regRecord ="\n Зарегистрировано: \n" + "Время прохождения: " +JOAnswer.get("date") + ", \n" +JOAnswer.get("user") +", метка:"+ JOAnswer.get("mark") +"\n" + "координаты: [" + Latitude + ", " + Longitude + ", " + Altitude + "] \n \n" ;
+                    String regRecord ="\n Зарегистрировано: \n" + "Время прохождения: " +JOAnswer.get("date") + ", \n" +JOAnswer.get("user") +", метка:"+ JOAnswer.get("mark") +"\n" + "координаты: [" + JOAnswer.get("latitude") + ", " + JOAnswer.get("longitude") + ", " + JOAnswer.get("altitude") + "] \n \n" ;
                     if (method == MainActivity.writeMethod.Append)
                         User_Monitor.append(regRecord);
                     else User_Monitor.setText(regRecord);

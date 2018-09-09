@@ -31,9 +31,11 @@
     <string name="ServerTime"> 00:00:00</string>
     <string name="ServerTimeLabel">Время на сервере</string>
 
-
-
-
+    <string name="RegistratinInctruction">Здесь назначаются права доступа в программу зарегистрировавшимся пользователям.\n\n
+    1. выбираем пользователя.\n
+    2. выбираем ему права. \n
+    3. нажимаем назначить. \n\n
+    Когда команда выполниться вверху будет сообщениие об этом. </string>
 
     <!-- Buttons -->
     <string name="exit">Выход</string>

@@ -27,6 +27,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
     }
 
+    @Override
     protected void onPreExecute(){}
 
     public void setLogin(TextView login1) {
@@ -43,6 +44,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
 
     // возвращает json с сервера  {level":"Admin","login":"TRUE|FALSE","key":"sgfsdfg"}
+    @Override
     protected String doInBackground(String... arg0) {
 
         JSONObject toServer = new JSONObject();

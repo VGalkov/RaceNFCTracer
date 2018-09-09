@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskUserTable;
@@ -97,7 +98,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             ServerTime =     findViewById(R.id.ServerTime);
             LoginLevel =     findViewById(R.id.LoginLevel);
             LoginLevelLabel = findViewById(R.id.LoginLevelLabel);
-            userLogger = findViewById(R.id.userLogger);
+            userLogger =    findViewById(R.id.userLogger);
 
             LoginLevel = findViewById(R.id.LoginLevel);
             LoginToChng = findViewById(R.id.LoginToChng);
@@ -140,10 +141,13 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 //                    Object item = parent.getItemAtPosition(position);
 //                    LoginLevel.setText(item.toString());
                     LoginLevel.setText(spinnerLevel.getSelectedItem().toString());
+                    userLogger.setText("Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText());
 
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
+                    MainActivity.registrationLevel regLevel =  MainActivity.registrationLevel.Guest;
+                    LoginToChng.setText(regLevel.toString());
                 }
             });
 
@@ -151,9 +155,11 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             spinnerUsers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    Object item = parent.getItemAtPosition(position);
-//                    LoginToChng.setText(item.toString());
-                    LoginToChng.setText(spinnerUsers.getSelectedItem().toString());
+
+                    String login = spinnerUsers.getSelectedItem().toString();
+                    // отсекаем ненужное. но если в логине будет скобка реально - это косяк. но логин = номеру телефона.12  цифр и +
+                    LoginToChng.setText(login.substring(0, login.indexOf('(')));
+                    userLogger.setText("Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText());
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {

@@ -79,7 +79,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-                    String regRecord ="Зарегистрировано: \n" + JOAnswer.get("date") + ", " +JOAnswer.get("user") +", "+ JOAnswer.get("mark") +"\n";
+                    String regRecord ="\n Зарегистрировано: \n" + "Время прохождения: " +JOAnswer.get("date") + ", \n" +JOAnswer.get("user") +", метка:"+ JOAnswer.get("mark") +"\n" + "координаты: [" + Latitude + ", " + Longitude + ", " + Altitude + "] \n \n" ;
                     User_Monitor.append(regRecord);
                 }
                 else {

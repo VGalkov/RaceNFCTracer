@@ -13,8 +13,8 @@
     <string name="WriteNFC">Записать в метку</string>
     <string name="CommitButton">Сохранить на сервер</string>
     <string name="LoginToChangeLabel">Кому меняем:</string>
-
-
+    <string name="registregList">Список зарегистрировавшихся:</string>
+    <string name="LevelTypeList">Список вариантов доступа:</string>
     <!-- User Manager Activity -->
     <string name="nfc_button_on">NFC активен</string>
     <string name="nfc_button_off">NFC не активен</string>

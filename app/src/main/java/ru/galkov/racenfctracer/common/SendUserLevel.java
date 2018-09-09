@@ -28,6 +28,9 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     }
 
     public void setLogin(String login1)  {
+        // отсекаем ненужное. но если в логине будет скобка реально - это косяк. но логин = номеру телефона.12  цифр и +
+
+//        login = login1.substring(0, login1.indexOf('('));
         login = login1;
     }
 
@@ -42,7 +45,7 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
         try {
             toServer.put("login",login);    // TRUE|FALSE
             toServer.put("key",KEY);
-            toServer.put("level","level");
+            toServer.put("level",level);
         } catch (JSONException e) {	e.printStackTrace();}
 
         return Utilites.getONEUserLogin_ZAGLUSHKA(toServer.toString());
@@ -52,6 +55,9 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 
         MainActivity.registrationLevel REGLEVEL = MainActivity.registrationLevel.Guest;
+
+        //        String str = JOAnswer.get("login").toString();
+//        String strLogin = str.substring(0, str.indexOf('('));
 
         try {
             JSONObject JOAnswer = new JSONObject(result);

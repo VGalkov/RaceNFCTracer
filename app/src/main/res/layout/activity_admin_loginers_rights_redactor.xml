@@ -7,14 +7,33 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/l1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/l2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/userLogger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=" "
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="14sp"
+                android:textStyle="bold|italic" />
+
+            <Button
+                android:id="@+id/setButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setter" />
 
             <Button
                 android:id="@+id/back_button"
@@ -23,108 +42,118 @@
                 android:text="@string/back" />
 
             <LinearLayout
+                android:id="@+id/l3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/ServerTimeLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/ServerTimeLabel" />
 
                 <TextView
                     android:id="@+id/ServerTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/ServerTime" />
+                    android:text="@string/ServerTime"
+                    android:textAlignment="viewEnd"
+                    android:textStyle="bold" />
+
+
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="97dp"
-            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="170dp"
+                android:id="@+id/l4"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/spinnerUsers"
+                <TextView
+                    android:id="@+id/LoginToChangeLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"></Spinner>
+                    android:layout_weight="1"
+                    android:text="@string/LoginToChangeLabel" />
 
-                <Spinner
-                    android:id="@+id/spinnerLevel"
+                <TextView
+                    android:id="@+id/LoginToChng"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"></Spinner>
-
+                    android:layout_weight="1"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/setButton"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
+
+            <LinearLayout
+                android:id="@+id/l5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/setter" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/LoginLevelLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/LoginLevel" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/LoginLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/userLogger"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Actions"
-            android:visibility="visible" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/LoginLevelLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/LoginLevel" />
-
-            <TextView
-                android:id="@+id/LoginLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/l6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/LoginToChangeLabel"
-                android:layout_width="wrap_content"
+                android:id="@+id/LevelTypes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/LoginToChangeLabel" />
+                android:text="@string/LevelTypeList" />
+
+            <Spinner
+                android:id="@+id/spinnerLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Spinner>
 
             <TextView
-                android:id="@+id/LoginToChng"
-                android:layout_width="wrap_content"
+                android:id="@+id/RegList"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="@string/registregList" />
+
+            <Spinner
+                android:id="@+id/spinnerUsers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:spinnerMode="dialog"></Spinner>
+
         </LinearLayout>
+
 
     </LinearLayout>
 

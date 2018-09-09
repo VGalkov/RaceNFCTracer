@@ -23,6 +23,7 @@ import ru.galkov.racenfctracer.common.Utilites;
 public class MainActivity extends Activity {
 
     public enum registrationLevel {Guest,User,Admin}
+    public enum writeMethod {Set, Append}
     private MainActivityFaceController MAFC;
     public static final String KEY = "xzcv4ewattaswrf";
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");

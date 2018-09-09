@@ -1,13 +1,17 @@
 package ru.galkov.racenfctracer.common;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 import ru.galkov.racenfctracer.MainActivity;
 
+import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
@@ -20,11 +24,20 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private Double Latitude;
     private Double Longitude;
     private Double Altitude;
-
-
+    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private Context activity;
+    public DecimalFormat df = DECIMAL_FORMAT;
 
     public SendUserNFCDiscovery(TextView User_Monitor1) {
         User_Monitor = User_Monitor1;
+    }
+
+    public  void setContext(Context c1) {
+        activity = c1;
+    }
+
+    public void setMethod(MainActivity.writeMethod method1) {
+        method = method1;
     }
 
     public void setGPS_System(GPS GPS_System1) {
@@ -64,9 +77,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             SendThis.put("mark",mark);
             SendThis.put("user",user);
             SendThis.put("key",KEY);
-            SendThis.put("geoLatitude", Latitude);
-            SendThis.put("geoLongitude", Longitude);
-            SendThis.put("geoAltitude", Altitude);
+            SendThis.put("Latitude", Latitude);
+            SendThis.put("Longitude", Longitude);
+            SendThis.put("Altitude", Altitude);
         } catch (JSONException e) {	e.printStackTrace();}
 
         return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA(SendThis.toString());
@@ -80,14 +93,16 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
                 if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
                     String regRecord ="\n Зарегистрировано: \n" + "Время прохождения: " +JOAnswer.get("date") + ", \n" +JOAnswer.get("user") +", метка:"+ JOAnswer.get("mark") +"\n" + "координаты: [" + Latitude + ", " + Longitude + ", " + Altitude + "] \n \n" ;
-                    User_Monitor.append(regRecord);
+                    if (method == MainActivity.writeMethod.Append)
+                        User_Monitor.append(regRecord);
+                    else User_Monitor.setText(regRecord);
                 }
                 else {
-                    User_Monitor.append(JOAnswer.get("Error").toString());
+                    Utilites.messager(activity, JOAnswer.get("Error").toString());
                 }
 
             }else {
-                    User_Monitor.append(JOAnswer.get("Error").toString());
+                    Utilites.messager(activity, JOAnswer.get("Error").toString());
                 }
         }
         catch (JSONException e) {	e.printStackTrace();}

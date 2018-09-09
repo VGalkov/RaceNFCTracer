@@ -35,7 +35,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
     public class ActivityUserManager  extends Activity {
-
+// не отображается список обнаруженых меток после вывода общего списка.
 
         private GPS GPS_System;
         private NfcAdapter nfcAdapter;
@@ -53,12 +53,14 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         public static final String ERROR_DETECTED = "No NFC tag detected!";
         public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
         public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
+        private Context activity;
 
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_manager);
+            activity = this;
 
             AUMC = new ActivityUserManagereController();
 
@@ -169,6 +171,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
             NFC.setGPS_System(GPS_System);
             NFC.setMark(text);
+            MainActivity.writeMethod wMethod = MainActivity.writeMethod.Set;
+            NFC.setMethod(wMethod);
+            NFC.setContext(activity);
             NFC.setUser("+79272006026");  // заглушка
 
             NFC.execute();

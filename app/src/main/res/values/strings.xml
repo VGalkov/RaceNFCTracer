@@ -49,10 +49,10 @@
 
 
     <!-- Edit -->
-    <string name="phone">Номер телефона</string>
-    <string name="password">Пароль</string>
+    <string name="phone">+00000000000</string>
+    <string name="password">минимум 6 знаков</string>
     <string name="title_activity_user_manager">activity_userManager</string>
-
+    <string name="noStr">\????</string>
 
     <!-- User Activity -->
     <string name="race_off">Событие не активно</string>

@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,16 +36,18 @@ public class MainActivity extends Activity {
     public static final int TimerTimeout = 6000;//0;
     public static final int TimerDelay = 0;
     private Timer ServerTimer;
+    private Context activity;
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#####");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        activity = this;
 
         MAFC = new MainActivityFaceController();
         startTimeSync();
-
     }
 
     @Override
@@ -77,7 +83,7 @@ public class MainActivity extends Activity {
         private Button              enterButton;
         private RadioGroup          LoginType_radio_group;
         private TextView            password;
-        public TextView            RegAsLabel;
+        public TextView             RegAsLabel;
         private TextView            phone;
         public  registrationLevel   REGLEVEL = registrationLevel.Guest;
         private RadioButton         AdminRadioButton;
@@ -190,9 +196,6 @@ public class MainActivity extends Activity {
             if (phone.getText().length() !=12)   { trigger = false; str = str + "Телефон не верен! (" + phone.getText().length() + ")"; }
             if (password.getText().length() < 5)  { trigger = false;  str = str + "Пароль - короткий! (" + password.getText() + ") "; }
 
-            // String regType = ((RadioButton) findViewById(LoginType_radio_group.getCheckedRadioButtonId())).getText().toString();
-            // if ((regType.length()<4) && (regType.length()>6))     { trigger = false; sb.append("Тип регистрации не определён! (" + regType + ") "); } // поменять это глупый способ проверки
-
             if (!trigger) { ERROR_MSG = str; }
             return trigger;
 
@@ -205,6 +208,7 @@ public class MainActivity extends Activity {
             Post.setLevel(getLevel());
             Post.setLogin(phone);
             Post.setPassword(password);
+            Post.setParentActivity(activity);
             Post.execute();
        }
 
@@ -214,9 +218,10 @@ public class MainActivity extends Activity {
 
         private void addListeners() {
 
+// если абонент был зарегистрирован => отключаемся, если незареганы - выходим из приложения.
+
             exitButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-// если абонент был зарегистрирован => отключаемся, если незареганы - выходим из приложения.
                     if (registerButton.isEnabled()) {
                         setResult(RESULT_OK, new Intent());
                         finish();
@@ -226,15 +231,15 @@ public class MainActivity extends Activity {
                 }
             });
 
+// 1. проверяем целостность данных, 2. логинимся по результату =>  setRegistredFace();     setDefaultFace();
             registerButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-// 1. проверяем целостность данных, 2. логинимся по результату =>  setRegistredFace();     setDefaultFace();
                     if (CheckLoginDataIntegrity()) {
                         RegisterThisUser();
                         setRegistredFace();
                     }
                     else {
-                        Utilites.messager(MainActivity.this, ERROR_MSG);
+                        Utilites.messager(activity, ERROR_MSG);
                     }
                 }
             });
@@ -243,34 +248,69 @@ public class MainActivity extends Activity {
                 public void onClick(View view) {
                     if ((!registerButton.isEnabled()) && (enterButton.isEnabled())) {
                         // переходим на активити согласно вычисленному при регистрации уровню доступа.
-                        if (REGLEVEL == registrationLevel.Admin) {
+                        if (REGLEVEL == registrationLevel.Admin)
                             startActivityForResult(new Intent(view.getContext(), ActivityAdminManager.class), 0);
-                        }
-                        else if (REGLEVEL == registrationLevel.User) {
+
+                        else if (REGLEVEL == registrationLevel.User)
                             startActivityForResult(new Intent(view.getContext(), ActivityUserManager.class), 0);
-                        }
-                        else if (REGLEVEL == registrationLevel.Guest) {
+
+                        else if (REGLEVEL == registrationLevel.Guest)
                             startActivityForResult(new Intent(view.getContext(), ActivityGuestManager.class), 0);
-                        }
-                        else {
-                            Utilites.messager(MainActivity.this,"Ошибка распознавания Avtivity to show из-за ");
-                        }
+
+                        else
+                            Utilites.messager(activity, "Ошибка распознавания Avtivity to show из-за ");
                     }
                 }
             });
-        }
 
-        // выкинуть в Utilites из всего кода.
-        public void messager(String str1) {
-            Utilites.messager(MainActivity.this, str1);
+            phone.addTextChangedListener(new TextWatcher() {
 
+                @Override
+                public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                    if(phone.getText().length()==12)
+                        phone.setTextColor(ContextCompat.getColor(activity, R.color.Green));
+                    else if (phone.getText().length()>12) {
+                        String str = phone.getText().toString();
+                        phone.setText(str.substring(0, 12));
+                    }
+                    else
+                        phone.setTextColor(ContextCompat.getColor(activity, R.color.Black));
+
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+
+                @Override
+                public void afterTextChanged(Editable arg0) { }
+
+            });
+
+
+            password.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                    if(password.getText().length()>5)
+                        password.setTextColor(ContextCompat.getColor(activity, R.color.Green));
+                    else
+                        password.setTextColor(ContextCompat.getColor(activity, R.color.Black));
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+
+                @Override
+                public void afterTextChanged(Editable arg0) { }
+
+            });
         }
 
         private registrationLevel getLevel(){
             registrationLevel level = null;
-            if (GuestRadioButton.isChecked()) {  level = registrationLevel.Guest; }
-            else if (AdminRadioButton.isChecked()) { level = registrationLevel.Admin; }
-            else if (UserRadioButton.isChecked()) { level = registrationLevel.User; }
+            if (GuestRadioButton.isChecked())       level = registrationLevel.Guest;
+            else if (AdminRadioButton.isChecked())  level = registrationLevel.Admin;
+            else if (UserRadioButton.isChecked())   level = registrationLevel.User;
 
             return level;
         }

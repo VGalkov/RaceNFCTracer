@@ -64,38 +64,16 @@ public class ActivityNFCMarksRedactor  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_nfc_marks_redactor);
 
-//        ANFCMRC = new ActivityNFCMarksRedactorController();
-        new AskMarksList(NFC_ConfigurationLog).execute();
-
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
 
         initClassVaribles();
         addlisteners();
         configureNFC();
         startTimeSync();
+
+        new AskMarksList(NFC_ConfigurationLog).execute();
     }
 
-
-
-
-
-/*
-    public class ActivityNFCMarksRedactorController{
-//        public TextView NFC_ConfigurationLog;
-//        public TextView ServerTime;
-
-        ActivityNFCMarksRedactorController() {
-            setDefaultView();
-
-        }
-
-        private void setDefaultView() {
-
-        }
-
-
-    }
-*/
 
 
     private void startTimeSync() {

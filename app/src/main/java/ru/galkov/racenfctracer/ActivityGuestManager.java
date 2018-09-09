@@ -58,7 +58,7 @@ public class ActivityGuestManager  extends Activity {
             public void run() {
                 new AskServerTime(AGMC.ServerTime).execute();
                 //  опрашивать сервер о новых данных и времени
-                MainActivity.writeMethod wMethod = MainActivity.writeMethod.Append;
+                MainActivity.writeMethod wMethod = MainActivity.writeMethod.Set;
                 AskForMainLog AForML = new AskForMainLog(AGMC.UserLogger); //опросчик на лог main_log сервера.
                 AForML.setMethod(wMethod);
                 AForML.execute();

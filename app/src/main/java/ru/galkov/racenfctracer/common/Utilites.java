@@ -28,12 +28,25 @@ public class Utilites {
         JSONArray arr = new JSONArray();
 
         try {
-            for(int i = 0 ; i< 10 ; i++) {
+// 1
                 JSONObject obj = new JSONObject();
-                obj.put("key", "sgfsdfg");
-                obj.put("Mark", "1234567890");
+                obj.put("key", KEY);
+                obj.put("mark", "0000SWAsdf01");
                 arr.put(obj);
-            }
+
+            // 2
+            obj.put("key", KEY);
+            obj.put("mark", "00000asd2W2");
+            arr.put(obj);
+            //3
+            obj.put("key", KEY);
+            obj.put("mark", "00000asd3");
+            arr.put(obj);
+            //4
+            obj.put("key", KEY);
+            obj.put("mark", "0000ASDasd01");
+            arr.put(obj);
+
         }
         catch (JSONException e) {	e.printStackTrace();}
 
@@ -70,14 +83,47 @@ public class Utilites {
 
 
         try {
-            for(int i = 0 ; i< 10 ; i++) {
                 JSONObject obj = new JSONObject();
+
+
                 obj.put("user", "+79272006026");
                 obj.put("key", KEY);
-                obj.put("level", "Guest");
+                obj.put("level", "Admin");
                 arr.put(obj);
-            }
 
+//2
+            obj.put("user", "+79272000001");
+            obj.put("key", KEY);
+            obj.put("level", "Guest");
+            arr.put(obj);
+
+            //3
+
+            obj.put("user", "+79272000004");
+            obj.put("key", KEY);
+            obj.put("level", "User");
+            arr.put(obj);
+            //4
+            obj.put("user", "+79272000009");
+            obj.put("key", KEY);
+            obj.put("level", "Guest");
+            arr.put(obj);
+            //5
+            obj.put("user", "+79272009999");
+            obj.put("key", KEY);
+            obj.put("level", "Guest");
+            arr.put(obj);
+            //6
+            obj.put("user", "+79272047546");
+            obj.put("key", KEY);
+            obj.put("level", "Admin");
+            arr.put(obj);
+
+            //7
+            obj.put("user", "+79272077777");
+            obj.put("key", KEY);
+            obj.put("level", "User");
+            arr.put(obj);
         }
         catch (JSONException e) {	e.printStackTrace();}
 

@@ -1,5 +1,6 @@
 package ru.galkov.racenfctracer.common;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private MainActivity.registrationLevel level;
     private MainActivity.registrationLevel REGLEVEL;
     private MainActivity.MainActivityFaceController MAFC;
+    private Context context;
 
 
     public AskForLogin(MainActivity.MainActivityFaceController MAFC1) {
@@ -27,8 +29,14 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
     }
 
+
+
     @Override
     protected void onPreExecute(){}
+
+    public void setParentActivity(Context context1) {
+        context = context1;
+    }
 
     public void setLogin(TextView login1) {
         this.login = login1;
@@ -74,9 +82,9 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
                         REGLEVEL = MainActivity.registrationLevel.User;
                     }
                 }// сменить на Utility
-                else { MAFC.messager("авторизация пройдена на уровне Guest"); }
+                else { Utilites.messager(context,"авторизация пройдена на уровне Guest"); }
             }
-            else { MAFC.messager("сбой протокола шифрования или всего запроса!"); }
+            else { Utilites.messager(context,"сбой протокола шифрования или всего запроса!"); }
         }
         catch (JSONException e) {	e.printStackTrace();}
 

@@ -31,6 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/GPSnowhere"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_purple"
             android:visibility="visible" />
 
 
@@ -51,7 +53,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/ServerTime" />
+                android:text="@string/ServerTime"
+                android:textAlignment="viewEnd"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView

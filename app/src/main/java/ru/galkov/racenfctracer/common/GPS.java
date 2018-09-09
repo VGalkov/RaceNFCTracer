@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
+import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
+
 
 public class GPS implements LocationListener {
 
@@ -18,7 +20,7 @@ public class GPS implements LocationListener {
     private int minTime = 1;
     private Double Longitude, Latitude, Altitude;
     private TextView gps_monitor;
-    DecimalFormat df = new DecimalFormat("#.#####");
+    public DecimalFormat df = DECIMAL_FORMAT;
 
     public GPS(Context this_, TextView gps_nowhere2) {
 

@@ -40,7 +40,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/ServerTime" />
+                android:text="@string/ServerTime"
+                android:textAlignment="viewEnd"
+                android:textStyle="bold" />
         </LinearLayout>
         <ScrollView
             android:id="@+id/myview"

@@ -19,6 +19,7 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     private String level;
     private String login;
     private TextView userLogger;
+    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
 
     public SendUserLevel(TextView userLogger1) {
@@ -30,24 +31,9 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     }
 
     public void setLogin(String login1)  {
-        // отсекаем ненужное. но если в логине будет скобка реально - это косяк. но логин = номеру телефона.12  цифр и +
-
-//        login = login1.substring(0, login1.indexOf('('));
         login = login1;
     }
 
-
-    private  void makeOutBoundJSON(){
-        try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-
-            outBoundJSON.put(f.key.toString(),KEY);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onPreExecute(){
@@ -65,7 +51,8 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
+// TODO rewrite
+        // {"level":"Admin","asker":"SendNewLoginLevel","login":"TRUE","key":"galkovvladimirandreevich"}
         MainActivity.registrationLevel REGLEVEL = MainActivity.registrationLevel.Guest;
 
         //        String str = JOAnswer.get("login").toString();
@@ -80,6 +67,24 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
 
     }
 
+    public void setMethod(MainActivity.writeMethod method1) {
+        method = method1;
 
+    }
+
+    private  void makeOutBoundJSON(){
+        // {"asker":"SendNewLoginLevel","level" ="User","key":"galkovvladimirandreevich","login":"+79000000111"}
+
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+            outBoundJSON.put(f.level.toString(),level);
+            outBoundJSON.put(f.login.toString(),login);
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

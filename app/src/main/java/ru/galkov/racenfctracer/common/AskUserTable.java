@@ -20,6 +20,7 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskUserTable";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
+    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
     public void setActivityContext(Context activityContext1){
         activityContext = activityContext1;
@@ -34,17 +35,6 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
         makeOutBoundJSON();
     }
 
-    private  void makeOutBoundJSON(){
-        try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-
-            outBoundJSON.put(f.key.toString(),KEY);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected String doInBackground(String... strings) {
@@ -58,8 +48,8 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-//  список полученных пользователей кидаем в выпадающий спсиок
-
+//        {"usersArr":[{"level":"Admin","login":"+79000000000"},{"level":"Guest","login":"490000000000"}],"asker":"AskUserTable","key":"galkovvladimirandreevich"}
+        // TODO rewrite
         try {
             JSONArray arr = new JSONArray(result);
             String[] userList = new String[arr.length()];
@@ -75,4 +65,19 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {	e.printStackTrace();}
     }
 
+    public void setMethod(MainActivity.writeMethod method1) {
+        method = method1;
+    }
+
+    private  void makeOutBoundJSON(){
+//         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

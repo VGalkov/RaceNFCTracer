@@ -41,10 +41,10 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     }
 
     private  void makeOutBoundJSON(){
+        // {"asker":"AskForMainLog","key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
-
             outBoundJSON.put(f.key.toString(),KEY);
 
         } catch (JSONException e) {
@@ -68,6 +68,25 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+
+    /*
+
+{	"asker":"AskForMainLog",
+	"rows":[
+		"date":"2018.09.11 10:41:35",
+		"altitude":"50.2143",
+		"latitude":"50.2134",
+		"Id":0,
+		"login":"+79272006026",
+		"mark":"1234567890",
+		"longitude":"50.2134"},
+
+		{"date":"2018.09.11 10:41:35","altitude":"50.2143","latitude":"50.2134","Id":1,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"}
+		],
+
+	"key":"galkovvladimirandreevich"}
+===========================================
+    * */
         String str = "\n";
         // структура поменялась, см ерверную часть.
         try {

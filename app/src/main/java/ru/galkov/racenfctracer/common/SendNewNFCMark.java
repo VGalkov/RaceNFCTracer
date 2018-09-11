@@ -19,36 +19,16 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private String mark;
     private String admin;
     private TextView NFC_ConfigurationLog;
+    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
     public SendNewNFCMark(TextView NFC_ConfigurationLog1) {
         this.NFC_ConfigurationLog = NFC_ConfigurationLog1;
     }
 
-    public void setLogin(String login1) {
-        this.login = login1;
-    }
-
-
     public void setMark(String mark1) {
         this.mark = mark1;
     }
 
-    private  void makeOutBoundJSON(){
-        try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-
-            outBoundJSON.put(f.key.toString(),KEY);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // должно неявно устанавливаться из имени заеганого
-    public void setAdmin(String admin1) {
-        this.admin = admin1;
-    }
 
     @Override
     protected void onPreExecute(){
@@ -66,6 +46,9 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // обработка ответа сервера о сохранении новой метки
+        // TODO rewrite!
+        //=>
+        //        {"asker":"SendNewNFCMark","mark":"09201724307","key":"galkovvladimirandreevich","status":"TRUE"}
         try {
             JSONObject JOAnswer = new JSONObject(result);
 
@@ -80,5 +63,24 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             }
         }
         catch (JSONException e) {	e.printStackTrace();}
+    }
+
+    public void setMethod(MainActivity.writeMethod method1) {
+        method = method1;
+
+    }
+
+    private  void makeOutBoundJSON(){
+
+//        {"asker":"SendNewNFCMark","mark" ="09201724307","key":"galkovvladimirandreevich"}
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+            outBoundJSON.put(f.mark.toString(),this.mark);
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

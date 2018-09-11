@@ -14,30 +14,17 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 public class AskResultsTable extends AsyncTask<String, Void, String> {
 
 
-    private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityGuestManager/";
     private TextView userLogger;
-
     private final String ASKER = "AskResultsTable";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
+    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
     public AskResultsTable(TextView userLogger1) {
         this.userLogger = userLogger1;
-
     }
 
 
-    private  void makeOutBoundJSON(){
-        try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-
-            outBoundJSON.put(f.key.toString(),KEY);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onPreExecute(){
@@ -55,7 +42,8 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // отображаем таблицу результатов пользователей ... кстати не понятно поака как ..
-        // userLogger.setText(result);
+//     {"asker":"AskResultsTable","rows":[{"date":"2018.09.11 10:59:27","altitude":"50.2143","latitude":"50.2134","Id":0,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"},{"date":"2018.09.11 10:59:27","altitude":"50.2143","latitude":"50.2134","Id":1,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"}],"key":"galkovvladimirandreevich"}
+// TODO переписать.
         try {
             JSONArray arr = new JSONArray(result);
             for(int i = 0 ; i< arr.length() ; i++) {
@@ -68,6 +56,22 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     }
 
 
+
+    public void setMethod(MainActivity.writeMethod method1) {
+        method = method1;
+
+    }
+
+    private  void makeOutBoundJSON(){
+        //     {"asker":"AskResultsTable","key":"galkovvladimirandreevich"}
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+            outBoundJSON.put(f.key.toString(),KEY);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

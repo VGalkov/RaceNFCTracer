@@ -47,6 +47,7 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         String str = "\n";
+        // структура поменялась, см ерверную часть.
         try {
                 JSONArray arr = new JSONArray(result);
                 for(int i = 0 ; i< arr.length() ; i++) {

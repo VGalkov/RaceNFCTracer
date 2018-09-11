@@ -25,19 +25,26 @@ import ru.galkov.racenfctracer.common.Utilites;
 
 
 public class MainActivity extends Activity {
+// тут объявляем и глобальные переменные, когда разрастётся выделить в отдельный класс с геттерами
 
-    public enum registrationLevel {Guest,User,Admin}
-    public enum writeMethod {Set, Append}
+
     private MainActivityFaceController MAFC;
-    public static final String KEY = "xzcv4ewattaswrf";
-    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
-    public static final String SERVER_URL = "https://mb-samara.ru";
-    public static final int HTTP_TIMEOUT = 15000; // milliseconds
-    public static final int TimerTimeout = 6000;//0;
-    public static final int TimerDelay = 0;
     private Timer ServerTimer;
     private Context activity;
-    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#####");
+    public static final String KEY = "galkovvladimirandreevich";
+
+    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
+
+    public static final String SERVER_URL = "http://localhost:8080";
+    public static final int HTTP_TIMEOUT = 15000;
+    public static final int TimerTimeout = 6000;
+    public static final int TimerDelay = 0;
+
+    public static enum fieldsJSON {asker,password, rows, date, key, mark, marks, error, usersArr, login, level, status, latitude, altitude,longitude}
+    public static enum trigger {TRUE, FALSE}
+    public static enum registrationLevel {Guest,User,Admin, Error} // = access in server
+    public enum writeMethod {Set, Append}
 
 
     @Override
@@ -206,8 +213,8 @@ public class MainActivity extends Activity {
 
             AskForLogin Post = new AskForLogin(MAFC);
             Post.setLevel(getLevel());
-            Post.setLogin(phone);
-            Post.setPassword(password);
+            Post.setLogin(phone.getText().toString());
+            Post.setPassword(password.getText().toString());
             Post.setParentActivity(activity);
             Post.execute();
        }

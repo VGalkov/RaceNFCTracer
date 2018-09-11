@@ -71,6 +71,86 @@
     <string name="results">Результаты</string>
 
 
+    <string name="notAstring">
+        ответ на регистрацию запись метки на сервер.
+{	"asker":"SendUserNFCDiscovery",
+	"mark" ="09201724307",
+	"key":"galkovvladimirandreevich",
+	"login":"+790002229999",
+	"longitude":"50.2134",
+	"altitude":"50.2143",
+	"latitude":"50.2134"}
+=>
+{"date":"2018.09.11 12:05:39","altitude":"50.2143","latitude":"50.2134","asker":"SendUserNFCDiscovery","login":"+790002229999","mark":"09201724307","key":"galkovvladimirandreevich","status":"TRUE","longitude":"50.2134"}
+
+=========================================
+
+ответ на добавление метки
+{"asker":"SendNewNFCMark","mark" ="09201724307","key":"galkovvladimirandreevich"}
+=>
+{"asker":"SendNewNFCMark","mark":"09201724307","key":"galkovvladimirandreevich","status":"TRUE"}
+==========================================
+
+
+ответ на изменение доступа пользователя.
+{"asker":"SendNewLoginLevel","level" ="User","key":"galkovvladimirandreevich","login":"+79000000111"}
+=>
+{"level":"Admin","asker":"SendNewLoginLevel","login":"TRUE","key":"galkovvladimirandreevich"}
+==========================================
+
+список пользователей
+{"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
+=>
+{"usersArr":[{"level":"Admin","login":"+79000000000"},{"level":"Guest","login":"490000000000"}],"asker":"AskUserTable","key":"galkovvladimirandreevich"}
+===========================================
+
+список меток
+{"asker":"AskMarksList", "key":"galkovvladimirandreevich"}
+=>
+{"asker":"AskMarksList","marks":[{"mark":"002222220000"},{"mark":"000000000001"}],"key":"galkovvladimirandreevich"}
+===========================================
+
+time:
+{"asker":"AskServerTime", "key":"galkovvladimirandreevich"}
+=>
+{"date":"2018.09.11 09:26:46","asker":"AskServerTime","key":"galkovvladimirandreevich"}
+===========================================
+
+login
+{"asker":"AskForLogin","level":"Guest","key":"galkovvladimirandreevich","login":"+79272006026","password":"aaazzz"}
+=>
+{"level":"Guest","asker":"AskForLogin","login":"TRUE|FALSE","key":"galkovvladimirandreevich"}
+===========================================
+
+результаты:
+{"asker":"AskResultsTable","key":"galkovvladimirandreevich"}
+=>
+{"asker":"AskResultsTable","rows":[{"date":"2018.09.11 10:59:27","altitude":"50.2143","latitude":"50.2134","Id":0,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"},{"date":"2018.09.11 10:59:27","altitude":"50.2143","latitude":"50.2134","Id":1,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"}],"key":"galkovvladimirandreevich"}
+===========================================
+
+mainlog:
+{"asker":"AskForMainLog","key":"galkovvladimirandreevich"}
+=>
+{	"asker":"AskForMainLog",
+	"rows":[
+		"date":"2018.09.11 10:41:35",
+		"altitude":"50.2143",
+		"latitude":"50.2134",
+		"Id":0,
+		"login":"+79272006026",
+		"mark":"1234567890",
+		"longitude":"50.2134"},
+
+		{"date":"2018.09.11 10:41:35","altitude":"50.2143","latitude":"50.2134","Id":1,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"}
+		],
+
+	"key":"galkovvladimirandreevich"}
+===========================================
+
+
+    </string>
+
+
 
 
 </resources>

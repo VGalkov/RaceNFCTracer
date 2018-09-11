@@ -15,7 +15,6 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
 
     private final String ASKER = "AskForLogin";
-    private final String SERVER_URL = MainActivity.SERVER_URL + "/" + ASKER + "/";
     private String login;
     private String password;
     private Context context;

@@ -9,22 +9,47 @@ import org.json.JSONObject;
 
 import ru.galkov.racenfctracer.MainActivity;
 
+import static ru.galkov.racenfctracer.MainActivity.KEY;
+
 public class AskResultsTable extends AsyncTask<String, Void, String> {
 
 
     private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityGuestManager/";
     private TextView userLogger;
 
+    private final String ASKER = "AskResultsTable";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
 
     public AskResultsTable(TextView userLogger1) {
         this.userLogger = userLogger1;
 
     }
 
+
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPreExecute(){
+        makeOutBoundJSON();
+    }
+
     @Override
     protected String doInBackground(String... strings) {
-// запрашиваем всю таблицу результатов участников.
-        return Utilites.getUsersResultsJSON_ZAGLUSHKA();
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

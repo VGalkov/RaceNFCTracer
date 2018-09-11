@@ -10,12 +10,18 @@ import org.json.JSONObject;
 
 import ru.galkov.racenfctracer.MainActivity;
 
+import static ru.galkov.racenfctracer.MainActivity.KEY;
+
 public class AskForMainLog extends AsyncTask<String, Void, String> {
 
     private String URL_Extention;
     private TextView ResultEkran;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
+
+    private final String ASKER = "AskForMainLog";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
     //
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
@@ -34,14 +40,30 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         activity = context1;
     }
 
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     protected void onPreExecute(){
-
+        makeOutBoundJSON();
     }
 
     @Override
     protected String doInBackground(String... strings) {
-        return Utilites.getMainLogJSON_ZAGLUSHKA();
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

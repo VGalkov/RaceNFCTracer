@@ -12,7 +12,9 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
-    private String SERVER_URL = MainActivity.SERVER_URL;
+    private final String ASKER = "SendNewNFCMark";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
     private String login;
     private String mark;
     private String admin;
@@ -31,23 +33,34 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         this.mark = mark1;
     }
 
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     // должно неявно устанавливаться из имени заеганого
     public void setAdmin(String admin1) {
         this.admin = admin1;
     }
 
     @Override
+    protected void onPreExecute(){
+        makeOutBoundJSON();
+    }
+
+    @Override
     protected String doInBackground(String... strings) {
-        // отправляем серверу новую NFC метку и получаем ответ
-
-        JSONObject SendThis = new JSONObject();
-        try {
-            SendThis.put("Mark",mark);
-            SendThis.put("admin",admin);
-            SendThis.put("key",KEY);
-        } catch (JSONException e) {	e.printStackTrace();}
-
-        return Utilites.getNewNFCMarkResultJSON_ZAGLUSHKA(SendThis.toString());
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

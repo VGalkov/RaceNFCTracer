@@ -6,8 +6,6 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 
@@ -15,34 +13,40 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskServerTime extends AsyncTask<String, Void, String> {
 
-    private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityGuestManager/";
-    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
     private ActivityResultsTable.ActivityResultsTableController ARTC;
     private TextView TimeLabel;
-    private String login;
+    private final String ASKER = "AskServerTime";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
 
-    public void setLogin(String login1) {
-        this.login = login1;
-    }
 
     public AskServerTime(TextView TimeLabel1) {
         TimeLabel = TimeLabel1;
     }
 
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPreExecute(){
+        makeOutBoundJSON();
+    }
 
     @Override
     protected String doInBackground(String... strings) {
-// запрашиваем всю таблицу результатов участников.
-
-        JSONObject SendThis = new JSONObject();
-        try {
-                SendThis.put("who",login);
-                SendThis.put("key",KEY);
-        } catch (JSONException e) {	e.printStackTrace();}
-
-        // отправка запроса тут
-
-        return Utilites.getServerTimeJSON_ZAGLUSHKA(SendThis.toString());
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

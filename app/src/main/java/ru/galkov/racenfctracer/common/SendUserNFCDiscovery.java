@@ -16,7 +16,6 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
-    private String SERVER_URL = MainActivity.SERVER_URL;
     private GPS GPS_System;
     private String user;
     private String mark;
@@ -27,6 +26,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
     public DecimalFormat df = DECIMAL_FORMAT;
+    private final String ASKER = "SendUserNFCDiscovery";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
 
     public SendUserNFCDiscovery(TextView User_Monitor1) {
         User_Monitor = User_Monitor1;
@@ -68,21 +70,30 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
         this.user = user1;
     }
 
+
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPreExecute(){
+        makeOutBoundJSON();
+    }
+
     @Override
     protected String doInBackground(String... strings) {
-        // отправляем на сервер уведомление о считывании участником NFC  метки
-
-        JSONObject SendThis = new JSONObject();
-        try {
-            SendThis.put("mark",mark);
-            SendThis.put("user",user);
-            SendThis.put("key",KEY);
-            SendThis.put("latitude", Latitude);
-            SendThis.put("longitude", Longitude);
-            SendThis.put("altitude", Altitude);
-        } catch (JSONException e) {	e.printStackTrace();}
-
-        return Utilites.getUserHaveReadNFCJSON_ZAGLUSHKA(SendThis.toString());
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

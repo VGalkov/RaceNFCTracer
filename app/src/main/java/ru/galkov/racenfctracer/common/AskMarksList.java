@@ -15,13 +15,14 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 public class AskMarksList extends AsyncTask<String, Void, String> {
 
 
-
-    private final String SERVER_URL = MainActivity.SERVER_URL + "/ActivityUserManager/";
-//    private ActivityNFCMarksRedactor.ActivityNFCMarksRedactorController ANFCMRC;
     private String admin;
     private TextView Ekran;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
+
+    private final String ASKER = "AskMarksList";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
 
     public void setAdmin(String admin1) {
         this.admin = admin1;
@@ -30,6 +31,23 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
     public AskMarksList(TextView Ekran1) {
         this.Ekran = Ekran1;
 
+    }
+
+    @Override
+    protected void onPreExecute(){
+        makeOutBoundJSON();
+    }
+
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public  void setContext(Context c1) {
@@ -43,16 +61,10 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-// список NFC меток на сервере.
-
-        JSONObject SendThis = new JSONObject();
-        try {
-            SendThis.put("Marklist","TRUE");
-            SendThis.put("admin",admin);
-            SendThis.put("key",KEY);
-        } catch (JSONException e) {	e.printStackTrace();}
-
-        return Utilites.getNFC_MarksListJSON_ZAGLUSHKA(SendThis.toString());
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

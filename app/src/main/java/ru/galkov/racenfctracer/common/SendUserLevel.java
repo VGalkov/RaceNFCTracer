@@ -13,7 +13,9 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class SendUserLevel extends AsyncTask<String, Void, String> {
 
-    private final String SERVER_URL = MainActivity.SERVER_URL + "/MainActivity/";
+    private final String ASKER = "SendUserLevel";
+    private JSONObject outBoundJSON;
+    private MainActivity.fieldsJSON f;
     private String level;
     private String login;
     private TextView userLogger;
@@ -34,21 +36,31 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
         login = login1;
     }
 
+
+    private  void makeOutBoundJSON(){
+        try {
+            outBoundJSON = new JSONObject();
+            outBoundJSON.put(f.asker.toString(),ASKER);
+
+            outBoundJSON.put(f.key.toString(),KEY);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onPreExecute(){
-        // проверку на
+        makeOutBoundJSON();
     }
 
 
     protected String doInBackground(String... arg0) {
 
-        JSONObject toServer = new JSONObject();
-        try {
-            toServer.put("login",login);    // TRUE|FALSE
-            toServer.put("key",KEY);
-            toServer.put("level",level);
-        } catch (JSONException e) {	e.printStackTrace();}
-
-        return Utilites.getONEUserLogin_ZAGLUSHKA(toServer.toString());
+        HttpProcessor HP = new HttpProcessor();
+        HP.setASKER(ASKER);
+        HP.setJson(outBoundJSON);
+        return HP.execute();
     }
 
     @Override

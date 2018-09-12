@@ -51,16 +51,18 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 //        {"usersArr":[{"level":"Admin","login":"+79000000000"},{"level":"Guest","login":"490000000000"}],"asker":"AskUserTable","key":"galkovvladimirandreevich"}
         // TODO rewrite
         try {
-            JSONArray arr = new JSONArray(result);
-            String[] userList = new String[arr.length()];
+                JSONObject obj = new  JSONObject(result);
+                JSONArray arr = obj.getJSONArray(f.usersArr.toString());
 
-            for(int i = 0 ; i< arr.length() ; i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                userList[i] = obj.get("user") + "("+ obj.get("level") +")";
-            }
+                String[] userList = new String[arr.length()];
 
-            ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, userList);
-            spinnerUsers.setAdapter(adapterUsers);
+                for(int i = 0 ; i< arr.length() ; i++) {
+                    JSONObject obj1 = arr.getJSONObject(i);
+                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString() +")");
+                }
+
+                ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, userList);
+                spinnerUsers.setAdapter(adapterUsers);
 
         } catch (JSONException e) {	e.printStackTrace();}
     }

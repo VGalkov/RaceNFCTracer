@@ -15,9 +15,8 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private final String ASKER = "SendNewNFCMark";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
-    private String login;
+    private MainActivity.trigger t;
     private String mark;
-    private String admin;
     private TextView NFC_ConfigurationLog;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
@@ -53,16 +52,21 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             JSONObject JOAnswer = new JSONObject(result);
 
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-                    NFC_ConfigurationLog.append("Зарегистрирована метка: " + JOAnswer.get("Mark") +"\n");
+                if(JOAnswer.get(f.status.toString()).equals(t.TRUE)) {  // TRUE|FALSE
+                    wrire("Зарегистрирована метка: " + JOAnswer.get("Mark") +"\n");
                 }
-                else {
-                    NFC_ConfigurationLog.append(JOAnswer.get("Error").toString());
+                else
+                    wrire(JOAnswer.get(f.error.toString()).toString());
                 }
 
             }
-        }
         catch (JSONException e) {	e.printStackTrace();}
+    }
+
+
+    private void wrire(String str) {
+        if (method == method.Set)  NFC_ConfigurationLog.setText(str);
+        else NFC_ConfigurationLog.append(str);
     }
 
     public void setMethod(MainActivity.writeMethod method1) {

@@ -45,17 +45,9 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
 // {"date":"2018.09.11 09:26:46","asker":"AskServerTime","key":"galkovvladimirandreevich"}
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-// пишем, что ок. и помещаем регистрационные данные в монитор в админа c датой с сервера.
-// formatForDateNow.format(Dt2)
-                    String regRecord = JOAnswer.get("date").toString();
-                    TimeLabel.setText(regRecord);
-                }
-                else {
-                    TimeLabel.setText(JOAnswer.get("Error").toString());
-                }
-
+            if (Utilites.chkKey((String) JOAnswer.get(f.key.toString()))) {
+                   String regRecord = JOAnswer.get(f.date.toString()).toString();
+                   TimeLabel.setText(regRecord);
             }
         }
         catch (JSONException e) {	e.printStackTrace();}

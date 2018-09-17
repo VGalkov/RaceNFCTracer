@@ -36,9 +36,9 @@ public class MainActivity extends Activity {
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
 
-    public static final String SERVER_URL = "http://localhost:8080";
+    public static final String SERVER_URL = "http://192.168.1.5:8080";
     public static final int HTTP_TIMEOUT = 15000;
-    public static final int TimerTimeout = 6000;
+    public static final int TimerTimeout = 10000;
     public static final int TimerDelay = 0;
 
     public static enum fieldsJSON {asker,password, rows, date, key, mark, marks, error, usersArr, login, level, status, latitude, altitude,longitude}

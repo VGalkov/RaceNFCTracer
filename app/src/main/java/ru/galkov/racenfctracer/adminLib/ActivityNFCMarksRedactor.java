@@ -120,7 +120,6 @@ public class ActivityNFCMarksRedactor  extends Activity {
                 NFC_ConfigurationLog.append("Сохраняется метка: \n ");
 
                 SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
-                NFC.setAdmin("+79272006036"); // заглушка
                 NFC.setMark(markContent);
                 NFC.execute();
             }

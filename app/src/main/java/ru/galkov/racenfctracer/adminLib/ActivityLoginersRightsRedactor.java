@@ -104,7 +104,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             LoginToChng = findViewById(R.id.LoginToChng);
 
             spinnerLevel =         findViewById(R.id.spinnerLevel);
-            String[] levels =   {"Guest", "User", "Admin"};
+            String[] levels =   {"Guest", "User", "Admin", "Delete"};
             adapterLevels = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, levels);
             spinnerLevel.setAdapter(adapterLevels);
 

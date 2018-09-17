@@ -46,15 +46,26 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        // =>         {"asker":"AskMarksList","marks":[{"mark":"002222220000"},{"mark":"000000000001"}],"key":"galkovvladimirandreevich"}/
-        // TODO переписать извлечение
+ /*
+ {
+    "asker":"AskMarksList",
+    "rows":
+        [
+            {"Id":0,"mark":"?????? ?????"},
+            {"Id":1,"mark":"??????"}
+        ],
+    "key":"galkovvladimirandreevich"}
+ */
         StringBuffer response = new StringBuffer();
-        String str = "\n";
+        // TODO проверка ключа
         try {
-            JSONArray arr = new JSONArray(result);
+            JSONObject JOAnswer = new JSONObject(result);
+            String serverKEY = JOAnswer.getString(f.key.toString());
+            JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
+
             for(int i = 0 ; i< arr.length() ; i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                response.append("Метка(зарегистрирована на сервере):" + obj.getString(f.mark.toString()) + "\n");
+                response.append("Метка(зарегистрирована на сервере):" + obj.getString(f.label.toString()) + "\n");
             }
         } catch (JSONException e) {	e.printStackTrace();}
 

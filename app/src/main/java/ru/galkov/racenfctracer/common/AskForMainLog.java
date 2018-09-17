@@ -71,29 +71,31 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
 
     /*
 
-{	"asker":"AskForMainLog",
-	"rows":[
-		"date":"2018.09.11 10:41:35",
-		"altitude":"50.2143",
-		"latitude":"50.2134",
-		"Id":0,
-		"login":"+79272006026",
-		"mark":"1234567890",
-		"longitude":"50.2134"},
-
-		{"date":"2018.09.11 10:41:35","altitude":"50.2143","latitude":"50.2134","Id":1,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"}
-		],
-
-	"key":"galkovvladimirandreevich"}
+	{   "asker":"AskForMainLog",
+	    "rows":[
+	        {"date":"2018.09.16 00:00:00",
+	            "altitude":2,
+	            "latitude":2,
+	            "Id":0,
+	            "login":8,
+	            "mark":4,
+	            "longitude":2
+	            }
+	            ],
+	    "key":"galkovvladimirandreevich"
+	 }
 ===========================================
     * */
         String str = "\n";
-        // структура поменялась, см ерверную часть.
+
         try {
-                JSONArray arr = new JSONArray(result);
+                JSONObject JOAnswer = new JSONObject(result);
+                // TODO проверка ключа
+                String serverKEY = JOAnswer.getString("key");
+                JSONArray arr = JOAnswer.getJSONArray("rows");
                 for(int i = 0 ; i< arr.length() ; i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    str = str + obj.getString("user") + " прошёл метку -> \n" + obj.getString("mark") + "\n время: " + obj.getString("date") + "\n" +"на точке: "+obj.getString("gpsX")+", "+obj.getString("gpsY")+", "+obj.getString("gpsZ")+" \n\n";
+                    str = str + obj.getString("login") + " прошёл метку -> \n" + obj.getString("mark") + "\n время: " + obj.getString("date") + "\n" +"на точке: "+obj.getString("latitude")+", "+obj.getString("longitude")+", "+obj.getString("altitude")+" \n\n";
                 }
 
             if (method == MainActivity.writeMethod.Append) {

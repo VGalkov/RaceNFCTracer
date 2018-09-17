@@ -48,17 +48,28 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-//        {"usersArr":[{"level":"Admin","login":"+79000000000"},{"level":"Guest","login":"490000000000"}],"asker":"AskUserTable","key":"galkovvladimirandreevich"}
-        // TODO rewrite
-        try {
-                JSONObject obj = new  JSONObject(result);
-                JSONArray arr = obj.getJSONArray(f.usersArr.toString());
 
+/*
+        {"usersArr":
+            [
+                {"password":"2222222","level":"User","Id":8,"login":"+79272000001"},
+                {"password":"1111111","level":"Admin","Id":9,"login":"+79272006026"},
+                {"password":"dggsshshgss","level":"Guest","Id":11,"login":"+79424557585"},
+                {"password":"cfccccccc","level":"Guest","Id":22,"login":"888888888888"},
+            ],
+            "asker":"AskUserTable",
+            "key":"galkovvladimirandreevich"}
+ */
+        try {
+                JSONObject JOAnswer = new JSONObject(result);
+                String serverKEY = JOAnswer.getString(f.key.toString());
+                JSONArray arr = JOAnswer.getJSONArray(f.usersArr.toString());
                 String[] userList = new String[arr.length()];
 
                 for(int i = 0 ; i< arr.length() ; i++) {
                     JSONObject obj1 = arr.getJSONObject(i);
-                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString() +")");
+//                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString() +")");
+                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString()) +")";
                 }
 
                 ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, userList);

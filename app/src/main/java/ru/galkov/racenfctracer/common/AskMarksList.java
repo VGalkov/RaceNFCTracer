@@ -65,7 +65,7 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
             for(int i = 0 ; i< arr.length() ; i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                response.append("Метка(зарегистрирована на сервере):" + obj.getString(f.label.toString()) + "\n");
+                response.append("Метка(зарегистрирована на сервере):" + obj.getString(f.label.toString()) + "\n\n");
             }
         } catch (JSONException e) {	e.printStackTrace();}
 

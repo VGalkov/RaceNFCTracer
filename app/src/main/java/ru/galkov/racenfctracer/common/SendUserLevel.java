@@ -34,7 +34,6 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
         login = login1;
     }
 
-
     @Override
     protected void onPreExecute(){
         makeOutBoundJSON();

@@ -20,11 +20,10 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private String login;
     private String mark;
     private TextView User_Monitor;
-    private Double latitude;
-    private Double longitude;
-    private Double altitude;
+    private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
+    private long race =0L;
     public DecimalFormat df = DECIMAL_FORMAT;
     private final String ASKER = "SendUserNFCDiscovery";
     private JSONObject outBoundJSON;
@@ -33,7 +32,6 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     public SendUserNFCDiscovery(TextView User_Monitor1) {
         User_Monitor = User_Monitor1;
     }
-
 
     @Override
     protected void onPreExecute(){
@@ -76,14 +74,21 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
 
     private  void makeOutBoundJSON(){
-/*        {	"asker":"SendUserNFCDiscovery",
-                "mark" ="09201724307",
-                "key":"galkovvladimirandreevich",
-                "login":"+790002229999",
-                "longitude":"50.2134",
-                "altitude":"50.2143",
-                "latitude":"50.2134"}*/
+/*
 
+    {
+            "altitude":0,
+            "latitude":0,
+            "asker":"SendUserNFCDiscovery",
+            "login":"+79272006026",
+            "mark":"777777",
+            "key":"galkovvladimirandreevich",
+            "longitude":0
+            ""
+    }
+
+                */
+// TODO RACE START интегрировать, пока это заглушка и с координатными полями херня какая-то.
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
@@ -93,6 +98,8 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.altitude.toString(),altitude);
             outBoundJSON.put(f.latitude.toString(),latitude);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.race.toString(),race);
+            outBoundJSON.put(f.start.toString(),race);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -108,15 +115,23 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
     public void setGPS_System(GPS GPS_System1) {
         this.GPS_System = GPS_System1;
+        this.altitude = GPS_System.getAltitude();
+        this.longitude = GPS_System.getLongitude();
+        this.latitude = GPS_System.getLatitude();
     }
 
     public void setMark(String mark1) {
         this.mark = mark1;
     }
 
+    public void setRace(long race1) {
+        this.race = race1;
+    }
+
     public void setUser(String user1) {
         this.login = user1;
     }
+
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
 

@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMarksList;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -52,8 +53,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
     public TextView NFC_ConfigurationLog;
     public TextView ServerTime;
     public String markContent;
-//    private ActivityNFCMarksRedactorController ANFCMRC;
-
+    private final MainActivity.writeMethod METHOD = MainActivity.writeMethod.Append;
     public static final String ERROR_DETECTED = "No NFC tag detected!";
     public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
     public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
@@ -118,9 +118,10 @@ public class ActivityNFCMarksRedactor  extends Activity {
             public void onClick(View view) {
 
                 NFC_ConfigurationLog.append("Сохраняется метка: \n ");
-
                 SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
                 NFC.setMark(markContent);
+                NFC.setMethod(METHOD);
+                NFC.setGPS_System(GPS_System);
                 NFC.execute();
             }
         });

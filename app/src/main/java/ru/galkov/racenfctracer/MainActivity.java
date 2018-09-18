@@ -41,9 +41,9 @@ public class MainActivity extends Activity {
     public static final int TimerTimeout = 10000;
     public static final int TimerDelay = 0;
 
-    public static enum fieldsJSON {label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status, latitude, altitude,longitude}
+    public static enum fieldsJSON {start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public static enum trigger {TRUE, FALSE}
-    public static enum registrationLevel {Guest,User,Admin, Error} // = access in server
+    public static enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
 
 

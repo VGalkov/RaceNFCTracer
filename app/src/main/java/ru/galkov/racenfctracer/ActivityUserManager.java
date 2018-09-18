@@ -171,8 +171,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
             NFC.setGPS_System(GPS_System);
             NFC.setMark(text);
-            MainActivity.writeMethod wMethod = MainActivity.writeMethod.Set;
-            NFC.setMethod(wMethod);
+            NFC.setMethod(MainActivity.writeMethod.Set);
             NFC.setContext(activity);
             NFC.setUser("+79272006026");  // заглушка
 
@@ -212,7 +211,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
             return recordNFC;
         }
-
 
 
         //     **********************************Enable Write********************************

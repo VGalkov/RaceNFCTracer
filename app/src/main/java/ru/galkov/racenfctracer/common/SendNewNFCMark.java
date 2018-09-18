@@ -17,6 +17,9 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private MainActivity.fieldsJSON f;
     private MainActivity.trigger t;
     private String mark;
+    private long race = 0;
+    private Double longitude = 0.00, latitude =0.00, altitude =0.00;
+    private GPS GPS_system;
     private TextView NFC_ConfigurationLog;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
@@ -28,6 +31,16 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         this.mark = mark1;
     }
 
+    public void setGPS_System(GPS GPS_System1) {
+            this.GPS_system = GPS_System1;
+            this.latitude = GPS_system.getLatitude();
+            this.longitude = GPS_system.getLongitude();
+            this.altitude = GPS_system.getAltitude();
+    }
+
+    public void setRace(long race1) {
+        this.race = race1;
+    }
 
     @Override
     protected void onPreExecute(){
@@ -45,18 +58,24 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // обработка ответа сервера о сохранении новой метки
-        // TODO rewrite!
-        //=>
-        //        {"asker":"SendNewNFCMark","mark":"09201724307","key":"galkovvladimirandreevich","status":"TRUE"}
-        try {
-            JSONObject JOAnswer = new JSONObject(result);
+/*
 
-            if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                if(JOAnswer.get(f.status.toString()).equals(t.TRUE)) {  // TRUE|FALSE
-                    wrire("Зарегистрирована метка: " + JOAnswer.get("Mark") +"\n");
-                }
-                else
-                    wrire(JOAnswer.get(f.error.toString()).toString());
+    {
+        "asker":"SendNewNFCMark",
+        "mark":"777777",
+        "key":"galkovvladimirandreevich",
+        "status":"TRUE"
+    }
+
+*/
+        try {
+                JSONObject JOAnswer = new JSONObject(result);
+                if (Utilites.chkKey((String) JOAnswer.get("key"))) {
+                    if(JOAnswer.get(f.status.toString()).equals(t.TRUE)) {  // TRUE|FALSE
+                        wrire("Зарегистрирована метка: " + JOAnswer.get("mark") +"\n");
+                    }
+                    else
+                        wrire(JOAnswer.get(f.error.toString()).toString());
                 }
 
             }
@@ -76,12 +95,21 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     private  void makeOutBoundJSON(){
 
-//        {"asker":"SendNewNFCMark","mark" ="09201724307","key":"galkovvladimirandreevich"}
+// {
+//  "race":0,
+//  "asker":"SendNewNFCMark",
+//  "mark":"42421",
+//  "key":"galkovvladimirandreevich"
+// }
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.mark.toString(),this.mark);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.longitude.toString(), this.longitude);
+            outBoundJSON.put(f.altitude.toString(), this.altitude);
+            outBoundJSON.put(f.latitude.toString(), this.latitude);
+            outBoundJSON.put("race", race);
 
         } catch (JSONException e) {
             e.printStackTrace();

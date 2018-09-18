@@ -18,7 +18,7 @@ public class GPS implements LocationListener {
     private LocationManager lm;
     private int minDistance  = 1;
     private int minTime = 1;
-    private Double Longitude, Latitude, Altitude;
+    private Double Longitude= 0.00, Latitude = 0.00, Altitude = 0.00;
     private TextView gps_monitor;
     public DecimalFormat df = DECIMAL_FORMAT;
 
@@ -48,7 +48,7 @@ public class GPS implements LocationListener {
     public Double getLongitude() {
         return Longitude;
     }
-    public Double gettLatitude() {
+    public Double getLatitude() {
         return Latitude;
     }
     public Double getAltitude() {

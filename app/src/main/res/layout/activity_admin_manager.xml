@@ -19,6 +19,12 @@
             android:text="@string/poins_table" />
 
         <Button
+            android:id="@+id/raceSetup_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/RaceSetup" />
+
+        <Button
             android:id="@+id/register_editor_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

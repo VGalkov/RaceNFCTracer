@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
@@ -47,13 +48,16 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         PendingIntent pendingIntent;
         IntentFilter writeTagFilters[];
         Context context;
+        private TextView raceStart;
         private Button back_button;
+        private Button register_button;
         private TextView NFC_ConfigurationLog;
         private ActivityUserManagereController AUMC;
         public static final String ERROR_DETECTED = "No NFC tag detected!";
         public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
         public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
         private Context activity;
+
 
 
         @Override
@@ -125,6 +129,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         NFC_ConfigurationLog =  findViewById(R.id.NFC_ConfigurationLog);
         race_status =           findViewById(R.id.race_status);
         User_Monitor =          findViewById(R.id.User_Monitor);
+        register_button =       findViewById(R.id.register_button);
+        raceStart =             findViewById(R.id.raceStart);
+
 
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -235,6 +242,13 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             public void onClick(View view) {
                 setResult(RESULT_OK, new Intent());
                 finish();
+            }
+        });
+
+        register_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart);
+                ACRS.execute();
             }
         });
 

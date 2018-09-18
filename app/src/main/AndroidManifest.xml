@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.galkov.racenfctracer">
-<!-- http://developer.alexanderklimov.ru/android/theory/AndroidManifestXML.php -->
+
+    <!-- http://developer.alexanderklimov.ru/android/theory/AndroidManifestXML.php -->
     <uses-permission android:name="android.permission.NFC" />
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!--    <uses-feature    android:name="android.hardware.nfc"  android:required="true" /> -->
-    <uses-feature    android:name="android.hardware.nfc"  android:required="false" />
-
-
+    <!-- <uses-feature    android:name="android.hardware.nfc"  android:required="true" /> -->
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -29,29 +25,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity android:name=".ActivityGuestManager">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-
         </activity>
-
         <activity android:name=".ActivityUserManager">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-<!--                <category android:name="android.intent.category.DEFAULT" /> -->
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <data android:mimeType="text/plain" />
             </intent-filter>
+
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
@@ -59,39 +51,36 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity android:name=".ActivityAdminManager">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity android:name=".adminLib.ActivityLoginersRightsRedactor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
         </activity>
-
         <activity android:name=".adminLib.ActivityResultsTable">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
         </activity>
-
         <activity android:name=".adminLib.ActivityNFCMarksRedactor">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
+
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
-
         </activity>
-
-</application>
+        <activity android:name=".adminLib.ActivityRaceSetup"></activity>
+    </application>
 
 </manifest>

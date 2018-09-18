@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
+import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -32,7 +33,6 @@ public class ActivityAdminManager  extends Activity {
 
         AAMC = new ActivityAdminManagerController();
         startTimeSync();
-
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
     }
 
@@ -67,6 +67,7 @@ public class ActivityAdminManagerController{
         private Button results_table_button;
         private Button register_editor_button;
         private Button nfc_marks_editor_button;
+        private Button raceSetup_button;
         public TextView UserLogger;
         public TextView ServerTime;
 
@@ -86,8 +87,10 @@ public class ActivityAdminManagerController{
         results_table_button =              findViewById(R.id.results_table_button);
         register_editor_button =            findViewById(R.id.register_editor_button);
         nfc_marks_editor_button =           findViewById(R.id.nfc_marks_editor_button);
+        raceSetup_button =                  findViewById(R.id.raceSetup_button);
         UserLogger =                        findViewById(R.id.UserLogger);
         ServerTime =                        findViewById(R.id.ServerTime);
+
 
 
     }
@@ -98,6 +101,12 @@ public class ActivityAdminManagerController{
             public void onClick(View view) {
                 setResult(RESULT_OK, new Intent());
                 finish();
+            }
+        });
+
+        raceSetup_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivityForResult(new Intent(view.getContext(), ActivityRaceSetup.class), 0);
             }
         });
 
@@ -119,7 +128,6 @@ public class ActivityAdminManagerController{
             }
         });
     }
-
 
 
     // ============================

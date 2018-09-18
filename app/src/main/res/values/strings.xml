@@ -22,10 +22,11 @@
     <string name="NFCrecived">NFC метка считана:</string>
     <string name="results_download">Скачать таблицу результатов</string>
     <string name="setter">Назначить</string>
-
+    <string name="raceStartRegister">Зарегистрироваться на активный старт</string>
+    <string name="RaceSetup">Управление заездами</string>
     <string name="ServMainLog">Список с сервера:</string>
     <string name="NFC_To_Server">Метка отправлена на сервер -</string>
-
+    <string name="raceStart">нет регистрации на заезд!</string>
 
     <string name="LoginLevel"> Уровень доступа:</string>
     <string name="ServerTime"> 00:00:00</string>
@@ -149,8 +150,6 @@ mainlog:
 
 
     </string>
-
-
 
 
 </resources>

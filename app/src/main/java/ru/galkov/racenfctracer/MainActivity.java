@@ -30,7 +30,6 @@ public class MainActivity extends Activity {
 
     private MainActivityFaceController MAFC;
     private Timer ServerTimer;
-    private Context activity;
     public static final String KEY = "galkovvladimirandreevich";
 
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
@@ -39,32 +38,41 @@ public class MainActivity extends Activity {
     public static final String SERVER_URL = "http://192.168.1.5:8080";
     public static final int HTTP_TIMEOUT = 15000;
     public static final int TimerTimeout = 10000;
-    public static final int TimerDelay = 0;
+    public static final int TimerDelay = 1000;
 
-    public static enum fieldsJSON {start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    // названия разных типизированных полей. для защиты от опечаток.
+    public static enum fieldsJSON {start_id,race_id,race_label,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public static enum trigger {TRUE, FALSE}
     public static enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
 
+    // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
+    private static Context activity;
+    private static String login;
+    private static String password;
+    private static registrationLevel level;
+    private static long race_id;
+    private static long start_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         activity = this;
-
         MAFC = new MainActivityFaceController();
-        startTimeSync();
+//        startTimeSync();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        startTimeSync();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        ServerTimer.cancel();
     }
 
     // вынести в отдельный класс для всех со списком запуска и ссылками на экраны отображения ддля каждого Async.
@@ -72,15 +80,53 @@ public class MainActivity extends Activity {
         ServerTimer = new Timer(); // Создаем таймер
         ServerTimer.schedule(new TimerTask() { // Определяем задачу
             @Override
-            public void run() {
-                new AskServerTime(MAFC.ServerTime).execute();
-            }
+            public void run() {new AskServerTime(MAFC.ServerTime).execute();}
         }, TimerDelay, TimerTimeout);
+    }
 
+// =======================================================
+
+    public static String getLogin() {
+        return login;
+    }
+
+    public static void setLogin(String login1) {
+        login = login1;
+    }
+
+    public static String  getPassword() {
+        return password;
+    }
+
+    public  static void setPassword(String password1) {
+        password = password1;
+    }
+
+    public static registrationLevel getLevel() {
+        return level;
+    }
+
+    public static void  setLevel(registrationLevel level1) {
+        level = level1;
+    }
+
+    public static long getRace_id() {
+        return race_id;
+    }
+
+    public static void setRace_id(long race_id1) {
+        race_id = race_id1;
+    }
+
+    public static long getStart_id() {
+        return start_id;
+    }
+
+    public static void setStart_id(long start_id1) {
+        start_id = start_id1;
     }
 
 
-// =======================================================
 
     public class MainActivityFaceController {
 
@@ -221,7 +267,11 @@ public class MainActivity extends Activity {
 
         // ==============================================================================
 
-
+        private void remember_registred_data(){
+            setLevel(REGLEVEL);
+            setPassword(password.getText().toString());
+            setLogin(phone.getText().toString());
+        }
 
         private void addListeners() {
 
@@ -253,17 +303,20 @@ public class MainActivity extends Activity {
 
             enterButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
+                    remember_registred_data();
                     if ((!registerButton.isEnabled()) && (enterButton.isEnabled())) {
                         // переходим на активити согласно вычисленному при регистрации уровню доступа.
-                        if (REGLEVEL == registrationLevel.Admin)
+                        if (REGLEVEL == registrationLevel.Admin) {
                             startActivityForResult(new Intent(view.getContext(), ActivityAdminManager.class), 0);
+                        }
+                        else if (REGLEVEL == registrationLevel.User) {
 
-                        else if (REGLEVEL == registrationLevel.User)
                             startActivityForResult(new Intent(view.getContext(), ActivityUserManager.class), 0);
+                        }
+                        else if (REGLEVEL == registrationLevel.Guest) {
 
-                        else if (REGLEVEL == registrationLevel.Guest)
                             startActivityForResult(new Intent(view.getContext(), ActivityGuestManager.class), 0);
-
+                        }
                         else
                             Utilites.messager(activity, "Ошибка распознавания Avtivity to show из-за ");
                     }

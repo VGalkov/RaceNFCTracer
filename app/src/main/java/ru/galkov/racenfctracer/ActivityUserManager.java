@@ -89,6 +89,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         @Override
         public void onPause(){
             super.onPause();
+            ServerTimer.cancel();
             WriteModeOff();
 
         }
@@ -96,6 +97,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         @Override
         public void onResume(){
             super.onResume();
+            startTimeSync();
             WriteModeOn();
         }
 

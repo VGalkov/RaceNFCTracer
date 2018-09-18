@@ -39,13 +39,13 @@ public class ActivityGuestManager  extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
+        startTimeSync();
     }
 
         @Override
         protected void onPause () {
             super.onPause();
+            ServerTimer.cancel();
         }
 
 

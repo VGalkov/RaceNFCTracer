@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
     public static final int TimerDelay = 1000;
 
     // названия разных типизированных полей. для защиты от опечаток.
-    public static enum fieldsJSON {start_id,race_id,race_label,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public static enum fieldsJSON {racesConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public static enum trigger {TRUE, FALSE}
     public static enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}

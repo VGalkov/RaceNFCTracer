@@ -168,12 +168,14 @@ public class ActivityNFCMarksRedactor  extends Activity {
     @Override
     public void onPause(){
         super.onPause();
+        ServerTimer.cancel();
         WriteModeOff();
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        startTimeSync();
         WriteModeOn();
     }
 

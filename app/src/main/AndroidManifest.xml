@@ -80,7 +80,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
         </activity>
-        <activity android:name=".adminLib.ActivityRaceSetup"></activity>
+        <activity android:name=".adminLib.ActivityRaceSetup">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ActivityAdminManager" />
+        </activity>
     </application>
 
 </manifest>

@@ -28,6 +28,9 @@
     <string name="NFC_To_Server">Метка отправлена на сервер -</string>
     <string name="raceStart">нет регистрации на заезд!</string>
 
+    <string name="raceNo">Номер, название мероприятия</string>
+    <string name="startNo">Номер, название старта на мероприятии</string>
+    <string name="declare">Объявить конфигурацию заезда</string>
     <string name="LoginLevel"> Уровень доступа:</string>
     <string name="ServerTime"> 00:00:00</string>
     <string name="ServerTimeLabel">Время на сервере</string>

@@ -72,6 +72,7 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
                     userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString()) +")";
                 }
 
+
                 ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, userList);
                 spinnerUsers.setAdapter(adapterUsers);
 

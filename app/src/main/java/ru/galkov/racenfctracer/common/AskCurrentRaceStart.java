@@ -16,14 +16,12 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
     private MainActivity.trigger trigger;
-
+    private TextView ekran;
 
 
     // fields
 
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
-    private TextView ekran;
-
 
     public AskCurrentRaceStart(TextView ekran1) {
         this.ekran = ekran1;
@@ -56,7 +54,6 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            // TODO проверка ключа
             String serverKEY = JOAnswer.getString(f.key.toString());
             // true, если определён админом.
             String status = JOAnswer.getString(f.status.toString());
@@ -65,12 +62,10 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 if (status.equals(trigger.TRUE.toString())) {
                     MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
-                    str = "Соревнование: " + JOAnswer.getString(f.race_label.toString()) + "(" + JOAnswer.getString(f.race_id.toString()) + ")" +
-                            "\n Заезд: " + JOAnswer.getString(f.race_label.toString()) + "(" + JOAnswer.getString(f.race_id.toString()) + ")";
+                    str = "Соревнование: " + JOAnswer.getString(f.race_name.toString()) + "(" + JOAnswer.getString(f.race_id.toString()) + ")" +
+                            "\n Заезд: " + JOAnswer.getString(f.start_label.toString()) + "(" + JOAnswer.getString(f.start_id.toString()) + ")";
                 }
-                else {
-                    str = "заезд не создан админом!";
-                }
+                else str = "заезд не создан админом!";
 
                 if (method == MainActivity.writeMethod.Append)     ekran.append(str);
                 else    ekran.setText(str);
@@ -82,7 +77,6 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 
 
     void makeOutBoundJSON() {
-        // {"asker":" AskCurrentRaceStart","key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);

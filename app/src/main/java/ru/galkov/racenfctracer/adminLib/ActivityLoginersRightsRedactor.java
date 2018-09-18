@@ -33,6 +33,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
     private ActivityLoginersRightsRedactorController ALRRC;
     private AskUserTable AUT;
     private Context activityContext;
+    private Timer ServerTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +50,26 @@ public class ActivityLoginersRightsRedactor  extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        startTimeSync();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        ServerTimer.cancel();
     }
 
     private void startTimeSync() {
-        new Timer().schedule(new TimerTask() {
+        ServerTimer = new Timer(); // Создаем таймер
+        ServerTimer.schedule(new TimerTask() { // Определяем задачу
             @Override
-            public void run() {new AskServerTime(ALRRC.ServerTime).execute();}
+            public void run() {
+                new AskServerTime(ALRRC.ServerTime).execute();
+            }
         }, TimerDelay, TimerTimeout);
+
     }
+
 
 // ==========================================================
 

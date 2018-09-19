@@ -80,6 +80,8 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.level.toString(),level);
             outBoundJSON.put(f.login.toString(),login);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();

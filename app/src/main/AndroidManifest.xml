@@ -32,12 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityGuestManager">
+        <activity android:name=".ActivityGuestManager" android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ActivityUserManager">
+        <activity android:name=".ActivityUserManager" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <!-- <category android:name="android.intent.category.DEFAULT" /> -->
@@ -51,22 +51,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ActivityAdminManager">
+        <activity android:name=".ActivityAdminManager" android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".adminLib.ActivityLoginersRightsRedactor">
+        <activity android:name=".adminLib.ActivityLoginersRightsRedactor" android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
         </activity>
-        <activity android:name=".adminLib.ActivityResultsTable">
+        <activity android:name=".adminLib.ActivityResultsTable" android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
         </activity>
-        <activity android:name=".adminLib.ActivityNFCMarksRedactor">
+        <activity android:name=".adminLib.ActivityNFCMarksRedactor" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
@@ -80,10 +80,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
         </activity>
-        <activity android:name=".adminLib.ActivityRaceSetup">
+        <activity android:name=".adminLib.ActivityRaceSetup" android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityAdminManager" />
+        </activity>
+        <activity android:name=".adminLib.ActivityHelpSystem" android:noHistory="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
     </application>
 

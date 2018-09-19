@@ -32,7 +32,7 @@ public class ActivityAdminManager  extends Activity {
         setContentView(R.layout.activity_admin_manager);
 
         AAMC = new ActivityAdminManagerController();
-        startTimeSync();
+//        startTimeSync();
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
     }
 
@@ -54,8 +54,7 @@ public class ActivityAdminManager  extends Activity {
             @Override
             public void run() {
                 new AskServerTime(AAMC.ServerTime).execute();
-                //  опрашивать сервер о новых данных и времени
-                new AskForMainLog(AAMC.UserLogger).execute(); //опросчик на лог main_log сервера.
+                new AskForMainLog(AAMC.UserLogger).execute();
             }
         }, TimerDelay, TimerTimeout);
 
@@ -72,6 +71,7 @@ public class ActivityAdminManagerController{
         private Button raceSetup_button;
         public TextView UserLogger;
         public TextView ServerTime;
+        private TextView loginInfo;
 
 
         ActivityAdminManagerController() {
@@ -92,9 +92,12 @@ public class ActivityAdminManagerController{
         raceSetup_button =                  findViewById(R.id.raceSetup_button);
         UserLogger =                        findViewById(R.id.UserLogger);
         ServerTime =                        findViewById(R.id.ServerTime);
+        loginInfo =             findViewById(R.id.loginInfo);
+        constructStatusString();
+    }
 
-
-
+    private void constructStatusString() {
+        loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
     }
 
     private void addListeners() {

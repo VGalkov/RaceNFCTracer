@@ -13,12 +13,14 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendActiveRaceStart;
+import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
@@ -26,8 +28,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 public class ActivityRaceSetup  extends Activity {
 
     private Timer ServerTimer;
-    private ActivityRaceSetupController ARSController;
-    private Context context;
+    public ActivityRaceSetupController ARSController;
+    public Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +41,6 @@ public class ActivityRaceSetup  extends Activity {
 
         new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
         ARSController = new ActivityRaceSetupController();
-
-        startTimeSync();
-
     }
 
     @Override
@@ -77,19 +76,15 @@ public class ActivityRaceSetup  extends Activity {
         public Spinner spinnerStart;
         private long race_id = 0L;
         private long start_id = 0L;
-
+        private TextView loginInfo;
 
         ActivityRaceSetupController() {
             initViewObjects();
             addListeners();
         }
 
-        public void setRace_id(long race_id) {
-            this.race_id = race_id;
-        }
-
-        public void setStart_id(long start_id) {
-            this.start_id = start_id;
+        private void constructStatusString() {
+            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
         }
 
         private void initViewObjects() {
@@ -100,6 +95,8 @@ public class ActivityRaceSetup  extends Activity {
             spinnerStart = findViewById(R.id.spinnerStart);
             spinnerRace = findViewById(R.id.spinnerRace);
             raceConfig = findViewById(R.id.raceConfig);
+            loginInfo =             findViewById(R.id.loginInfo);
+            constructStatusString();
 
             AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
             ACRS.execute();
@@ -109,6 +106,7 @@ public class ActivityRaceSetup  extends Activity {
             ARaceS.setActivityContext(context);
             ARaceS.execute();
         }
+
 
         private void addListeners() {
 
@@ -135,18 +133,17 @@ public class ActivityRaceSetup  extends Activity {
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
-
+                    Utilites.messager(context, "Нужно что-то выбрать!");
                 }
             });
 
           spinnerRace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
               @Override
               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
               }
               @Override
               public void onNothingSelected(AdapterView<?> arg0) {
-
+                  Utilites.messager(context, "Нужно что-то выбрать!");
               }
           });
         }

@@ -32,7 +32,7 @@ public class ActivityGuestManager  extends Activity {
         AGMC = new ActivityGuestManagereController();
 
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
-        startTimeSync(); // или в onResume?
+//        startTimeSync(); // или в onResume?
 
     }
 
@@ -72,6 +72,7 @@ public class ActivityGuestManager  extends Activity {
             private Button back_button;
             public TextView UserLogger;
             public TextView ServerTime;
+            private TextView loginInfo;
 
             ActivityGuestManagereController() {
                 setDefaultView();
@@ -86,6 +87,12 @@ public class ActivityGuestManager  extends Activity {
                 back_button = findViewById(R.id.back_button);
                 UserLogger = findViewById(R.id.UserLogger);
                 ServerTime = findViewById(R.id.ServerTime);
+                loginInfo =             findViewById(R.id.loginInfo);
+                constructStatusString();
+            }
+
+            private void constructStatusString() {
+                loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
             }
 
             private void addListeners() {

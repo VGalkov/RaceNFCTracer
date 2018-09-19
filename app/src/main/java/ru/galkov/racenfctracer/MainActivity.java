@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
     private Timer ServerTimer;
     public static final String KEY = "galkovvladimirandreevich";
 
-    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+    public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
 
     public static final String SERVER_URL = "http://192.168.1.5:8080";
@@ -40,11 +40,13 @@ public class MainActivity extends Activity {
     public static final int TimerTimeout = 10000;
     public static final int TimerDelay = 1000;
 
-    // названия разных типизированных полей. для защиты от опечаток.
-    public static enum fieldsJSON {racesConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
-    public static enum trigger {TRUE, FALSE}
-    public static enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
+    // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
+    public enum fieldsJSON {exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public enum trigger {TRUE, FALSE}
+    public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
+    public enum fileType {Results, Marcs, Log}
+
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
     private static Context activity;
@@ -53,6 +55,7 @@ public class MainActivity extends Activity {
     private static registrationLevel level;
     private static long race_id;
     private static long start_id;
+    // TODO GPS class сделать список контекстов кому передавать информацию из 1 класса, а не как сейчас.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         activity = this;
         MAFC = new MainActivityFaceController();
-//        startTimeSync();
+
     }
 
     @Override
@@ -85,6 +88,7 @@ public class MainActivity extends Activity {
     }
 
 // =======================================================
+
 
     public static String getLogin() {
         return login;
@@ -235,7 +239,13 @@ public class MainActivity extends Activity {
             phone.setText(getMyPhoneNumber());
             password.setText("");
             REGLEVEL = registrationLevel.Guest;
-            RegAsLabel.setText(REGLEVEL.toString()); // toString ли?
+            RegAsLabel.setText(REGLEVEL.toString());
+            // это глобальные данные для всех активити, возможно это неправильно.
+            setLogin("nobody");
+            setPassword("");
+            setLevel(REGLEVEL);
+            setRace_id(0L);
+            setStart_id(0L);
         }
 
 

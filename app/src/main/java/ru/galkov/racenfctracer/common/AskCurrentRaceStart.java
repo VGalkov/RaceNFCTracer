@@ -62,14 +62,18 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 if (status.equals(trigger.TRUE.toString())) {
                     MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
-                    str = "Соревнование: " + JOAnswer.getString(f.race_name.toString()) + "(" + JOAnswer.getString(f.race_id.toString()) + ")" +
-                            "\n Заезд: " + JOAnswer.getString(f.start_label.toString()) + "(" + JOAnswer.getString(f.start_id.toString()) + ")";
+                    str = "Соревнование: " + JOAnswer.getString(f.race_id.toString()) +
+                            "\n Заезд: " + JOAnswer.getString(f.start_id.toString());
                 }
-                else str = "заезд не создан админом!";
+                else {
+                    str = "заезд не создан админом!";
+                    // сброс соревнования!!!
+                    MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
+                    MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
+                }
 
                 if (method == MainActivity.writeMethod.Append)     ekran.append(str);
                 else    ekran.setText(str);
-
             }
 
         } catch (JSONException e) {	e.printStackTrace();}
@@ -81,7 +85,8 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
-
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

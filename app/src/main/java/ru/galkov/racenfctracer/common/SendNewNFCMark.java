@@ -62,7 +62,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     {
         "asker":"SendNewNFCMark",
-        "mark":"777777",
+        "mark":"79100",
         "key":"galkovvladimirandreevich",
         "status":"TRUE"
     }
@@ -71,7 +71,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         try {
                 JSONObject JOAnswer = new JSONObject(result);
                 if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                    if(JOAnswer.get(f.status.toString()).equals(t.TRUE)) {  // TRUE|FALSE
+                    if(JOAnswer.get(f.status.toString()).equals(t.TRUE.toString())) {  // TRUE|FALSE
                         wrire("Зарегистрирована метка: " + JOAnswer.get("mark") +"\n");
                     }
                     else
@@ -109,6 +109,8 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.longitude.toString(), this.longitude);
             outBoundJSON.put(f.altitude.toString(), this.altitude);
             outBoundJSON.put(f.latitude.toString(), this.latitude);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
             outBoundJSON.put("race", race);
 
         } catch (JSONException e) {

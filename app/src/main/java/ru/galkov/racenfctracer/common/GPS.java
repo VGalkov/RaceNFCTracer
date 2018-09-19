@@ -30,6 +30,7 @@ public class GPS implements LocationListener {
     }
 
 
+
     public void setGPSString(String str1) {
         gps_monitor.setText(str1);
     }

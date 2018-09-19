@@ -81,6 +81,8 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.race_id.toString(),race_id);
             outBoundJSON.put(f.start_id.toString(),start_id);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();

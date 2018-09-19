@@ -49,6 +49,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
     private Button back_button;
     private Button CommitButton;
     private TextView NfS_Mark_Editor;
+    private TextView loginInfo;
     private TextView CurrentNFC_Label;
     public TextView NFC_ConfigurationLog;
     public TextView ServerTime;
@@ -69,7 +70,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
         initClassVaribles();
         addlisteners();
         configureNFC();
-        startTimeSync();
+//        startTimeSync();
 
         new AskMarksList(NFC_ConfigurationLog).execute();
     }
@@ -104,6 +105,8 @@ public class ActivityNFCMarksRedactor  extends Activity {
         CommitButton =      findViewById(R.id.CommitButton);
         NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
         ServerTime = findViewById(R.id.ServerTime);
+        loginInfo =             findViewById(R.id.loginInfo);
+        constructStatusString();
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -112,12 +115,16 @@ public class ActivityNFCMarksRedactor  extends Activity {
         }
     }
 
+    private void constructStatusString() {
+        loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+    }
+
     private void addlisteners() {
 
         CommitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                NFC_ConfigurationLog.append("Сохраняется метка: \n ");
+                NFC_ConfigurationLog.append("Сохраняется метка -> \n ");
                 SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
                 NFC.setMark(markContent);
                 NFC.setMethod(METHOD);

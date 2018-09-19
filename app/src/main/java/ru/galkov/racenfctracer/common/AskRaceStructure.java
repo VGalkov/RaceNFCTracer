@@ -55,48 +55,69 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         // TODO конструируем спинеры. выпадающие списки рейсов и стартов связанные.
-
 /*
-	{   "asker":"AskForMainLog",
-	    "racesConfig":
-	        [
-	            {
-	                "race_id":"0", "starts": [
-	                                    {start_id=0},
-	                                    {start_id=1},
-	                                    {start_id=2}
-	                                ]
-                }
-                {
-	                 "race_id":"1", "starts": [
-	                                    {start_id=0},
-	                                    {start_id=1},
-	                                    {start_id=2},
-	                                    {start_id=3},
-	                                    {start_id=4},
-	                                    {start_id=5}
-	                                ]
-	            }
-	        ],
-	    "key":"galkovvladimirandreevich"
-	 }
+
+    {
+        "asker":"AskRaceStructure",
+        "key":"galkovvladimirandreevich",
+        "racesConfig":[
+                        {   "race_id":4,
+                            "startsConfig":{"{"start_id":13,"active":"N","Id":0,"label":"5"}":{"start_id":13,"active":"N","Id":0,"label":"5"},"{"start_id":9,"active":"N","Id":0,"label":"1"}":{"start_id":9,"active":"N","Id":0,"label":"1"},"{"start_id":10,"active":"N","Id":0,"label":"2"}":{"start_id":10,"active":"N","Id":0,"label":"2"},"{"start_id":11,"active":"N","Id":0,"label":"3"}":{"start_id":11,"active":"N","Id":0,"label":"3"},"{"start_id":12,"active":"N","Id":0,"label":"4"}":{"start_id":12,"active":"N","Id":0,"label":"4"}},
+                            "name":"??????",
+                            "active":"N",
+                            "Id":0
+                        },
+                        {   "race_id":5,
+                             "startsConfig":{"{"start_id":16,"active":"N","Id":1,"label":"3"}":{"start_id":16,"active":"N","Id":1,"label":"3"},"{"start_id":14,"active":"N","Id":1,"label":"1"}":{"start_id":14,"active":"N","Id":1,"label":"1"},"{"start_id":15,"active":"N","Id":1,"label":"2"}":{"start_id":15,"active":"N","Id":1,"label":"2"}},
+                             "name":"??????",
+                             "active":"N",
+                             "Id":1
+                         },
+                         {
+                            "race_id":6,
+                            "startsConfig":{"{"start_id":17,"active":"N","Id":2,"label":"1"}":{"start_id":17,"active":"N","Id":2,"label":"1"},"{"start_id":18,"active":"N","Id":2,"label":"2"}":{"start_id":18,"active":"N","Id":2,"label":"2"}},
+                            "name":"??????",
+                            "active":"N",
+                            "Id":2
+                         },
+                         {
+                            "race_id":7,
+                            "startsConfig":{"{"start_id":19,"active":"N","Id":3,"label":"1"}":{"start_id":19,"active":"N","Id":3,"label":"1"},"{"start_id":23,"active":"N","Id":3,"label":"5"}":{"start_id":23,"active":"N","Id":3,"label":"5"},"{"start_id":24,"active":"N","Id":3,"label":"6"}":{"start_id":24,"active":"N","Id":3,"label":"6"},"{"start_id":25,"active":"N","Id":3,"label":"7"}":{"start_id":25,"active":"N","Id":3,"label":"7"},"{"start_id":26,"active":"N","Id":3,"label":"8"}":{"start_id":26,"active":"N","Id":3,"label":"8"},"{"start_id":20,"active":"N","Id":3,"label":"2"}":{"start_id":20,"active":"N","Id":3,"label":"2"},"{"start_id":21,"active":"N","Id":3,"label":"3"}":{"start_id":21,"active":"N","Id":3,"label":"3"},"{"start_id":22,"active":"N","Id":3,"label":"4"}":{"start_id":22,"active":"N","Id":3,"label":"4"}},
+                            "name":"?????????",
+                            "active":"N",
+                            "Id":3
+                          }
+                      ]
+      }
 
 */
-    try {
-//            Spinner raceSpinner = ARSController.spinnerRace;
-//            Spinner startSpinner = ARSController.spinnerStart;
-            JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(f.key.toString());
-            JSONArray arr = JOAnswer.getJSONArray(f.racesConfig.toString());
-            String[] raceList = new String[arr.length()];
 
-            for (int i = 0; i<arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                raceList[i] = obj.getString(f.race_id.toString());
+    JSONObject JOAnswer;
+    JSONArray races;
+    String[] racesList = null;
+    try {
+// не очень понятно в какую структуру разворачивать для работы со связанными  спинерами.
+// которые тут нужно и связать по onchange listenery...
+
+            JOAnswer = new JSONObject(result);
+            String serverKEY = JOAnswer.getString(f.key.toString());
+            races = JOAnswer.getJSONArray(f.racesConfig.toString());
+            racesList = new String[races.length()];
+
+            for (int i = 0; i<races.length(); i++) {
+                JSONObject r = races.getJSONObject(i);
+                racesList[i] = r.getString(f.race_id.toString()) + "[" + r.getString(f.label.toString()) + "]";
+/*
+                JSONArray starts = races.getJSONArray(f.startsConfig.toString());
+*/
+
             }
-            ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, raceList);
-            ARSController.spinnerRace.setAdapter(adapterUsers);
-    } catch (JSONException e) {	e.printStackTrace();}
+
+            ArrayAdapter adapterStarts = new ArrayAdapter(activityContext,  android.R.layout.simple_spinner_item, racesList);
+//            ARSController.spinnerRace.setAdapter(adapterStarts);
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
 
     }
 
@@ -106,8 +127,11 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
+            outBoundJSON = Utilites.ErrorJSON();
         }
     }
 

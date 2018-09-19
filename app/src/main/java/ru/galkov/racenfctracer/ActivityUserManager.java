@@ -49,6 +49,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         IntentFilter writeTagFilters[];
         Context context;
         private TextView raceStart;
+        private TextView loginInfo;
         private Button back_button;
         private Button register_button;
         private TextView NFC_ConfigurationLog;
@@ -73,7 +74,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             initClassVaribles();
             addlisteners();
             configureNFC();
-            startTimeSync();
+//            startTimeSync();
 
         }
 
@@ -126,6 +127,10 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         writeTagFilters = new IntentFilter[] { tagDetected };
     }
 
+    public void constructStatusString() {
+        loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+    }
+
     private void initClassVaribles(){
         back_button =           findViewById(R.id.back_button);
         NFC_ConfigurationLog =  findViewById(R.id.NFC_ConfigurationLog);
@@ -133,6 +138,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         User_Monitor =          findViewById(R.id.User_Monitor);
         register_button =       findViewById(R.id.register_button);
         raceStart =             findViewById(R.id.raceStart);
+        loginInfo =             findViewById(R.id.loginInfo);
+        constructStatusString();
 
 
 
@@ -180,10 +187,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
             NFC.setGPS_System(GPS_System);
             NFC.setMark(text);
-            NFC.setMethod(MainActivity.writeMethod.Set);
             NFC.setContext(activity);
-            NFC.setUser("+79272006026");  // заглушка
-
             NFC.execute();
 
         }

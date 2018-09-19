@@ -56,7 +56,6 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
                 outBoundJSON.put(f.password.toString(),password);
                 outBoundJSON.put(f.level.toString(),level);
                 outBoundJSON.put(f.key.toString(),KEY);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

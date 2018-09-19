@@ -19,12 +19,14 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private MainActivity.fileType fileType;
 
-    public AskResultsTable(TextView userLogger1) {
+// TODO полностью переписать смысл.
+
+    public AskResultsTable(TextView userLogger1,MainActivity.fileType fileType2 ) {
         this.userLogger = userLogger1;
+        this.fileType = fileType2;
     }
-
-
 
     @Override
     protected void onPreExecute(){
@@ -41,29 +43,9 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-// отображаем таблицу результатов пользователей ... кстати не понятно поака как ..
-//     {"asker":"AskResultsTable","rows":[{"date":"2018.09.11 10:59:27","altitude":"50.2143","latitude":"50.2134","Id":0,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"},{"date":"2018.09.11 10:59:27","altitude":"50.2143","latitude":"50.2134","Id":1,"login":"+79272006026","mark":"1234567890","longitude":"50.2134"}],"key":"galkovvladimirandreevich"}
 // TODO переписать.
 
-            /*
-
-	{   "asker":"AskForMainLog",
-	    "rows":[
-	        {"date":"2018.09.16 00:00:00",
-	            "altitude":2,
-	            "latitude":2,
-	            "Id":0,
-	            "login":8,
-	            "mark":4,
-	            "longitude":2
-	            }
-	            ],
-	    "key":"galkovvladimirandreevich"
-	 } userLogger
-===========================================
-    * */
         String str = "\n";
-
         try {
             JSONObject JOAnswer = new JSONObject(result);
             // TODO проверка ключа
@@ -97,6 +79,8 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

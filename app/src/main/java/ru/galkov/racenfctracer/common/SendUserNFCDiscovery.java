@@ -17,7 +17,6 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
     private GPS GPS_System;
-    private String login;
     private String mark;
     private TextView User_Monitor;
     private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
@@ -48,13 +47,16 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        //TODO rewrite
-        // {"date":"2018.09.11 12:05:39","altitude":"50.2143","latitude":"50.2134","asker":"SendUserNFCDiscovery","login":"+790002229999","mark":"09201724307","key":"galkovvladimirandreevich","status":"TRUE","longitude":"50.2134"}
         try {
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                if(JOAnswer.get("Status").equals("TRUE")) {  // TRUE|FALSE
-                    String regRecord ="\n Зарегистрировано: \n" + "Время прохождения: " +JOAnswer.get("date") + ", \n" +JOAnswer.get("user") +", метка:"+ JOAnswer.get("mark") +"\n" + "координаты: [" + JOAnswer.get("latitude") + ", " + JOAnswer.get("longitude") + ", " + JOAnswer.get("altitude") + "] \n \n" ;
+                if(JOAnswer.get(f.status.toString()).equals("TRUE")) {  // TRUE|FALSE
+                    String regRecord ="\n Зарегистрировано: \n"
+                            + "Время прохождения: " +JOAnswer.get(f.date.toString()) + ", \n"
+                            + JOAnswer.get(f.login.toString()) +", метка:"+ JOAnswer.get(f.mark.toString()) +"\n"
+                            + "координаты: [" + JOAnswer.get(f.latitude.toString()) + ", " + JOAnswer.get(f.longitude.toString())
+                            + ", " + JOAnswer.get(f.altitude.toString()) + "] \n "
+                            + "Мероприятие: " + JOAnswer.get(f.race_id.toString()) + ", Старт: " + JOAnswer.get(f.start_id.toString()) + "\n\n" ;
                     if (method == MainActivity.writeMethod.Append)
                         User_Monitor.append(regRecord);
                     else User_Monitor.setText(regRecord);
@@ -74,32 +76,20 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
 
     private  void makeOutBoundJSON(){
-/*
 
-    {
-            "altitude":0,
-            "latitude":0,
-            "asker":"SendUserNFCDiscovery",
-            "login":"+79272006026",
-            "mark":"777777",
-            "key":"galkovvladimirandreevich",
-            "longitude":0
-            ""
-    }
-
-                */
-// TODO RACE START интегрировать, пока это заглушка и с координатными полями херня какая-то.
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.mark.toString(),mark);
-            outBoundJSON.put(f.login.toString(),login);
+            outBoundJSON.put(f.login.toString(), MainActivity.getLogin());// повтор...
             outBoundJSON.put(f.longitude.toString(),longitude);
             outBoundJSON.put(f.altitude.toString(),altitude);
             outBoundJSON.put(f.latitude.toString(),latitude);
             outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.race.toString(),race);
-            outBoundJSON.put(f.start.toString(),race);
+            outBoundJSON.put(f.race.toString(),MainActivity.getRace_id());
+            outBoundJSON.put(f.start.toString(),MainActivity.getStart_id());
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -126,10 +116,6 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
     public void setRace(long race1) {
         this.race = race1;
-    }
-
-    public void setUser(String user1) {
-        this.login = user1;
     }
 
     public void setMethod(MainActivity.writeMethod method1) {

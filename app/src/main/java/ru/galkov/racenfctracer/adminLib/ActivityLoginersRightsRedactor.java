@@ -43,7 +43,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
         ALRRC = new ActivityLoginersRightsRedactorController();
 
-        startTimeSync();
+//        startTimeSync();
 
     }
 
@@ -86,7 +86,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
         public Spinner spinnerUsers;
         public Spinner spinnerLevel;
         public TextView userLogger;
-
+        private TextView loginInfo;
 
 
 
@@ -107,9 +107,10 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             LoginLevel =     findViewById(R.id.LoginLevel);
             LoginLevelLabel = findViewById(R.id.LoginLevelLabel);
             userLogger =    findViewById(R.id.userLogger);
-
+            loginInfo =             findViewById(R.id.loginInfo);
             LoginLevel = findViewById(R.id.LoginLevel);
             LoginToChng = findViewById(R.id.LoginToChng);
+            constructStatusString();
 
             spinnerLevel =         findViewById(R.id.spinnerLevel);
             String[] levels =   {"Guest", "User", "Admin", "Delete"};
@@ -121,6 +122,10 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             AskUserTable AUT = new AskUserTable(spinnerUsers);
             AUT.setActivityContext(activityContext);
             AUT.execute();
+        }
+
+        private void constructStatusString() {
+            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
         }
 
         private void addListeners() {

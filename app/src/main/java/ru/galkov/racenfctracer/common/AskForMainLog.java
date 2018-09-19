@@ -17,12 +17,13 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     private String URL_Extention;
     private TextView ResultEkran;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    // private SimpleDateFormat formatForDate = MainActivity.formatForDate;
     private Context activity;
 
     private final String ASKER = "AskForMainLog";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
-    //
+
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
     }
@@ -31,11 +32,6 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         this.ResultEkran = ResultEkran1;
     }
 
-    public  void setURL_Extention(String str) {
-        URL_Extention = str;
-    }
-
-    // для соообщейний
     public void setActivity(Context context1) {
         activity = context1;
     }
@@ -46,6 +42,8 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -69,25 +67,10 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-    /*
+// =====================================================================
 
-	{   "asker":"AskForMainLog",
-	    "rows":[
-	        {"date":"2018.09.16 00:00:00",
-	            "altitude":2,
-	            "latitude":2,
-	            "Id":0,
-	            "login":8,
-	            "mark":4,
-	            "longitude":2
-	            }
-	            ],
-	    "key":"galkovvladimirandreevich"
-	 }
-===========================================
-    * */
         String str = "\n";
-
+        System.out.print(result);
         try {
                 JSONObject JOAnswer = new JSONObject(result);
                 // TODO проверка ключа
@@ -95,15 +78,14 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
                 JSONArray arr = JOAnswer.getJSONArray("rows");
                 for(int i = 0 ; i< arr.length() ; i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    str = str + obj.getString("login") + " прошёл метку -> \n" + obj.getString("mark") + "\n время: " + obj.getString("date") + "\n" +"на точке: "+obj.getString("latitude")+", "+obj.getString("longitude")+", "+obj.getString("altitude")+" \n\n";
+                    str = str + obj.getString("login") + " прошёл метку -> \n"
+                            + obj.getString("mark_label") + "\n"
+                            + "время: " + obj.getString("date") + "\n"
+                            + "на точке: "+obj.getString("latitude")+", "+obj.getString("longitude")+", "+obj.getString("altitude")+" \n\n";
                 }
 
-            if (method == MainActivity.writeMethod.Append) {
-                ResultEkran.append(str);
-            }
-            else {
-                ResultEkran.setText(str);
-            }
+            if (method == MainActivity.writeMethod.Append)  ResultEkran.append(str);
+            else                                            ResultEkran.setText(str);
         } catch (JSONException e) {	e.printStackTrace();}
     }
 }

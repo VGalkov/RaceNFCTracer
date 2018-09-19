@@ -65,7 +65,7 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
             for(int i = 0 ; i< arr.length() ; i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                response.append("Метка(зарегистрирована на сервере):" + obj.getString(f.label.toString()) + "\n\n");
+                response.append("Метка(сервер):" + obj.getString(f.label.toString()) + "("+obj.getString(f.altitude.toString())+","+obj.getString(f.latitude.toString())+","+obj.getString(f.longitude.toString())+")" + "\n");
             }
         } catch (JSONException e) {	e.printStackTrace();}
 
@@ -84,6 +84,8 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

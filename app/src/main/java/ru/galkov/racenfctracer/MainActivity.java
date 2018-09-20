@@ -1,13 +1,15 @@
 package ru.galkov.racenfctracer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -24,18 +26,21 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.Utilites;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 // тут объявляем и глобальные переменные, когда разрастётся выделить в отдельный класс с геттерами
 
 
     private MainActivityFaceController MAFC;
+    private SettingsFaceController SFC;
+    private HelpFaceController HFC;
+
     private Timer ServerTimer;
     public static final String KEY = "galkovvladimirandreevich";
 
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
 
-    public static final String SERVER_URL = "http://192.168.1.5:8080";
+
     public static final int HTTP_TIMEOUT = 15000;
     public static final int TimerTimeout = 10000;
     public static final int TimerDelay = 1000;
@@ -49,22 +54,56 @@ public class MainActivity extends Activity {
 
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
+    public static int SERVER_PORT = 8080;
+    public static String server = "127.0.0.1";
+    //  192.168.1.5:8008
+    public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
+
     private static Context activity;
     private static String login;
     private static String password;
     private static registrationLevel level;
     private static long race_id;
     private static long start_id;
+
     // TODO GPS class сделать список контекстов кому передавать информацию из 1 класса, а не как сейчас.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        activity = this;
+        setActivity(this);
         MAFC = new MainActivityFaceController();
-
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.settings :
+                setContentView(R.layout.activity_settings);
+                SFC = new SettingsFaceController();
+                return true;
+            case R.id.help:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                return true;
+            case R.id.login:
+                setContentView(R.layout.activity_main);
+                MAFC = new MainActivityFaceController();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onResume() {
@@ -89,6 +128,18 @@ public class MainActivity extends Activity {
 
 // =======================================================
 
+    public static void setActivity(Context activity) {
+        MainActivity.activity = activity;
+    }
+
+    public static void setServerUrl(String serverUrl) {
+        SERVER_URL = "http://" + serverUrl + ":"+SERVER_PORT;
+        server = serverUrl;
+    }
+
+    public static String getServerUrl() {
+        return server;
+    }
 
     public static String getLogin() {
         return login;
@@ -130,6 +181,54 @@ public class MainActivity extends Activity {
         start_id = start_id1;
     }
 
+
+    class SettingsFaceController {
+
+        private TextView ipaddress;
+        private Button saveServerIP;
+
+        public SettingsFaceController() {
+            initViewObjects();
+            addListeners();
+            setDefaultFace();
+        }
+
+        private void initViewObjects(){
+            ipaddress =           findViewById(R.id.ipaddress);
+            ipaddress.setText(getServerUrl());
+
+            saveServerIP =        findViewById(R.id.saveServerIP);
+        }
+        private void addListeners() {
+            saveServerIP.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    MainActivity.setServerUrl(ipaddress.getText().toString());
+                }
+            });
+        }
+        private void setDefaultFace() {
+
+        }
+    }
+
+
+    public class HelpFaceController {
+
+        public HelpFaceController() {
+            initViewObjects();
+            addListeners();
+            setDefaultFace();
+        }
+        private void initViewObjects(){
+
+        }
+        private void addListeners() {
+
+        }
+        private void setDefaultFace() {
+
+        }
+    }
 
 
     public class MainActivityFaceController {

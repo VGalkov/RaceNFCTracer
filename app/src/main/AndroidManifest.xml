@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.galkov.racenfctracer">
 
-    <!-- http://developer.alexanderklimov.ru/android/theory/AndroidManifestXML.php -->
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -13,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- <uses-feature    android:name="android.hardware.nfc"  android:required="true" /> -->
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="false" />
@@ -25,6 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity android:name=".ActivityGuestManager">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -40,7 +41,6 @@
         <activity android:name=".ActivityUserManager">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <data android:mimeType="text/plain" />
             </intent-filter>
 

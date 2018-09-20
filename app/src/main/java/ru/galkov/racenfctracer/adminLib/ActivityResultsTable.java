@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
+import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -58,7 +59,7 @@ public class ActivityResultsTable  extends Activity {
     }
 // =======================================================
 
-    public class ActivityResultsTableController{
+    public class ActivityResultsTableController extends ActivityFaceController {
         private Button back_button;
         private Button downLoadResultsCVS;
         private Button downLoadLogCVS;
@@ -68,16 +69,12 @@ public class ActivityResultsTable  extends Activity {
         private TextView loginInfo;
 
         ActivityResultsTableController() {
-            setDefaultView();
+            super();
         }
 
-        public void setDefaultView() {
-            initViewObjects();
-            addListeners();
-            startTimeSync();
-        }
 
-        private void initViewObjects() {
+        @Override
+        protected void initViewObjects() {
             back_button =      findViewById(R.id.back_button);
             userLogger =         findViewById(R.id.userLogger);
             downLoadResultsCVS = findViewById(R.id.downLoadResultsCVS);
@@ -85,15 +82,11 @@ public class ActivityResultsTable  extends Activity {
             downLoadMarksCVS =    findViewById(R.id.downLoadMarksCVS);
             ServerTime =        findViewById(R.id.ServerTime);
             loginInfo =             findViewById(R.id.loginInfo);
-            constructStatusString();
-
         }
 
-        private void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
-        }
 
-        private void addListeners() {
+        @Override
+        protected void addListeners() {
             back_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     setResult(RESULT_OK, new Intent());
@@ -119,6 +112,15 @@ public class ActivityResultsTable  extends Activity {
                     new AskResultsTable(ARTC.userLogger, MainActivity.fileType.Marcs).execute();
                 }
             });
+        }
+
+        @Override
+        protected void setDefaultFace() {
+            constructStatusString();
+        }
+
+        private void constructStatusString() {
+            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
         }
     }
 }

@@ -14,4 +14,9 @@
         android:orderInCategory="3"
         android:title="Помощь" />
 
+    <item
+        android:id="@+id/exit"
+        android:orderInCategory="3"
+        android:title="Выход" />
+
 </menu>

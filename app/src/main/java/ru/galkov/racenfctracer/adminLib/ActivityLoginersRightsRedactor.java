@@ -16,6 +16,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
+import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskUserTable;
 import ru.galkov.racenfctracer.common.SendUserLevel;
@@ -73,7 +74,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
 // ==========================================================
 
-    public class ActivityLoginersRightsRedactorController{
+    public class ActivityLoginersRightsRedactorController extends ActivityFaceController {
         private Button back_button;
         private Button setButton;
         private ArrayAdapter<String> adapterLevels;
@@ -91,16 +92,12 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
 
         ActivityLoginersRightsRedactorController() {
-            setDefaultView();
+            super();
         }
 
-        public void setDefaultView() {
-            initViewObjects();
-            addListeners();
-            setDefaultFace();
-        }
 
-        private void initViewObjects() {
+        @Override
+        protected void initViewObjects() {
             back_button =    findViewById(R.id.back_button);
             setButton =    findViewById(R.id.setButton);
             ServerTime =     findViewById(R.id.ServerTime);
@@ -110,25 +107,17 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             loginInfo =             findViewById(R.id.loginInfo);
             LoginLevel = findViewById(R.id.LoginLevel);
             LoginToChng = findViewById(R.id.LoginToChng);
-            constructStatusString();
-
             spinnerLevel =         findViewById(R.id.spinnerLevel);
-            String[] levels =   {"Guest", "User", "Admin", "Delete"};
-            adapterLevels = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, levels);
-            spinnerLevel.setAdapter(adapterLevels);
-
             spinnerUsers =         findViewById(R.id.spinnerUsers);
-            // запрос содержимого списка
-            AskUserTable AUT = new AskUserTable(spinnerUsers);
-            AUT.setActivityContext(activityContext);
-            AUT.execute();
+
         }
 
         private void constructStatusString() {
             loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
         }
 
-        private void addListeners() {
+        @Override
+        protected void addListeners() {
             back_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     setResult(RESULT_OK, new Intent());
@@ -182,8 +171,18 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
 
         // ============================
-        private void setDefaultFace() {
-// считать абонентов из базы и нарисовать структуры со спиннером.
+        @Override
+        protected void setDefaultFace() {
+            constructStatusString();
+
+            String[] levels =   {"Guest", "User", "Admin", "Delete"};
+            adapterLevels = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, levels);
+            spinnerLevel.setAdapter(adapterLevels);
+
+            // запрос содержимого списка
+            AskUserTable AUT = new AskUserTable(spinnerUsers);
+            AUT.setActivityContext(activityContext);
+            AUT.execute();
         }
     }
 }

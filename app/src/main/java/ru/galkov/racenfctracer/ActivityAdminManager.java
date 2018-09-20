@@ -14,6 +14,7 @@ import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
+import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
@@ -63,7 +64,7 @@ public class ActivityAdminManager  extends Activity {
 
 
 // ==============================================================
-public class ActivityAdminManagerController{
+public class ActivityAdminManagerController extends ActivityFaceController {
         private Button back_button;
         private Button results_table_button;
         private Button register_editor_button;
@@ -75,16 +76,11 @@ public class ActivityAdminManagerController{
 
 
         ActivityAdminManagerController() {
-            setDefaultView();
+            super();
         }
 
-    public void setDefaultView() {
-        initViewObjects();
-        addListeners();
-        setDefaultFace();
-    }
-
-    private void initViewObjects() {
+    @Override
+    protected void initViewObjects() {
         back_button =                       findViewById(R.id.back_button);
         results_table_button =              findViewById(R.id.results_table_button);
         register_editor_button =            findViewById(R.id.register_editor_button);
@@ -93,14 +89,10 @@ public class ActivityAdminManagerController{
         UserLogger =                        findViewById(R.id.UserLogger);
         ServerTime =                        findViewById(R.id.ServerTime);
         loginInfo =             findViewById(R.id.loginInfo);
-        constructStatusString();
     }
 
-    private void constructStatusString() {
-        loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
-    }
-
-    private void addListeners() {
+    @Override
+    protected void addListeners() {
 
         back_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -136,8 +128,13 @@ public class ActivityAdminManagerController{
 
 
     // ============================
-    private void setDefaultFace() {
+    @Override
+    protected void setDefaultFace() {
+        constructStatusString();
+    }
 
+    private void constructStatusString() {
+        loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
     }
 }
 }

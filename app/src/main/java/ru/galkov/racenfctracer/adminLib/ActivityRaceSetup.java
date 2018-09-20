@@ -15,6 +15,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
+import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -67,7 +68,7 @@ public class ActivityRaceSetup  extends Activity {
     }
 
 
-    public class ActivityRaceSetupController {
+    public class ActivityRaceSetupController extends ActivityFaceController {
         private TextView ServerTime;
         private Button back_button;
 
@@ -80,39 +81,25 @@ public class ActivityRaceSetup  extends Activity {
         private TextView loginInfo;
 
         ActivityRaceSetupController() {
-            initViewObjects();
-            addListeners();
+            super();
         }
 
-        private void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
-        }
 
-        private void initViewObjects() {
+        @Override
+        protected void initViewObjects() {
             back_button = findViewById(R.id.back_button);
             ServerTime = findViewById(R.id.ServerTime);
             setRaceConfig_button = findViewById(R.id.setRaceConfig_button);
             setRaceConfig_button.setEnabled(false);
-
             spinnerStart = findViewById(R.id.spinnerStart);
             spinnerRace = findViewById(R.id.spinnerRace);
             raceConfig = findViewById(R.id.raceConfig);
             loginInfo =             findViewById(R.id.loginInfo);
-            constructStatusString();
-
-            AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
-            ACRS.execute();
-
-            // спинеры собираются тут ...
-            AskRaceStructure ARaceS = new AskRaceStructure(ARSController);
-            ARaceS.setActivityContext(context);
-            ARaceS.setRaceSpiner(spinnerRace);
-            ARaceS.execute();
-
         }
 
 
-        private void addListeners() {
+        @Override
+        protected void addListeners() {
 
             back_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -156,6 +143,24 @@ public class ActivityRaceSetup  extends Activity {
                   Utilites.messager(context, "Нужно что-то выбрать!");
               }
           });
+        }
+
+        @Override
+        protected void setDefaultFace() {
+            constructStatusString();
+
+            AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
+            ACRS.execute();
+
+            // спинеры собираются тут ...
+            AskRaceStructure ARaceS = new AskRaceStructure(ARSController);
+            ARaceS.setActivityContext(context);
+            ARaceS.setRaceSpiner(spinnerRace);
+            ARaceS.execute();
+        }
+
+        private void constructStatusString() {
+            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
         }
     }
 

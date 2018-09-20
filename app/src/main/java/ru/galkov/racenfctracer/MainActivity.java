@@ -1,8 +1,11 @@
 package ru.galkov.racenfctracer;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -21,8 +24,10 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.Utilites;
 
 
@@ -34,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private SettingsFaceController SFC;
     private HelpFaceController HFC;
 
-    private Timer ServerTimer;
     public static final String KEY = "galkovvladimirandreevich";
 
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int HTTP_TIMEOUT = 15000;
     public static final int TimerTimeout = 10000;
+    public static final int MainLogTimeout = 10000; // TODO разделить тайминг
     public static final int TimerDelay = 1000;
 
     // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
     public static int SERVER_PORT = 8080;
-    public static String server = "127.0.0.1";
+    public static String server =  "192.168.1.5"; // "127.0.0.1";
     //  192.168.1.5:8008
     public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
 
@@ -66,13 +71,12 @@ public class MainActivity extends AppCompatActivity {
     private static long race_id;
     private static long start_id;
 
-    // TODO GPS class сделать список контекстов кому передавать информацию из 1 класса, а не как сейчас.
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setActivity(this);
+
         MAFC = new MainActivityFaceController();
     }
 
@@ -100,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
                 MAFC = new MainActivityFaceController();
                 return true;
 
+            case R.id.exit:
+                setResult(RESULT_OK, new Intent());
+                finish();
+                return true;
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -108,28 +118,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startTimeSync();
+        MAFC.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ServerTimer.cancel();
+        MAFC.stop();
     }
 
-    // вынести в отдельный класс для всех со списком запуска и ссылками на экраны отображения ддля каждого Async.
-    private void startTimeSync() {
-        ServerTimer = new Timer(); // Создаем таймер
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {new AskServerTime(MAFC.ServerTime).execute();}
-        }, TimerDelay, TimerTimeout);
-    }
 
 // =======================================================
 
     public static void setActivity(Context activity) {
         MainActivity.activity = activity;
+    }
+
+    public static Context  getActivity() {
+        return activity;
     }
 
     public static void setServerUrl(String serverUrl) {
@@ -182,56 +188,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    class SettingsFaceController {
+    class SettingsFaceController extends ActivityFaceController {
 
         private TextView ipaddress;
         private Button saveServerIP;
 
-        public SettingsFaceController() {
-            initViewObjects();
-            addListeners();
-            setDefaultFace();
+        protected SettingsFaceController() {
+            super();
         }
 
-        private void initViewObjects(){
+        @Override
+        protected void initViewObjects(){
             ipaddress =           findViewById(R.id.ipaddress);
-            ipaddress.setText(getServerUrl());
-
             saveServerIP =        findViewById(R.id.saveServerIP);
         }
-        private void addListeners() {
+        @Override
+        protected void addListeners() {
             saveServerIP.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     MainActivity.setServerUrl(ipaddress.getText().toString());
                 }
             });
         }
-        private void setDefaultFace() {
+        @Override
+        protected void setDefaultFace() {
+            ipaddress.setText(getServerUrl());
+        }
+    }
+
+
+    public class HelpFaceController extends ActivityFaceController {
+
+        HelpFaceController() {
+            super();
+        }
+
+
+        @Override
+        protected void initViewObjects() {
+
+        }
+
+        @Override
+        protected void addListeners() {
+
+        }
+
+        @Override
+        protected void setDefaultFace() {
 
         }
     }
 
 
-    public class HelpFaceController {
-
-        public HelpFaceController() {
-            initViewObjects();
-            addListeners();
-            setDefaultFace();
-        }
-        private void initViewObjects(){
-
-        }
-        private void addListeners() {
-
-        }
-        private void setDefaultFace() {
-
-        }
-    }
-
-
-    public class MainActivityFaceController {
+    public class MainActivityFaceController extends ActivityFaceController {
 
         private String              ERROR_MSG;
         private Button              exitButton;
@@ -246,24 +256,20 @@ public class MainActivity extends AppCompatActivity {
         private RadioButton         UserRadioButton;
         private RadioButton         GuestRadioButton;
         public TextView             ServerTime;
+        private Timer ServerTimer;
+        private GPS GPS_System;
 
         //      Constructor; ============================================
         MainActivityFaceController() {
-            setDefaultView();
+            super();
+            GPS_System = new GPS(getActivity(),(TextView) findViewById(R.id.gpsPosition) );
+            start();
         }
-
-
-        private void setDefaultView() {
-            initViewObjects();
-            addListeners();
-            setDefaultFace();
-
-        }
-
 
 
         // ======================================================================================
-        private void setDefaultFace() {
+        @Override
+        protected void setDefaultFace() {
             setButton(exitButton, true);
             setButton(registerButton, true);
             setButton(enterButton, false);
@@ -275,18 +281,8 @@ public class MainActivity extends AppCompatActivity {
             dropRegistration();
         }
 
-        public void setRegistredFace() {
-            setButton(exitButton, true);
-            setButton(registerButton, false);
-            setButton(enterButton, true);
-            setRadioSystem(LoginType_radio_group, false);
-            setTextFields(password, false);
-            setTextFields(phone, false);
-        }
-
-        // =======================================================================================
-
-        private void initViewObjects() {
+        @Override
+        protected void initViewObjects() {
             exitButton =            findViewById(R.id.exit_button);
             enterButton =           findViewById(R.id.enter_button);
             registerButton =        findViewById(R.id.register_button);
@@ -300,89 +296,8 @@ public class MainActivity extends AppCompatActivity {
             ServerTime =            findViewById(R.id.ServerTime);
         }
 
-
-
-        private String getMyPhoneNumber() {
-            TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//              if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-//              getString(R.string.noREAD_PHONE_STATE)
-//                return "";
-            return mTelephonyMgr.getLine1Number();
-        }
-
-        private void setTextFields(TextView tv1, boolean trigger2) {
-            tv1.setEnabled(trigger2);
-            tv1.setClickable(trigger2);
-        }
-
-        private void setRadioSystem(RadioGroup rg1, boolean trigger2) {
-            rg1.setEnabled(trigger2);
-            rg1.setClickable(trigger2);
-
-            GuestRadioButton.setEnabled(trigger2);
-            UserRadioButton.setEnabled(trigger2);
-            AdminRadioButton.setEnabled(trigger2);
-
-            GuestRadioButton.setClickable(trigger2);
-            UserRadioButton.setClickable(trigger2);
-            AdminRadioButton.setClickable(trigger2);
-
-        }
-
-        private void setButton(Button btn1, boolean trigger2) {
-            btn1.setEnabled(trigger2);
-            btn1.setClickable(trigger2);
-        }
-
-        private void dropRegistration() {
-            phone.setText(getMyPhoneNumber());
-            password.setText("");
-            REGLEVEL = registrationLevel.Guest;
-            RegAsLabel.setText(REGLEVEL.toString());
-            // это глобальные данные для всех активити, возможно это неправильно.
-            setLogin("nobody");
-            setPassword("");
-            setLevel(REGLEVEL);
-            setRace_id(0L);
-            setStart_id(0L);
-        }
-
-
-        // ===================================================================================
-
-        private boolean CheckLoginDataIntegrity() {
-            // проверка данных для логина в систему.
-            boolean trigger = true;
-            String str = "";
-
-            if (phone.getText().length() !=12)   { trigger = false; str = str + "Телефон не верен! (" + phone.getText().length() + ")"; }
-            if (password.getText().length() < 5)  { trigger = false;  str = str + "Пароль - короткий! (" + password.getText() + ") "; }
-
-            if (!trigger) { ERROR_MSG = str; }
-            return trigger;
-
-        }
-
-        private void RegisterThisUser(){
-// поверка логина-пароля - видоизменяет интерфейс пользователя.
-
-            AskForLogin Post = new AskForLogin(MAFC);
-            Post.setLevel(getLevel());
-            Post.setLogin(phone.getText().toString());
-            Post.setPassword(password.getText().toString());
-            Post.setParentActivity(activity);
-            Post.execute();
-       }
-
-        // ==============================================================================
-
-        private void remember_registred_data(){
-            setLevel(REGLEVEL);
-            setPassword(password.getText().toString());
-            setLogin(phone.getText().toString());
-        }
-
-        private void addListeners() {
+        @Override
+        protected void addListeners() {
 
 // если абонент был зарегистрирован => отключаемся, если незареганы - выходим из приложения.
 
@@ -475,6 +390,115 @@ public class MainActivity extends AppCompatActivity {
 
             });
         }
+
+        public void setRegistredFace() {
+            setButton(exitButton, true);
+            setButton(registerButton, false);
+            setButton(enterButton, true);
+            setRadioSystem(LoginType_radio_group, false);
+            setTextFields(password, false);
+            setTextFields(phone, false);
+        }
+
+        // =======================================================================================
+
+
+
+        private void startTimeSync() {
+            ServerTimer = new Timer(); // Создаем таймер
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {new AskServerTime(ServerTime).execute();}
+            }, TimerDelay, TimerTimeout);
+        }
+        void start() {
+            startTimeSync();
+        }
+        void stop() {
+            ServerTimer.cancel();
+        }
+
+
+        private String getMyPhoneNumber() {
+            TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+              if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                Utilites.messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами.");
+                return "";}
+              else {         return mTelephonyMgr.getLine1Number(); }
+        }
+
+        private void setTextFields(TextView tv1, boolean trigger2) {
+            tv1.setEnabled(trigger2);
+            tv1.setClickable(trigger2);
+        }
+
+        private void setRadioSystem(RadioGroup rg1, boolean trigger2) {
+            rg1.setEnabled(trigger2);
+            rg1.setClickable(trigger2);
+
+            GuestRadioButton.setEnabled(trigger2);
+            UserRadioButton.setEnabled(trigger2);
+            AdminRadioButton.setEnabled(trigger2);
+
+            GuestRadioButton.setClickable(trigger2);
+            UserRadioButton.setClickable(trigger2);
+            AdminRadioButton.setClickable(trigger2);
+
+        }
+
+        private void setButton(Button btn1, boolean trigger2) {
+            btn1.setEnabled(trigger2);
+            btn1.setClickable(trigger2);
+        }
+
+        private void dropRegistration() {
+            phone.setText(getMyPhoneNumber());
+            password.setText("");
+            REGLEVEL = registrationLevel.Guest;
+            RegAsLabel.setText(REGLEVEL.toString());
+            // это глобальные данные для всех активити, возможно это неправильно.
+            setLogin("nobody");
+            setPassword("");
+            setLevel(REGLEVEL);
+            setRace_id(0L);
+            setStart_id(0L);
+        }
+
+
+        // ===================================================================================
+
+        private boolean CheckLoginDataIntegrity() {
+            // проверка данных для логина в систему.
+            boolean trigger = true;
+            String str = "";
+
+            if (phone.getText().length() !=12)   { trigger = false; str = str + "Телефон не верен! (" + phone.getText().length() + ")"; }
+            if (password.getText().length() < 5)  { trigger = false;  str = str + "Пароль - короткий! (" + password.getText() + ") "; }
+
+            if (!trigger) { ERROR_MSG = str; }
+            return trigger;
+
+        }
+
+        private void RegisterThisUser(){
+// поверка логина-пароля - видоизменяет интерфейс пользователя.
+
+            AskForLogin Post = new AskForLogin(MAFC);
+            Post.setLevel(getLevel());
+            Post.setLogin(phone.getText().toString());
+            Post.setPassword(password.getText().toString());
+            Post.setParentActivity(activity);
+            Post.execute();
+       }
+
+        // ==============================================================================
+
+        private void remember_registred_data(){
+            setLevel(REGLEVEL);
+            setPassword(password.getText().toString());
+            setLogin(phone.getText().toString());
+        }
+
 
         private registrationLevel getLevel(){
             registrationLevel level = null;

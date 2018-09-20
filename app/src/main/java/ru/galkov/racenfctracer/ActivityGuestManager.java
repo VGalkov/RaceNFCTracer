@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
@@ -69,34 +70,28 @@ public class ActivityGuestManager  extends Activity {
     }
 
 
-        public class ActivityGuestManagereController {
+        public class ActivityGuestManagereController extends ActivityFaceController {
             private Button back_button;
             public TextView UserLogger;
             public TextView ServerTime;
             private TextView loginInfo;
 
             ActivityGuestManagereController() {
-                setDefaultView();
+                super();
             }
 
-            public void setDefaultView() {
-                initViewObjects();
-                addListeners();
-            }
 
-            private void initViewObjects() {
+            @Override
+            protected void initViewObjects() {
                 back_button = findViewById(R.id.back_button);
                 UserLogger = findViewById(R.id.UserLogger);
                 ServerTime = findViewById(R.id.ServerTime);
                 loginInfo =             findViewById(R.id.loginInfo);
-                constructStatusString();
             }
 
-            private void constructStatusString() {
-                loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
-            }
 
-            private void addListeners() {
+            @Override
+            protected void addListeners() {
                 back_button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         setResult(RESULT_OK, new Intent());
@@ -105,6 +100,14 @@ public class ActivityGuestManager  extends Activity {
                 });
             }
 
+            @Override
+            protected void setDefaultFace() {
+                constructStatusString();
+            }
+
+            private void constructStatusString() {
+                loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+            }
 
         }
 

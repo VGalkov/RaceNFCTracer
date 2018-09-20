@@ -30,17 +30,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/activityLogger"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="здесь описание того, что сделано"
-                android:textAlignment="center"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textSize="14sp"
-                android:textStyle="bold|italic" />
-
-            <TextView
                 android:id="@+id/label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

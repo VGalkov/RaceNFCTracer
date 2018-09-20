@@ -54,8 +54,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
                     String regRecord ="\n Зарегистрировано: \n"
                             + "Время прохождения: " +JOAnswer.get(f.date.toString()) + ", \n"
                             + JOAnswer.get(f.login.toString()) +", метка:"+ JOAnswer.get(f.mark.toString()) +"\n"
-                            + "координаты: [" + JOAnswer.get(f.latitude.toString()) + ", " + JOAnswer.get(f.longitude.toString())
-                            + ", " + JOAnswer.get(f.altitude.toString()) + "] \n "
+                            + "координаты: [" + df.format(JOAnswer.getDouble(f.latitude.toString())) + ", "
+                                + df.format(JOAnswer.getDouble(f.longitude.toString()))
+                            + ", " + df.format(JOAnswer.getDouble(f.altitude.toString())) + "] \n "
                             + "Мероприятие: " + JOAnswer.get(f.race_id.toString()) + ", Старт: " + JOAnswer.get(f.start_id.toString()) + "\n\n" ;
                     if (method == MainActivity.writeMethod.Append)
                         User_Monitor.append(regRecord);

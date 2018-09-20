@@ -18,6 +18,7 @@ import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.AskStartSructure;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendActiveRaceStart;
 import ru.galkov.racenfctracer.common.Utilites;
@@ -69,7 +70,7 @@ public class ActivityRaceSetup  extends Activity {
     public class ActivityRaceSetupController {
         private TextView ServerTime;
         private Button back_button;
-        private TextView activityLogger;
+
         private TextView raceConfig;
         private Button setRaceConfig_button;
         public Spinner spinnerRace;
@@ -91,7 +92,8 @@ public class ActivityRaceSetup  extends Activity {
             back_button = findViewById(R.id.back_button);
             ServerTime = findViewById(R.id.ServerTime);
             setRaceConfig_button = findViewById(R.id.setRaceConfig_button);
-            activityLogger = findViewById(R.id.activityLogger);
+            setRaceConfig_button.setEnabled(false);
+
             spinnerStart = findViewById(R.id.spinnerStart);
             spinnerRace = findViewById(R.id.spinnerRace);
             raceConfig = findViewById(R.id.raceConfig);
@@ -104,7 +106,9 @@ public class ActivityRaceSetup  extends Activity {
             // спинеры собираются тут ...
             AskRaceStructure ARaceS = new AskRaceStructure(ARSController);
             ARaceS.setActivityContext(context);
+            ARaceS.setRaceSpiner(spinnerRace);
             ARaceS.execute();
+
         }
 
 
@@ -117,11 +121,12 @@ public class ActivityRaceSetup  extends Activity {
                 }
             });
 
+
             setRaceConfig_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    SendActiveRaceStart SARS = new SendActiveRaceStart(ARSController.activityLogger);
-                    SARS.setRace_id(race_id);
-                    SARS.setStart_id(start_id);
+                    SendActiveRaceStart SARS = new SendActiveRaceStart(raceConfig);
+                    SARS.setRace_id(Long.parseLong(spinnerRace.getSelectedItem().toString()));
+                    SARS.setStart_id(Long.parseLong(spinnerStart.getSelectedItem().toString()));
                     SARS.execute();
                 }
             });
@@ -129,7 +134,7 @@ public class ActivityRaceSetup  extends Activity {
           spinnerStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                    setRaceConfig_button.setEnabled(true);
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
@@ -140,6 +145,11 @@ public class ActivityRaceSetup  extends Activity {
           spinnerRace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
               @Override
               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                  AskStartSructure AStartStr = new AskStartSructure(ARSController);
+                  AStartStr.setRaceID(Long.parseLong(spinnerRace.getSelectedItem().toString())); // значение из выбранного спинером.
+                  AStartStr.setActivityContext(context);
+                  AStartStr.setStartSpiner(spinnerStart);
+                  AStartStr.execute();
               }
               @Override
               public void onNothingSelected(AdapterView<?> arg0) {

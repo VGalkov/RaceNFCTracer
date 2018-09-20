@@ -3,7 +3,6 @@ package ru.galkov.racenfctracer.common;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +21,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private MainActivity.fileType fileType;
 
 // TODO полностью переписать смысл.
-
+// http://qaru.site/questions/887264/android-how-to-download-file-in-android
     public AskResultsTable(TextView userLogger1,MainActivity.fileType fileType2 ) {
         this.userLogger = userLogger1;
         this.fileType = fileType2;
@@ -43,19 +42,15 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-// TODO переписать.
+
 
         String str = "\n";
         try {
             JSONObject JOAnswer = new JSONObject(result);
             // TODO проверка ключа
             String serverKEY = JOAnswer.getString(f.key.toString());
-            JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
-            for(int i = 0 ; i< arr.length() ; i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                str = str + obj.getString("login") + " прошёл метку -> \n" + obj.getString("mark") + "\n время: " + obj.getString("date") + "\n" +"на точке: "+obj.getString("latitude")+", "+obj.getString("longitude")+", "+obj.getString("altitude")+" \n\n";
-            }
-
+            String downLoadResult = JOAnswer.getString(f.resultsFileLink.toString()); // ссылка не скачивание.
+// TODO дописать.
             if (method == MainActivity.writeMethod.Append) {
                 userLogger.append(str);
             }
@@ -74,11 +69,11 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     }
 
     private  void makeOutBoundJSON(){
-        //     {"asker":"AskResultsTable","key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.fileType.toString(),fileType);
             outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
             outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {

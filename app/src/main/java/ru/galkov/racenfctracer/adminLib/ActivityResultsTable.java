@@ -20,7 +20,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityResultsTable  extends Activity {
-
+// TODO переписать смысл http://qaru.site/questions/887264/android-how-to-download-file-in-android
     private ActivityResultsTableController ARTC;
     private AskResultsTable ART;
     private Timer ServerTimer;
@@ -51,7 +51,7 @@ public class ActivityResultsTable  extends Activity {
             @Override
             public void run() {
                 new AskServerTime(ARTC.ServerTime).execute();
-                new AskForMainLog(ARTC.userLogger).execute();
+                new AskForMainLog(ARTC.ServerTime, this.toString()).execute();
             }
         }, TimerDelay, TimerTimeout);
 

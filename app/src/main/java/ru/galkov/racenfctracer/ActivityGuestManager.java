@@ -32,7 +32,7 @@ public class ActivityGuestManager  extends Activity {
         AGMC = new ActivityGuestManagereController();
 
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
-//        startTimeSync(); // или в onResume?
+        startTimeSync();
 
     }
 
@@ -61,6 +61,7 @@ public class ActivityGuestManager  extends Activity {
                 MainActivity.writeMethod wMethod = MainActivity.writeMethod.Set;
                 AskForMainLog AForML = new AskForMainLog(AGMC.UserLogger); //опросчик на лог main_log сервера.
                 AForML.setMethod(wMethod);
+                AForML.setCaller(this.toString());
                 AForML.execute();
             }
         }, TimerDelay, TimerTimeout);

@@ -70,7 +70,7 @@ public class ActivityNFCMarksRedactor  extends Activity {
         initClassVaribles();
         addlisteners();
         configureNFC();
-//        startTimeSync();
+        startTimeSync();
 
         new AskMarksList(NFC_ConfigurationLog).execute();
     }

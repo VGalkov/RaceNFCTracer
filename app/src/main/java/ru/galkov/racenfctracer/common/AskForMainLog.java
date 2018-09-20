@@ -8,8 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 import ru.galkov.racenfctracer.MainActivity;
 
+import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskForMainLog extends AsyncTask<String, Void, String> {
@@ -21,19 +24,31 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     private Context activity;
 
     private final String ASKER = "AskForMainLog";
+    private String caller = "Unknown";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
-
+    public DecimalFormat df = DECIMAL_FORMAT;
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
     }
 
     public AskForMainLog(TextView ResultEkran1) {
         this.ResultEkran = ResultEkran1;
+
     }
+
+    public AskForMainLog(TextView ResultEkran1, String caller1) {
+        this.ResultEkran = ResultEkran1;
+        setCaller(caller1);
+    }
+
 
     public void setActivity(Context context1) {
         activity = context1;
+    }
+
+    public void setCaller(String caller) {
+        this.caller = caller;
     }
 
     private  void makeOutBoundJSON(){
@@ -42,6 +57,7 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.caller.toString(),caller);
             outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
             outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
 
@@ -81,7 +97,9 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
                     str = str + obj.getString("login") + " прошёл метку -> \n"
                             + obj.getString("mark_label") + "\n"
                             + "время: " + obj.getString("date") + "\n"
-                            + "на точке: "+obj.getString("latitude")+", "+obj.getString("longitude")+", "+obj.getString("altitude")+" \n\n";
+                            + "на точке: "+df.format(obj.getDouble("latitude"))
+                            +", "+df.format(obj.getDouble("longitude"))
+                            +", "+df.format(obj.getDouble("altitude"))+" \n\n";
                 }
 
             if (method == MainActivity.writeMethod.Append)  ResultEkran.append(str);

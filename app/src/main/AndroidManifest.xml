@@ -32,12 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityGuestManager" android:noHistory="true">
+        <activity android:name=".ActivityGuestManager">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ActivityUserManager" android:noHistory="true">
+        <activity android:name=".ActivityUserManager">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <!-- <category android:name="android.intent.category.DEFAULT" /> -->
@@ -51,7 +51,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ActivityAdminManager" android:noHistory="true">
+        <activity android:name=".ActivityAdminManager">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

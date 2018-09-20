@@ -3,6 +3,7 @@ package ru.galkov.racenfctracer.common;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +24,7 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     private MainActivity.writeMethod method;
     private ActivityRaceSetup.ActivityRaceSetupController ARSController;
     private Context activityContext;
+    public Spinner raceSpiner;
 
 
     public AskRaceStructure(ActivityRaceSetup.ActivityRaceSetupController ARSController1) {
@@ -32,6 +34,10 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
     public void setActivityContext(Context activityContext) {
         this.activityContext = activityContext;
+    }
+
+    public void setRaceSpiner(Spinner raceSpiner1) {
+        this.raceSpiner =raceSpiner1;
     }
 
     public void setMethod(MainActivity.writeMethod method) {
@@ -54,7 +60,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        // TODO конструируем спинеры. выпадающие списки рейсов и стартов связанные.
 /*
 
     {
@@ -92,29 +97,20 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
 */
 
-    JSONObject JOAnswer;
-    JSONArray races;
-    String[] racesList = null;
     try {
-// не очень понятно в какую структуру разворачивать для работы со связанными  спинерами.
-// которые тут нужно и связать по onchange listenery...
-
-            JOAnswer = new JSONObject(result);
+            JSONObject JOAnswer = new JSONObject(result);
             String serverKEY = JOAnswer.getString(f.key.toString());
-            races = JOAnswer.getJSONArray(f.racesConfig.toString());
-            racesList = new String[races.length()];
+            JSONArray races = JOAnswer.getJSONArray(f.racesConfig.toString());
+            String[] racesList = new String[races.length()];
 
             for (int i = 0; i<races.length(); i++) {
                 JSONObject r = races.getJSONObject(i);
-                racesList[i] = r.getString(f.race_id.toString()) + "[" + r.getString(f.label.toString()) + "]";
-/*
-                JSONArray starts = races.getJSONArray(f.startsConfig.toString());
-*/
-
+                racesList[i] = r.getString(f.race_id.toString());
+//                raceStarts[i] = r.getJSONArray(f.startsConfig.toString());
             }
 
             ArrayAdapter adapterStarts = new ArrayAdapter(activityContext,  android.R.layout.simple_spinner_item, racesList);
-//            ARSController.spinnerRace.setAdapter(adapterStarts);
+            raceSpiner.setAdapter(adapterStarts);
     } catch (JSONException e) {
         e.printStackTrace();
     }

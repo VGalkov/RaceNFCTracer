@@ -43,7 +43,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
         ALRRC = new ActivityLoginersRightsRedactorController();
 
-//        startTimeSync();
+        startTimeSync();
 
     }
 

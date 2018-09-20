@@ -109,7 +109,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             public void run() {
                 new AskServerTime(AUMC.ServerTime).execute();
                 if (race_status.isChecked())  {
-                    new AskForMainLog(AUMC.User_Monitor).execute();
+                    new AskForMainLog(AUMC.User_Monitor, this.toString()).execute();
                 }
             }
         }, TimerDelay, TimerTimeout);

@@ -54,7 +54,13 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
         HP.setJson(outBoundJSON);
         return HP.execute();
     }
+/*
 
+{
+    "start_id":9,
+    "exec_login":"+79272006026","race_id":4,"asker":"SendActiveRaceStart","exec_level":"Admin","key":"galkovvladimirandreevich"}
+
+*/
 
     @Override
     protected void onPostExecute(String result) {
@@ -63,11 +69,14 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
                 JSONObject JOAnswer = new JSONObject(result);
                 String serverKEY = JOAnswer.getString(f.key.toString());
                 // устанавливаем номер гонки и номер старта глобально.
+//                  MainActivity.setRace_id(race_id);
+//                   MainActivity.setStart_id(start_id);
+
                 MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                 MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
 
-                String str = "Соревнование: " + JOAnswer.getString(f.race_name.toString()) + "(" + JOAnswer.getString(f.race_id.toString()) + ")" +
-                    "\n Заезд: " + JOAnswer.getString(f.start_label.toString()) + "(" + JOAnswer.getString(f.start_id.toString()) + ")";
+                String str = "Соревнование: " + JOAnswer.getString(f.race_id.toString()) +
+                    "\n Заезд: " + JOAnswer.getString(f.start_id.toString());
                 ekran.setText(str);
         }
         catch (JSONException e) {	e.printStackTrace();}

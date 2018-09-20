@@ -32,7 +32,7 @@ public class ActivityAdminManager  extends Activity {
         setContentView(R.layout.activity_admin_manager);
 
         AAMC = new ActivityAdminManagerController();
-//        startTimeSync();
+        startTimeSync();
         GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
     }
 
@@ -54,7 +54,7 @@ public class ActivityAdminManager  extends Activity {
             @Override
             public void run() {
                 new AskServerTime(AAMC.ServerTime).execute();
-                new AskForMainLog(AAMC.UserLogger).execute();
+                new AskForMainLog(AAMC.UserLogger, this.toString()).execute();
             }
         }, TimerDelay, TimerTimeout);
 

@@ -8,8 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 import ru.galkov.racenfctracer.MainActivity;
 
+import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskMarksList extends AsyncTask<String, Void, String> {
@@ -22,6 +25,8 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskMarksList";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
+    public DecimalFormat df = DECIMAL_FORMAT;
+
 
 
     public AskMarksList(TextView Ekran1) {
@@ -65,7 +70,10 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
             for(int i = 0 ; i< arr.length() ; i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                response.append("Метка(сервер):" + obj.getString(f.label.toString()) + "("+obj.getString(f.altitude.toString())+","+obj.getString(f.latitude.toString())+","+obj.getString(f.longitude.toString())+")" + "\n");
+                response.append("Метка(сервер):" + obj.getString(f.label.toString())
+                        + "("+df.format(obj.getDouble(f.altitude.toString()))
+                        +","+df.format(obj.getDouble(f.latitude.toString()))
+                        +","+df.format(obj.getDouble(f.longitude.toString()))+")" + "\n");
             }
         } catch (JSONException e) {	e.printStackTrace();}
 

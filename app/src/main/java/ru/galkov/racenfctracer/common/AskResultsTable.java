@@ -1,10 +1,15 @@
 package ru.galkov.racenfctracer.common;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import ru.galkov.racenfctracer.MainActivity;
 
@@ -19,12 +24,14 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private MainActivity.fileType fileType;
+    private Context context;
 
 // TODO полностью переписать смысл.
 // http://qaru.site/questions/887264/android-how-to-download-file-in-android
-    public AskResultsTable(TextView userLogger1,MainActivity.fileType fileType2 ) {
+    public AskResultsTable(TextView userLogger1,MainActivity.fileType fileType2, Context context3) {
         this.userLogger = userLogger1;
         this.fileType = fileType2;
+        this.context = context3;
     }
 
     @Override
@@ -43,23 +50,38 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-
-        String str = "\n";
+        // если в JSON преобразуется - в ответе не файл :)
         try {
             JSONObject JOAnswer = new JSONObject(result);
             // TODO проверка ключа
             String serverKEY = JOAnswer.getString(f.key.toString());
-            String downLoadResult = JOAnswer.getString(f.resultsFileLink.toString()); // ссылка не скачивание.
-// TODO дописать.
-            if (method == MainActivity.writeMethod.Append) {
-                userLogger.append(str);
+            String res = "Файл не выслан!" + JOAnswer.getString(f.resultsFileLink.toString()) +"/"+ JOAnswer.getString(f.resultsFileDir.toString());
+
+            if (method == MainActivity.writeMethod.Append)    userLogger.append(res);
+            else        userLogger.setText(res);
+
+        } catch (JSONException e) {
+            try {
+                    String filePath = context.getFilesDir().getPath().toString() + "/"+fileType+".csv";
+                    File file = new File(filePath);
+                    if(file.exists()) file.delete();
+                    file.createNewFile();
+                    PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+                    out.println(result);
+                    out.close();
+                    if (method == MainActivity.writeMethod.Append)    userLogger.append("Файл  сохранён в:" + filePath);
+                    else        userLogger.setText("Файл  сохранён в:" + filePath);
+
+            }catch (IOException ee) {
+                ee.printStackTrace();
             }
-            else {
-                userLogger.setText(str);
-            }
-        } catch (JSONException e) {	e.printStackTrace();}
+
+
+        }
 
     }
+
+
 
 
 

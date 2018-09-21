@@ -4,22 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".adminLib.ActivityHelpSystem">
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteY="81dp">
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/l1"
+        android:layout_width="0dp"
+        android:layout_height="112dp"
         android:orientation="vertical"
+        app:layout_constraintDimensionRatio="w,1:1"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"></LinearLayout>
 
         <TextView
             android:id="@+id/serverIP"
@@ -44,5 +41,63 @@
             android:layout_weight="1"
             android:text="@string/save"
             android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/l2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="148dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/serverTimers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/serverTimers" />
+
+        <EditText
+            android:id="@+id/TimeTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/secondsTimer"
+            android:inputType="number"
+            android:text="" />
+
+        <EditText
+            android:id="@+id/MainLogTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/secondsMainLog"
+            android:inputType="number"
+            android:singleLine="true"
+            android:text="" />
+
+        <Button
+            android:id="@+id/saveTimers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/save"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/serverTimersInfo"
+            android:layout_width="322dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/serverTimersInfo" />
+
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

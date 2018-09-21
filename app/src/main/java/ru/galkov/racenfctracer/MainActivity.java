@@ -46,12 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static final int HTTP_TIMEOUT = 15000;
-    public static final int TimerTimeout = 10000;
-    public static final int MainLogTimeout = 10000; // TODO разделить тайминг
     public static final int TimerDelay = 1000;
 
     // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
-    public enum fieldsJSON {caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public enum fieldsJSON {resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public enum trigger {TRUE, FALSE}
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
@@ -70,6 +68,26 @@ public class MainActivity extends AppCompatActivity {
     private static registrationLevel level;
     private static long race_id;
     private static long start_id;
+    public static int TimerTimeout = 15000;
+    public static int MainLogTimeout = 60000;
+
+
+    // TODO добавить в настройки.
+    public static void setTimerTimeout(int timeout) {
+        TimerTimeout = timeout;
+    }
+
+    public static int getTimerTimeout() {
+        return TimerTimeout;
+    }
+
+    public static void setMainLogTimeout(int timeout) {
+        MainLogTimeout = timeout;
+    }
+
+    public static int getMainLogTimeout() {
+        return MainLogTimeout;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.login:
                 setContentView(R.layout.activity_main);
                 MAFC = new MainActivityFaceController();
+                MAFC.start();
                 return true;
 
             case R.id.exit:
@@ -143,8 +162,12 @@ public class MainActivity extends AppCompatActivity {
         server = serverUrl;
     }
 
-    public static String getServerUrl() {
+    public static String getServerIP() {
         return server;
+    }
+
+    public static String getServerUrl() {
+        return SERVER_URL;
     }
 
     public static String getLogin() {
@@ -192,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
         private TextView ipaddress;
         private Button saveServerIP;
+        private Button saveTimers;
+        private TextView TimeTimer;
+        private TextView MainLogTimer;
 
         protected SettingsFaceController() {
             super();
@@ -201,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
         protected void initViewObjects(){
             ipaddress =           findViewById(R.id.ipaddress);
             saveServerIP =        findViewById(R.id.saveServerIP);
+            saveTimers =           findViewById(R.id.saveTimers);
+            TimeTimer =           findViewById(R.id.TimeTimer);
+            MainLogTimer =        findViewById(R.id.MainLogTimer);
+
         }
         @Override
         protected void addListeners() {
@@ -209,10 +239,26 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.setServerUrl(ipaddress.getText().toString());
                 }
             });
+
+            saveTimers.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    if (Integer.parseInt(MainLogTimer.getText().toString())==0)
+                        MainActivity.setMainLogTimeout(60000);
+                    else MainActivity.setMainLogTimeout(Integer.parseInt(MainLogTimer.getText().toString())*1000);
+
+                    if (Integer.parseInt(TimeTimer.getText().toString())==0)
+                        MainActivity.setTimerTimeout(60000);
+                    else  MainActivity.setTimerTimeout(Integer.parseInt(TimeTimer.getText().toString())*1000);
+                }
+            });
         }
         @Override
         protected void setDefaultFace() {
-            ipaddress.setText(getServerUrl());
+            ipaddress.setText(getServerIP());
+            String timer = Integer.toString(MainActivity.getMainLogTimeout()/1000);
+            MainLogTimer.setText(timer);
+            timer = Integer.toString(MainActivity.getTimerTimeout()/1000);
+            TimeTimer.setText(timer);
         }
     }
 

@@ -1,6 +1,7 @@
 package ru.galkov.racenfctracer.adminLib;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,14 +18,14 @@ import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
+import static ru.galkov.racenfctracer.MainActivity.MainLogTimeout;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityResultsTable  extends Activity {
 // TODO переписать смысл http://qaru.site/questions/887264/android-how-to-download-file-in-android
     private ActivityResultsTableController ARTC;
-    private AskResultsTable ART;
-    private Timer ServerTimer;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,31 +33,30 @@ public class ActivityResultsTable  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_results_table);
         ARTC = new ActivityResultsTableController();
+        setContextVar(this);
+    }
+
+    public void setContextVar(Context context) {
+        this.context = context;
+    }
+
+    public Context getContextVar() {
+        return context;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startTimeSync();
+        ARTC.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ServerTimer.cancel();
+        ARTC.stop();
     }
 
-    private void startTimeSync() {
-        ServerTimer = new Timer(); // Создаем таймер
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(ARTC.ServerTime).execute();
-                new AskForMainLog(ARTC.ServerTime, this.toString()).execute();
-            }
-        }, TimerDelay, TimerTimeout);
 
-    }
 // =======================================================
 
     public class ActivityResultsTableController extends ActivityFaceController {
@@ -67,9 +67,12 @@ public class ActivityResultsTable  extends Activity {
         public TextView userLogger;
         public TextView ServerTime;
         private TextView loginInfo;
+        private Timer ServerTimer;
+        private Timer MainLogAskTimer;
 
         ActivityResultsTableController() {
             super();
+            start();
         }
 
 
@@ -85,6 +88,41 @@ public class ActivityResultsTable  extends Activity {
         }
 
 
+        public void stop() {
+            ServerTimer.cancel();
+            MainLogAskTimer.cancel();
+        }
+
+        public void start() {
+            startTimeSync();
+            startMainLogSync();
+        }
+
+        private void startTimeSync() {
+            ServerTimer = new Timer(); // Создаем таймер
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskServerTime(ServerTime).execute();
+                }
+            }, TimerDelay, TimerTimeout);
+
+        }
+
+
+        private void startMainLogSync() {
+            MainLogAskTimer = new Timer(); // Создаем таймер
+            MainLogAskTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskForMainLog(userLogger, this.toString()).execute();
+                }
+            }, TimerDelay, MainLogTimeout);
+
+        }
+
+
+
         @Override
         protected void addListeners() {
             back_button.setOnClickListener(new View.OnClickListener() {
@@ -97,19 +135,19 @@ public class ActivityResultsTable  extends Activity {
             // TODO установить выдачу нужного типа файла и всунть его в ответ.
             downLoadResultsCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    new AskResultsTable(ARTC.userLogger, MainActivity.fileType.Results).execute();
+                    new AskResultsTable(userLogger, MainActivity.fileType.Results, getContextVar()).execute();
                 }
             });
 
             downLoadLogCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    new AskResultsTable(ARTC.userLogger, MainActivity.fileType.Log).execute();
+                    new AskResultsTable(userLogger, MainActivity.fileType.Log, getContextVar()).execute();
                 }
             });
 
             downLoadMarksCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    new AskResultsTable(ARTC.userLogger, MainActivity.fileType.Marcs).execute();
+                    new AskResultsTable(userLogger, MainActivity.fileType.Marcs, getContextVar()).execute();
                 }
             });
         }

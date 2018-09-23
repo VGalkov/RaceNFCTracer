@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
     public enum fileType {Results, Marcs, Log}
+    public  enum helpType {login}
 
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
@@ -101,12 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.guest_activity_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
             case R.id.settings :
@@ -116,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
                 HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.RegistratinHelp));
+                HFC.show();
+
                 return true;
             case R.id.login:
                 setContentView(R.layout.activity_main);
@@ -263,28 +270,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public class HelpFaceController extends ActivityFaceController {
-
-        HelpFaceController() {
-            super();
-        }
-
-
-        @Override
-        protected void initViewObjects() {
-
-        }
-
-        @Override
-        protected void addListeners() {
-
-        }
-
-        @Override
-        protected void setDefaultFace() {
-
-        }
-    }
 
 
     public class MainActivityFaceController extends ActivityFaceController {

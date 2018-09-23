@@ -1,8 +1,10 @@
 package ru.galkov.racenfctracer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -19,11 +22,12 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 
-public class ActivityGuestManager  extends Activity {
+public class ActivityGuestManager  extends AppCompatActivity {
 
     private ActivityGuestManagereController AGMC;
     private GPS GPS_System;
     private Timer ServerTimer;
+    private HelpFaceController HFC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,39 @@ public class ActivityGuestManager  extends Activity {
         startTimeSync();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.guest_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // getWindow().getDecorView().findViewById(android.R.id.content)
+        int id = item.getItemId();
+        switch(id){
+
+            case R.id.help:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.GuestAccessHelp));
+                HFC.show();
+                return true;
+
+
+            case R.id.exit:
+                /// TODO переписать на выход в геста после переделки фейсконтроллера.
+                setResult(RESULT_OK, new Intent());
+                finish();
+                return true;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onResume() {

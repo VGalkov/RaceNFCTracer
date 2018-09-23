@@ -13,9 +13,9 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -29,49 +29,43 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityRaceSetup  extends Activity {
 
-    private Timer ServerTimer;
     public ActivityRaceSetupController ARSController;
-    public Context context;
+    public Context activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_setup);
-
-        context = this;
-
-        new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
+        setActivity(this);
         ARSController = new ActivityRaceSetupController();
+        ARSController.start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startTimeSync();
+        ARSController.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ServerTimer.cancel();
+        ARSController.stop();
+    }
+    public void setActivity(Context activity1) {
+        activity = activity1;
     }
 
-  private void startTimeSync() {
-        ServerTimer = new Timer();
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-          @Override
-          public void run() {
-              new AskServerTime((TextView) findViewById(R.id.ServerTime)).execute();
-          }
-      }, TimerDelay, TimerTimeout);
+    public Context  getActivity() {
+        return activity;
     }
 
 
     public class ActivityRaceSetupController extends ActivityFaceController {
         private TextView ServerTime;
         private Button back_button;
-
+        private Timer ServerTimer;
         private TextView raceConfig;
         private Button setRaceConfig_button;
         public Spinner spinnerRace;
@@ -79,10 +73,23 @@ public class ActivityRaceSetup  extends Activity {
         private long race_id = 0L;
         private long start_id = 0L;
         private TextView loginInfo;
+        private TextView gpsPosition;
 
         ActivityRaceSetupController() {
             super();
         }
+
+
+        private void startTimeSync() {
+            ServerTimer = new Timer();
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskServerTime(ServerTime).execute();
+                }
+            }, TimerDelay, TimerTimeout);
+        }
+
 
 
         @Override
@@ -95,6 +102,8 @@ public class ActivityRaceSetup  extends Activity {
             spinnerRace = findViewById(R.id.spinnerRace);
             raceConfig = findViewById(R.id.raceConfig);
             loginInfo =             findViewById(R.id.loginInfo);
+            ServerTime =             findViewById(R.id.ServerTime);
+            gpsPosition=             findViewById(R.id.gpsPosition);
         }
 
 
@@ -125,7 +134,7 @@ public class ActivityRaceSetup  extends Activity {
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
-                    Utilites.messager(context, "Нужно что-то выбрать!");
+                    Utilites.messager(getActivity(), "Нужно что-то выбрать!");
                 }
             });
 
@@ -134,13 +143,13 @@ public class ActivityRaceSetup  extends Activity {
               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                   AskStartSructure AStartStr = new AskStartSructure(ARSController);
                   AStartStr.setRaceID(Long.parseLong(spinnerRace.getSelectedItem().toString())); // значение из выбранного спинером.
-                  AStartStr.setActivityContext(context);
+                  AStartStr.setActivityContext(getActivity());
                   AStartStr.setStartSpiner(spinnerStart);
                   AStartStr.execute();
               }
               @Override
               public void onNothingSelected(AdapterView<?> arg0) {
-                  Utilites.messager(context, "Нужно что-то выбрать!");
+                  Utilites.messager(getActivity(), "Нужно что-то выбрать!");
               }
           });
         }
@@ -148,15 +157,25 @@ public class ActivityRaceSetup  extends Activity {
         @Override
         protected void setDefaultFace() {
             constructStatusString();
-
+            new GPS(getActivity(),gpsPosition);
             AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
             ACRS.execute();
 
             // спинеры собираются тут ...
             AskRaceStructure ARaceS = new AskRaceStructure(ARSController);
-            ARaceS.setActivityContext(context);
+            ARaceS.setActivityContext(getActivity());
             ARaceS.setRaceSpiner(spinnerRace);
             ARaceS.execute();
+        }
+
+        @Override
+        protected void start() {
+            startTimeSync();
+        }
+
+        @Override
+        protected void stop() {
+            ServerTimer.cancel();
         }
 
         private void constructStatusString() {

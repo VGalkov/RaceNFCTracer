@@ -95,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setActivity(this);
-
         MAFC = new MainActivityFaceController();
+        MAFC.start();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.guest_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
         return true;
     }
 
@@ -266,6 +266,16 @@ public class MainActivity extends AppCompatActivity {
             timer = Integer.toString(MainActivity.getTimerTimeout()/1000);
             TimeTimer.setText(timer);
         }
+
+        @Override
+        protected void start() {
+
+        }
+
+        @Override
+        protected void stop() {
+
+        }
     }
 
 
@@ -286,20 +296,20 @@ public class MainActivity extends AppCompatActivity {
         private RadioButton         UserRadioButton;
         private RadioButton         GuestRadioButton;
         public TextView             ServerTime;
-        private Timer ServerTimer;
-        private GPS GPS_System;
+        private Timer               ServerTimer;
+        private TextView            gpsPosition;
+        private GPS                 GPS_System;
 
         //      Constructor; ============================================
         MainActivityFaceController() {
             super();
-            GPS_System = new GPS(getActivity(),(TextView) findViewById(R.id.gpsPosition) );
-            start();
         }
 
 
         // ======================================================================================
         @Override
         protected void setDefaultFace() {
+            GPS_System = new GPS(getActivity(), gpsPosition);
             setButton(exitButton, true);
             setButton(registerButton, true);
             setButton(enterButton, false);
@@ -324,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
             phone =                 findViewById(R.id.phone);
             password =              findViewById(R.id.password);
             ServerTime =            findViewById(R.id.ServerTime);
+            gpsPosition =           findViewById(R.id.gpsPosition);
         }
 
         @Override
@@ -441,10 +452,10 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {new AskServerTime(ServerTime).execute();}
             }, TimerDelay, TimerTimeout);
         }
-        void start() {
+        protected void start() {
             startTimeSync();
         }
-        void stop() {
+        protected void stop() {
             ServerTimer.cancel();
         }
 

@@ -14,15 +14,14 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskUserTable;
 import ru.galkov.racenfctracer.common.SendUserLevel;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
-import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 //  https://startandroid.ru/ru/uroki/vse-uroki-spiskom/115-urok-56-spinner-vypadajuschij-spisok.html
 // https://startandroid.ru/ru/uroki/vse-uroki-spiskom/115-urok-56-spinner-vypadajuschij-spisok.html
@@ -32,44 +31,40 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 public class ActivityLoginersRightsRedactor  extends Activity {
 
     private ActivityLoginersRightsRedactorController ALRRC;
-    private AskUserTable AUT;
-    private Context activityContext;
-    private Timer ServerTimer;
+    private Context activity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_loginers_rights_redactor);
-        activityContext =  this;
-
+        setActivity(this);
         ALRRC = new ActivityLoginersRightsRedactorController();
-
-        startTimeSync();
-
+        ALRRC.start();
     }
+
+    public void setActivity(Context activity1) {
+        activity = activity1;
+    }
+
+    public Context  getActivity() {
+        return activity;
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        startTimeSync();
+        ALRRC = new ActivityLoginersRightsRedactorController();
+        ALRRC.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ServerTimer.cancel();
+        ALRRC.stop();
     }
 
-    private void startTimeSync() {
-        ServerTimer = new Timer(); // Создаем таймер
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(ALRRC.ServerTime).execute();
-            }
-        }, TimerDelay, TimerTimeout);
-
-    }
 
 
 // ==========================================================
@@ -80,7 +75,7 @@ public class ActivityLoginersRightsRedactor  extends Activity {
         private ArrayAdapter<String> adapterLevels;
         private TextView LoginLevel;
         private TextView LoginToChng;
-
+        private Timer ServerTimer;
 
         public TextView ServerTime;
         public TextView LoginLevelLabel;
@@ -93,6 +88,17 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
         ActivityLoginersRightsRedactorController() {
             super();
+        }
+
+        private void startTimeSync() {
+            ServerTimer = new Timer();
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskServerTime(ALRRC.ServerTime).execute();
+                }
+            }, TimerDelay, MainActivity.getTimerTimeout());
+
         }
 
 
@@ -127,7 +133,6 @@ public class ActivityLoginersRightsRedactor  extends Activity {
 
             setButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    // прописываем уровень абоента. нужно передвать весё состояние view
                     SendUserLevel SUL = new SendUserLevel(userLogger);
                     SUL.setLogin(LoginToChng.getText().toString());
                     SUL.setLevel(LoginLevel.getText().toString());
@@ -140,8 +145,6 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    Object item = parent.getItemAtPosition(position);
-//                    LoginLevel.setText(item.toString());
                     LoginLevel.setText(spinnerLevel.getSelectedItem().toString());
                     userLogger.setText("Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText());
 
@@ -176,13 +179,23 @@ public class ActivityLoginersRightsRedactor  extends Activity {
             constructStatusString();
 
             String[] levels =   {"Guest", "User", "Admin", "Delete"};
-            adapterLevels = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, levels);
+            adapterLevels = new ArrayAdapter(getActivity(),  android.R.layout.simple_spinner_item, levels);
             spinnerLevel.setAdapter(adapterLevels);
 
             // запрос содержимого списка
             AskUserTable AUT = new AskUserTable(spinnerUsers);
-            AUT.setActivityContext(activityContext);
+            AUT.setActivityContext(getActivity());
             AUT.execute();
+        }
+
+        @Override
+        protected void start() {
+            startTimeSync();
+        }
+
+        @Override
+        protected void stop() {
+            ServerTimer.cancel();
         }
     }
 }

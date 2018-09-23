@@ -31,8 +31,9 @@ public class ActivityResultsTable  extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_results_table);
-        ARTC = new ActivityResultsTableController();
         setContextVar(this);
+        ARTC = new ActivityResultsTableController();
+        ARTC.start();
     }
 
     public void setContextVar(Context context) {
@@ -71,7 +72,6 @@ public class ActivityResultsTable  extends Activity {
 
         ActivityResultsTableController() {
             super();
-            start();
         }
 
 

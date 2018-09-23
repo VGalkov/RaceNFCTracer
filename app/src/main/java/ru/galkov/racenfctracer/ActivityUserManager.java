@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskForMainLog;
@@ -35,27 +36,15 @@ import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
-import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
-// https://www.codexpedia.com/android/android-nfc-read-and-write-example/
     public class ActivityUserManager extends AppCompatActivity {
-// не отображается список обнаруженых меток после вывода общего списка.
 
-        private GPS GPS_System;
+//        private GPS GPS_System;
         private NfcAdapter nfcAdapter;
         private Tag myTag;
         private boolean writeMode;
-        private Switch race_status;
-        private Timer ServerTimer;
-        private TextView User_Monitor;
         PendingIntent pendingIntent;
         IntentFilter writeTagFilters[];
-        Context context;
-        private TextView raceStart;
-        private TextView loginInfo;
-        private Button back_button;
-        private Button register_button;
-        private TextView NFC_ConfigurationLog;
         private ActivityUserManagereController AUMC;
         private HelpFaceController HFC;
         public static final String ERROR_DETECTED = "No NFC tag detected!";
@@ -69,14 +58,11 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_manager);
-            activity = this;
+            setActivity(this);
 
             AUMC = new ActivityUserManagereController();
+            AUMC.start();
 
-            GPS_System = new GPS(this,(TextView) findViewById(R.id.gpsPosition) );
-
-            initClassVaribles();
-            addlisteners();
             configureNFC();
         }
 
@@ -128,7 +114,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         @Override
         public void onPause(){
             super.onPause();
-            ServerTimer.cancel();
+            AUMC.stop();
             WriteModeOff();
 
         }
@@ -136,28 +122,32 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         @Override
         public void onResume(){
             super.onResume();
-            startTimeSync();
+            AUMC.start();
             WriteModeOn();
         }
 
-    private void startTimeSync() {
-        ServerTimer = new Timer(); // Создаем таймер
-        ServerTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                new AskServerTime(AUMC.ServerTime).execute();
-                if (race_status.isChecked())  {
-                    new AskForMainLog(AUMC.User_Monitor, this.toString()).execute();
-                }
-            }
-        }, TimerDelay, TimerTimeout);
 
+
+    public void setActivity(Context activity1) {
+        activity = activity1;
     }
 
-        // ====================================================================================
+    public Context  getActivity() {
+        return activity;
+    }
+
+
+    // ====================================================================================
 
 
     private void configureNFC() {
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (nfcAdapter == null) {
+            Utilites.messager(this, "This device doesn't support NFC.");
+            finish();
+        }
+
         readFromIntent(getIntent());
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
@@ -165,28 +155,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         writeTagFilters = new IntentFilter[] { tagDetected };
     }
 
-    public void constructStatusString() {
-        loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
-    }
-
-    private void initClassVaribles(){
-        back_button =           findViewById(R.id.back_button);
-        NFC_ConfigurationLog =  findViewById(R.id.NFC_ConfigurationLog);
-        race_status =           findViewById(R.id.race_status);
-        User_Monitor =          findViewById(R.id.User_Monitor);
-        register_button =       findViewById(R.id.register_button);
-        raceStart =             findViewById(R.id.raceStart);
-        loginInfo =             findViewById(R.id.loginInfo);
-        constructStatusString();
-
-
-
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null) {
-            Utilites.messager(this, "This device doesn't support NFC.");
-            finish();
-        }
-    }
 
         // **********************************Read From NFC Tag***************************
 
@@ -221,9 +189,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
             }
 
 
-            SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(User_Monitor);
+            SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC.getUser_Monitor());
 
-            NFC.setGPS_System(GPS_System);
+            NFC.setGPS_System(AUMC.getGPS_System());
             NFC.setMark(text);
             NFC.setContext(activity);
             NFC.execute();
@@ -279,53 +247,144 @@ import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
         }
 
 
-    private void addlisteners() {
 
 
-        back_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                setResult(RESULT_OK, new Intent());
-                finish();
-            }
-        });
-
-        register_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart);
-                ACRS.execute();
-            }
-        });
 
 
-        race_status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
-
-                back_button.setEnabled(!bChecked);
-                back_button.setActivated(!bChecked);
-                back_button.setFocusable(!bChecked);
-
-                if (bChecked) {  race_status.setText(R.string.race_on); }
-                else { race_status.setText(R.string.race_off); }
-            }
-        });
-
-    }
 
 
-    public class ActivityUserManagereController{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public class ActivityUserManagereController extends ActivityFaceController {
 
         public TextView User_Monitor;
         public TextView ServerTime;
+        public TextView gpsPosition;
+        private Timer ServerTimer;
+        private  Button back_button;
+        private Button register_button;
+        private Switch race_status;
+        private Timer ServerMainLogTimer;
+        private TextView raceStart;
+        private TextView loginInfo;
+        private GPS GPS_System;
+
 
         ActivityUserManagereController() {
-            setDefaultView();
+            super();
         }
 
-
-        public void setDefaultView() {
+        @Override
+        protected void initViewObjects() {
             User_Monitor =  findViewById(R.id.User_Monitor);
             ServerTime =  findViewById(R.id.ServerTime);
+            User_Monitor =          findViewById(R.id.User_Monitor);
+            gpsPosition = findViewById(R.id.gpsPosition);
+            back_button =           findViewById(R.id.back_button);
+            register_button =       findViewById(R.id.register_button);
+            raceStart =             findViewById(R.id.raceStart);
+            loginInfo =             findViewById(R.id.loginInfo);
+            race_status =           findViewById(R.id.race_status);
+        }
+
+        public TextView getUser_Monitor() {
+            return User_Monitor;
+        }
+
+        public GPS getGPS_System() {
+            return GPS_System;
+        }
+
+        @Override
+        protected void addListeners() {
+
+            back_button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    setResult(RESULT_OK, new Intent());
+                    finish();
+                }
+            });
+
+            register_button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart);
+                    ACRS.execute();
+                }
+            });
+
+
+            race_status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
+
+                    back_button.setEnabled(!bChecked);
+                    back_button.setActivated(!bChecked);
+                    back_button.setFocusable(!bChecked);
+
+                    if (bChecked) {  race_status.setText(R.string.race_on); }
+                    else { race_status.setText(R.string.race_off); }
+                }
+            });
+        }
+
+        @Override
+        protected void setDefaultFace(){
+                GPS_System = new GPS(getActivity(),gpsPosition);
+                constructStatusString();
+        }
+
+        @Override
+        protected void start() {
+            startMainLogSync();
+            startTimeSync();
+        }
+
+        @Override
+        protected void stop() {
+            ServerTimer.cancel();
+
+        }
+
+        private void startTimeSync() {
+            ServerTimer = new Timer(); // Создаем таймер
+            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    new AskServerTime(ServerTime).execute();
+                }
+            }, TimerDelay, MainActivity.getTimerTimeout());
+
+        }
+
+        private void startMainLogSync() {
+            ServerMainLogTimer = new Timer(); // Создаем таймер
+            ServerMainLogTimer.schedule(new TimerTask() { // Определяем задачу
+                @Override
+                public void run() {
+                    if (race_status.isChecked())  {
+                        new AskForMainLog(User_Monitor, this.toString()).execute();
+                    }
+                }
+            }, TimerDelay, MainActivity.getMainLogTimeout());
+
+        }
+
+        public void constructStatusString() {
+            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
         }
 
     }

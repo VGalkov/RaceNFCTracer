@@ -16,6 +16,10 @@ public abstract class ActivityFaceController {
 
         protected abstract void setDefaultFace();
 
+        protected abstract void start();
+
+        protected abstract void stop();
+
 /*
         protected abstract void start();
 

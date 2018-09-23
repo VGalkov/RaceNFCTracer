@@ -34,6 +34,16 @@ public class HelpFaceController extends ActivityFaceController {
 
     }
 
+    @Override
+    protected void start() {
+
+    }
+
+    @Override
+    protected void stop() {
+
+    }
+
 
     public void show() {
         ekran.setText(helpTopic);

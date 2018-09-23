@@ -41,8 +41,6 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        //TODO rewrite
-// {"date":"2018.09.11 09:26:46","asker":"AskServerTime","key":"galkovvladimirandreevich"}
         try {
             JSONObject JOAnswer = new JSONObject(result);
             if (Utilites.chkKey((String) JOAnswer.get(f.key.toString()))) {

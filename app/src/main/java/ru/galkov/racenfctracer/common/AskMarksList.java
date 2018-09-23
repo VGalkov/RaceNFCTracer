@@ -51,31 +51,26 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
- /*
- {
-    "asker":"AskMarksList",
-    "rows":
-        [
-            {"Id":0,"mark":"?????? ?????"},
-            {"Id":1,"mark":"??????"}
-        ],
-    "key":"galkovvladimirandreevich"}
- */
         StringBuffer response = new StringBuffer();
-        // TODO проверка ключа
+
         try {
             JSONObject JOAnswer = new JSONObject(result);
             String serverKEY = JOAnswer.getString(f.key.toString());
-            JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
+            if (Utilites.chkKey(serverKEY)) {
+                JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
 
-            for(int i = 0 ; i< arr.length() ; i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                response.append("Метка(сервер):" + obj.getString(f.label.toString())
-                        + "("+df.format(obj.getDouble(f.altitude.toString()))
-                        +","+df.format(obj.getDouble(f.latitude.toString()))
-                        +","+df.format(obj.getDouble(f.longitude.toString()))+")" + "\n");
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = arr.getJSONObject(i);
+                    response.append("Метка(сервер):" + obj.getString(f.label.toString())
+                            + "(" + df.format(obj.getDouble(f.altitude.toString()))
+                            + "," + df.format(obj.getDouble(f.latitude.toString()))
+                            + "," + df.format(obj.getDouble(f.longitude.toString())) + ")" + "\n");
+                }
+            } else {
+                response = new StringBuffer("Ошибка ключа или версии клиента!");
+                // Utilites.messager(context,"сбой протокола шифрования или всего запроса!");
             }
-        } catch (JSONException e) {	e.printStackTrace();}
+            } catch(JSONException e){       e.printStackTrace();      }
 
         if (method == MainActivity.writeMethod.Append) Ekran.append(response.toString());
            else Ekran.setText(response.toString());

@@ -64,13 +64,9 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        // TODO выпадающие списки рейсов и стартов связанные.
         try {
                 JSONObject JOAnswer = new JSONObject(result);
                 String serverKEY = JOAnswer.getString(f.key.toString());
-                // устанавливаем номер гонки и номер старта глобально.
-//                  MainActivity.setRace_id(race_id);
-//                   MainActivity.setStart_id(start_id);
 
                 MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                 MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));

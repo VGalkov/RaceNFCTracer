@@ -89,18 +89,19 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         System.out.print(result);
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                // TODO проверка ключа
                 String serverKEY = JOAnswer.getString("key");
-                JSONArray arr = JOAnswer.getJSONArray("rows");
-                for(int i = 0 ; i< arr.length() ; i++) {
-                    JSONObject obj = arr.getJSONObject(i);
-                    str = str + obj.getString("login") + " прошёл метку -> \n"
-                            + obj.getString("mark_label") + "\n"
-                            + "время: " + obj.getString("date") + "\n"
-                            + "на точке: "+df.format(obj.getDouble("latitude"))
-                            +", "+df.format(obj.getDouble("longitude"))
-                            +", "+df.format(obj.getDouble("altitude"))+" \n\n";
-                }
+                if (Utilites.chkKey(serverKEY)) {
+                    JSONArray arr = JOAnswer.getJSONArray("rows");
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = arr.getJSONObject(i);
+                        str = str + obj.getString("login") + " прошёл метку -> \n"
+                                + obj.getString("mark_label") + "\n"
+                                + "время: " + obj.getString("date") + "\n"
+                                + "на точке: " + df.format(obj.getDouble("latitude"))
+                                + ", " + df.format(obj.getDouble("longitude"))
+                                + ", " + df.format(obj.getDouble("altitude")) + " \n\n";
+                    }
+                } else str = "Ошибка ключа или версии клиента!";
 
             if (method == MainActivity.writeMethod.Append)  ResultEkran.append(str);
             else                                            ResultEkran.setText(str);

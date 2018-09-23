@@ -26,8 +26,6 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private MainActivity.fileType fileType;
     private Context context;
 
-// TODO полностью переписать смысл.
-// http://qaru.site/questions/887264/android-how-to-download-file-in-android
     public AskResultsTable(TextView userLogger1,MainActivity.fileType fileType2, Context context3) {
         this.userLogger = userLogger1;
         this.fileType = fileType2;
@@ -52,15 +50,18 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
         // если в JSON преобразуется - в ответе не файл :)
         try {
-            JSONObject JOAnswer = new JSONObject(result);
-            // TODO проверка ключа
-            String serverKEY = JOAnswer.getString(f.key.toString());
-            String res = "Файл не выслан!" + JOAnswer.getString(f.resultsFileLink.toString()) +"/"+ JOAnswer.getString(f.resultsFileDir.toString());
+                JSONObject JOAnswer = new JSONObject(result);
+                String res;
+                String serverKEY = JOAnswer.getString(f.key.toString());
+                if (Utilites.chkKey(serverKEY)) {
+                    res = "Файл не выслан!" + JOAnswer.getString(f.resultsFileLink.toString()) + "/" + JOAnswer.getString(f.resultsFileDir.toString());
+                }
+                else        { res = "Ошибка ключа или версии клиента!"; }
 
-            if (method == MainActivity.writeMethod.Append)    userLogger.append(res);
-            else        userLogger.setText(res);
+                if (method == MainActivity.writeMethod.Append) userLogger.append(res);
+                else userLogger.setText(res);
 
-        } catch (JSONException e) {
+            } catch (JSONException e) {
             try {
                     String filePath = context.getFilesDir().getPath().toString() + "/"+fileType+".csv";
                     File file = new File(filePath);

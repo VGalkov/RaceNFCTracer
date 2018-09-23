@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;

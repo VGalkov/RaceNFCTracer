@@ -50,13 +50,6 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-// TODO rewrite
-        // {"level":"Admin","asker":"SendNewLoginLevel","login":"TRUE","key":"galkovvladimirandreevich"}
-        MainActivity.registrationLevel REGLEVEL = MainActivity.registrationLevel.Guest;
-
-        //        String str = JOAnswer.get("login").toString();
-//        String strLogin = str.substring(0, str.indexOf('('));
-
         try {
             JSONObject JOAnswer = new JSONObject(result);
             userLogger.setText("отработало! =>" + JOAnswer.get("login") + "/" + JOAnswer.get("level"));

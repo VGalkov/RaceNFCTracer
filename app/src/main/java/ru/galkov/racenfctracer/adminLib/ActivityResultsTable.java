@@ -13,7 +13,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -23,7 +23,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityResultsTable  extends Activity {
-// TODO переписать смысл http://qaru.site/questions/887264/android-how-to-download-file-in-android
     private ActivityResultsTableController ARTC;
     private Context context;
 
@@ -132,7 +131,6 @@ public class ActivityResultsTable  extends Activity {
                 }
             });
 
-            // TODO установить выдачу нужного типа файла и всунть его в ответ.
             downLoadResultsCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     new AskResultsTable(userLogger, MainActivity.fileType.Results, getContextVar()).execute();

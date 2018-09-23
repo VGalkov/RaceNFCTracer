@@ -25,7 +25,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.common.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     public static int MainLogTimeout = 60000;
 
 
-    // TODO добавить в настройки.
     public static void setTimerTimeout(int timeout) {
         TimerTimeout = timeout;
     }

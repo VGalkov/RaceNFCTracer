@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.common.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;

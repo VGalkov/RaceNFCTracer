@@ -12,12 +12,12 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
-import ru.galkov.racenfctracer.common.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
@@ -140,10 +140,11 @@ public class ActivityAdminManagerController extends ActivityFaceController {
                 finish();
             }
         });
-
+// TODO перепсать вызов в то же активити.
         raceSetup_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivityForResult(new Intent(view.getContext(), ActivityRaceSetup.class), 0);
+//                setContentView(R.layout.ActivityRaceSetup);
             }
         });
 

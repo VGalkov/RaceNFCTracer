@@ -2,8 +2,6 @@ package ru.galkov.racenfctracer.FaceControllers;
 
 import android.widget.TextView;
 
-import ru.galkov.racenfctracer.common.ActivityFaceController;
-
 public class HelpFaceController extends ActivityFaceController {
 
     private TextView ekran;

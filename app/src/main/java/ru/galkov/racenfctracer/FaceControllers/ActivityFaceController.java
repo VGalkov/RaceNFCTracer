@@ -1,4 +1,4 @@
-package ru.galkov.racenfctracer.common;
+package ru.galkov.racenfctracer.FaceControllers;
 
 public abstract class ActivityFaceController {
 

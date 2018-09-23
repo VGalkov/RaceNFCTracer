@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskUserTable;
 import ru.galkov.racenfctracer.common.SendUserLevel;

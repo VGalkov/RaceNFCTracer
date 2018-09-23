@@ -129,6 +129,14 @@ public class MainActivity extends AppCompatActivity {
                 MAFC.start();
                 return true;
 
+            case R.id.donate:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.donate));
+                HFC.show();
+                return true;
+
             case R.id.exit:
                 setResult(RESULT_OK, new Intent());
                 finish();

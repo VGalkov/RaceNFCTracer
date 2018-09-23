@@ -63,11 +63,15 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
             } catch (JSONException e) {
             try {
-                    String filePath = context.getFilesDir().getPath().toString() + "/"+fileType+".csv";
+                    String filePath = context.getExternalCacheDir().toString() + "/"+fileType+".csv"; // папка приложения на SD
+                    // String filePath =  Environment.getExternalStorageDirectory().toString() + "/"+fileType+".csv"; //корень SD
+                    //String filePath = context.getCacheDir().toString() + "/"+fileType+".csv";
+                    //String filePath = context.getFilesDir().getPath().toString() + "/"+fileType+".csv"; // туда не попасть
                     File file = new File(filePath);
                     if(file.exists()) file.delete();
                     file.createNewFile();
                     PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+                    result = result.replace("||", "\r\n");
                     out.println(result);
                     out.close();
                     if (method == MainActivity.writeMethod.Append)    userLogger.append("Файл  сохранён в:" + filePath);

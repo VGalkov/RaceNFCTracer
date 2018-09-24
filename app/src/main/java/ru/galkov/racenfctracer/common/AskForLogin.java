@@ -18,19 +18,16 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private String login;
     private String password;
     private Context context;
-
     private TextView RegAsLabel;
     private MainActivity.registrationLevel level;
     private MainActivity.registrationLevel REGLEVEL;
     private MainActivity.MainActivityFaceController MAFC;
-
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
 
 //    https://ru.stackoverflow.com/questions/552262/android-%D0%BA%D0%B0%D0%BA-%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C-get-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81
     public AskForLogin(MainActivity.MainActivityFaceController MAFC1) {
         MAFC = MAFC1;
-
     }
 
 
@@ -38,17 +35,15 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute(){
         boolean tr = true;
-        if (login.length()!=12)  tr = false;
-        if (password.length()<5) tr = false;
+        if (login.length()!=MainActivity.LoginLength)  tr = false;
+        if (password.length()<MainActivity.PasswordLength) tr = false;
 
-// проверку забитого уровня можно не делать.
-
-            if (tr) makeOutBoundJSON();
+// BACKDORE без сервера.
+            if (tr)       makeOutBoundJSON();
             else Utilites.messager(context, "Не смог подготовить запрос на сервер");
         }
 
     private  void makeOutBoundJSON(){
-//        {"asker":"AskForLogin","level":"Guest","key":"galkovvladimirandreevich","login":"+79272006026","password":"aaazzz"}
         try {
                 outBoundJSON = new JSONObject();
                 outBoundJSON.put(f.asker.toString(),ASKER);

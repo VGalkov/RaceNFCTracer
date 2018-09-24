@@ -35,7 +35,16 @@ public class Utilites {
         Toast.makeText(cont1, str2, Toast.LENGTH_LONG).show();
     }
 
-
+    public static String replace(String str, int index, char replace){
+        if(str==null){
+            return str;
+        }else if(index<0 || index>=str.length()){
+            return str;
+        }
+        char[] chars = str.toCharArray();
+        chars[index] = replace;
+        return String.valueOf(chars);
+    }
 
 
 }

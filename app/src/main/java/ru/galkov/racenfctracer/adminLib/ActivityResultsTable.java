@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,19 +13,19 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
-import static ru.galkov.racenfctracer.MainActivity.MainLogTimeout;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
-import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityResultsTable  extends Activity {
     private ActivityResultsTableController ARTC;
+    private HelpFaceController HFC;
     private Context context;
 
     @Override
@@ -55,6 +57,40 @@ public class ActivityResultsTable  extends Activity {
         super.onPause();
         ARTC.stop();
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.results_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // getWindow().getDecorView().findViewById(android.R.id.content)
+        int id = item.getItemId();
+        switch(id){
+
+            case R.id.help:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.ResultsHelp));
+                HFC.start();
+                return true;
+
+
+            case R.id.exit:
+                /// TODO переписать на выход в геста после переделки фейсконтроллера.
+                setResult(RESULT_OK, new Intent());
+                finish();
+                return true;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 // =======================================================
@@ -104,7 +140,7 @@ public class ActivityResultsTable  extends Activity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, TimerDelay, TimerTimeout);
+            }, TimerDelay, MainActivity.getTimerTimeout());
 
         }
 
@@ -116,7 +152,7 @@ public class ActivityResultsTable  extends Activity {
                 public void run() {
                     new AskForMainLog(userLogger, this.toString()).execute();
                 }
-            }, TimerDelay, MainLogTimeout);
+            }, TimerDelay, MainActivity.getMainLogTimeout());
 
         }
 

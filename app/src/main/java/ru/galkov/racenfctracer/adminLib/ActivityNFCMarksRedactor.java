@@ -1,6 +1,5 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,9 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMarksList;
@@ -34,20 +37,55 @@ import ru.galkov.racenfctracer.common.Utilites;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
-public class ActivityNFCMarksRedactor  extends Activity {
+public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
     private NfcAdapter nfcAdapter;
+
     private Tag myTag;
     private boolean writeMode;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
     private Context activity;
     public String markContent;
-    ActivityNFCMarksRedactorFaceController NFCRedactorController;
+    private ActivityNFCMarksRedactorFaceController NFCRedactorController;
+    private HelpFaceController HFC;
     private final MainActivity.writeMethod METHOD = MainActivity.writeMethod.Append;
     public static final String ERROR_DETECTED = "No NFC tag detected!";
     public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
     public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.redactor_nfc_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // getWindow().getDecorView().findViewById(android.R.id.content)
+        int id = item.getItemId();
+        switch(id){
+
+            case R.id.help:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.redactorNFCHelp));
+                HFC.start();
+                return true;
+
+
+            case R.id.exit:
+                /// TODO переписать на выход в геста после переделки фейсконтроллера.
+                setResult(RESULT_OK, new Intent());
+                finish();
+                return true;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @Override

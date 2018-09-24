@@ -35,8 +35,8 @@ public class HelpFaceController extends ActivityFaceController {
     }
 
     @Override
-    protected void start() {
-
+    public void start() {
+        ekran.setText(helpTopic);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class HelpFaceController extends ActivityFaceController {
 
     }
 
-
+    @Deprecated
     public void show() {
         ekran.setText(helpTopic);
     }

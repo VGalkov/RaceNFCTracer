@@ -6,15 +6,9 @@
         android:orderInCategory="3"
         android:title="@string/help" />
 
-<!--    <item
-        android:id="@+id/results"
-        android:orderInCategory="3"
-        android:title="@string/results" /> -->
-
     <item
         android:id="@+id/exit"
         android:orderInCategory="3"
         android:title="@string/back" />
-
 
 </menu>

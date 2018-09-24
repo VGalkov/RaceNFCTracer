@@ -1,9 +1,11 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -23,15 +26,12 @@ import ru.galkov.racenfctracer.common.SendUserLevel;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
-//  https://startandroid.ru/ru/uroki/vse-uroki-spiskom/115-urok-56-spinner-vypadajuschij-spisok.html
-// https://startandroid.ru/ru/uroki/vse-uroki-spiskom/115-urok-56-spinner-vypadajuschij-spisok.html
-// https://developer.android.com/guide/topics/ui/controls/spinner
-// https://metanit.com/java/android/5.4.php
 
-public class ActivityLoginersRightsRedactor  extends Activity {
+public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
 
     private ActivityLoginersRightsRedactorController ALRRC;
     private Context activity;
+    private HelpFaceController HFC;
 
 
     @Override
@@ -65,6 +65,36 @@ public class ActivityLoginersRightsRedactor  extends Activity {
         ALRRC.stop();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.login_setup_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // getWindow().getDecorView().findViewById(android.R.id.content)
+        int id = item.getItemId();
+        switch(id){
+
+            case R.id.help:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.loginSetupHelp));
+                HFC.start();
+                return true;
+
+
+            case R.id.exit:
+                setResult(RESULT_OK, new Intent());
+                finish();
+                return true;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 // ==========================================================

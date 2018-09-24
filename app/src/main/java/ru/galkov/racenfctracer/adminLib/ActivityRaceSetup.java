@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
@@ -25,12 +28,12 @@ import ru.galkov.racenfctracer.common.SendActiveRaceStart;
 import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
-import static ru.galkov.racenfctracer.MainActivity.TimerTimeout;
 
 public class ActivityRaceSetup  extends Activity {
 
     public ActivityRaceSetupController ARSController;
     public Context activity;
+    private HelpFaceController HFC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,38 @@ public class ActivityRaceSetup  extends Activity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.race_setup_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // getWindow().getDecorView().findViewById(android.R.id.content)
+        int id = item.getItemId();
+        switch(id){
+
+            case R.id.help:
+                setContentView(R.layout.activity_help_system);
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.raceSetupHelp));
+                HFC.start();
+                return true;
+
+
+            case R.id.exit:
+                setResult(RESULT_OK, new Intent());
+                finish();
+                return true;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public class ActivityRaceSetupController extends ActivityFaceController {
         private TextView ServerTime;
         private Button back_button;
@@ -84,10 +119,9 @@ public class ActivityRaceSetup  extends Activity {
             ServerTimer = new Timer();
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
                 @Override
-                public void run() {
-                    new AskServerTime(ServerTime).execute();
-                }
-            }, TimerDelay, TimerTimeout);
+                public void run() {new AskServerTime(ServerTime).execute();}
+            },
+                    TimerDelay, MainActivity.getTimerTimeout());
         }
 
 

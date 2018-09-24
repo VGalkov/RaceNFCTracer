@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
                 @Override
                 public void run() {new AskServerTime(ServerTime).execute();}
-            }, TimerDelay, TimerTimeout);
+            }, TimerDelay, MainActivity.getTimerTimeout());
         }
         protected void start() {
             startTimeSync();

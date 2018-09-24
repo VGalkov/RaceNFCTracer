@@ -59,7 +59,6 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
 
             case R.id.exit:
-                /// TODO переписать на выход в геста после переделки фейсконтроллера.
                 setResult(RESULT_OK, new Intent());
                 finish();
                 return true;

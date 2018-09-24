@@ -39,7 +39,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
     public class ActivityUserManager extends AppCompatActivity {
 
-//        private GPS GPS_System;
+
         private NfcAdapter nfcAdapter;
         private Tag myTag;
         private boolean writeMode;

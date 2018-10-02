@@ -87,15 +87,22 @@
     <string name="race_off">Событие не активно</string>
     <string name="race_on">Событие стартовало</string>
     <string name="nfc_log">NFC события</string>
+    <string name="get_master_mark_button">Установить эталонную метку</string>
 
     <!-- Admin -->
     <string name="registration_table">Таблица регистрации</string>
+
+
+    <string name="masterMarkSw">Эталонная марка?</string>
     <string name="users_table">Таблица участников</string>
+    <string name="EventLog">Лог событий</string>
+
 
     <string name="race_table">Таблица участников</string>
     <string name="map">Карта участников</string>
     <string name="poins_table">Редактор NFC точек</string>
     <string name="results">Результаты</string>
+    <string name="no_master_mark">Эталонная метка не загружена!</string>
     <string name="title_activity_app_help_system">ActivityAppHelpSystem</string>
 
 

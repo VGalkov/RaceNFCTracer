@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -173,8 +174,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         WriteModeOn();
     }
 
-    // ====================================================================================
-
     // **********************************Read From NFC Tag***************************
 
     private void readFromIntent(Intent intent) {
@@ -263,24 +262,9 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public class  ActivityNFCMarksRedactorFaceController extends ActivityFaceController {
         public TextView ServerTime;
+        private CheckBox masterMarkSw;
         private TextView gpsPosition;
         private GPS GPS_System;
         private Timer ServerTimer;
@@ -290,6 +274,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         private TextView loginInfo;
         public TextView NFC_ConfigurationLog;
         private TextView NfS_Mark_Editor;
+        private boolean isStarted = false;
 
         @Override
         protected void initViewObjects() {
@@ -301,8 +286,13 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
             gpsPosition =                       findViewById(R.id.gpsPosition);
             loginInfo =             findViewById(R.id.loginInfo);
+            masterMarkSw =          findViewById(R.id.masterMarkSw);
         }
 
+        @Override
+        public boolean isStarted() {
+            return isStarted;
+        }
 
 
         public void setCurrentNFC_Label(String str) {
@@ -317,12 +307,13 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         protected void addListeners() {
             CommitButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-
                     NFC_ConfigurationLog.append("Сохраняется метка -> \n ");
                     SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
                     NFC.setMark(markContent);
                     NFC.setMethod(METHOD);
                     NFC.setGPS_System(GPS_System);
+                    if (masterMarkSw.isChecked()) NFC.setType(MainActivity.marksTypes.master.toString());
+                    else NFC.setType(MainActivity.marksTypes.normal.toString());
                     NFC.execute();
                 }
             });
@@ -343,13 +334,15 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         }
 
         @Override
-        protected void start() {
+        public void start() {
             startTimeSync();
+            isStarted = true;
         }
 
         @Override
-        protected void stop() {
+        public void stop() {
             ServerTimer.cancel();
+            isStarted = false;
         }
 
         private void constructStatusString() {

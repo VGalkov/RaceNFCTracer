@@ -110,7 +110,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         private Timer ServerTimer;
         private Timer MainLogTimer;
         private TextView gpsPosition;
-
+        private boolean isStarted = false;
 
         ActivityAdminManagerController() {
             super();
@@ -127,6 +127,10 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         ServerTime =                        findViewById(R.id.ServerTime);
         loginInfo =                         findViewById(R.id.loginInfo);
         gpsPosition =                       findViewById(R.id.gpsPosition);
+    }
+    @Override
+    public boolean isStarted() {
+        return isStarted;
     }
 
     @Override
@@ -174,15 +178,17 @@ public class ActivityAdminManagerController extends ActivityFaceController {
     }
 
     @Override
-    protected void start() {
+    public void start() {
         startTimeSync();
         startMainLogTimeSync();
+        isStarted = true;
     }
 
     @Override
-    protected void stop() {
+    public void stop() {
         ServerTimer.cancel();
         MainLogTimer.cancel();
+        isStarted = false;
     }
 
     private void startTimeSync() {

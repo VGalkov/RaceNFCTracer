@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
     public static final int HTTP_TIMEOUT = 15000;
+    public static final int MarkChekDelayTimerTimeout = 5000;
+    public static final int MarkChekTimerDelay = 5000;
+
     public static final int TimerDelay = 1000;
     public static final short LoginLength = 12;
     public static final short PasswordLength =5;
@@ -52,11 +55,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String backDoreUser =  "+84873967849";
 
     // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
-    public enum fieldsJSON {resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public enum fieldsJSON {master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public enum trigger {TRUE, FALSE}
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
     public enum fileType {Results, Marcs, Log}
+    public enum marksTypes {master, normal}
+
+
     public enum helpType {login}
 
 
@@ -72,10 +78,38 @@ public class MainActivity extends AppCompatActivity {
     private static registrationLevel level;
     private static long race_id;
     private static long start_id;
+    private static String  mASTER_MARK ="";
+    private static String  mASTER_MARK_Flag ="_";
     public static int TimerTimeout = 15000;
     public static int MainLogTimeout = 60000;
     public static int BlameTimeout = 600000;
 
+
+
+    public static int getMarkChekTimerDelay() {
+        return MarkChekTimerDelay;
+    }
+
+    public static int getMarkChekDelayTimerTimeout() {
+        return MarkChekDelayTimerTimeout;
+    }
+
+
+    public static void setmASTER_MARK(String mASTER_MARK1) {
+        mASTER_MARK = mASTER_MARK1;
+    }
+
+    public static void setmASTER_MARK_Flag(String mASTER_MARK_Flag) {
+        MainActivity.mASTER_MARK_Flag = mASTER_MARK_Flag;
+    }
+
+    public static String getmASTER_MARK() {
+        return mASTER_MARK;
+    }
+
+    public static String getmASTER_MARK_Flag() {
+        return mASTER_MARK_Flag;
+    }
 
     public static void setTimerTimeout(int timeout) {
         TimerTimeout = timeout;
@@ -233,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
         private Button saveTimers;
         private TextView TimeTimer;
         private TextView MainLogTimer;
-
+        private boolean isStarted = false;
         protected SettingsFaceController() {
             super();
         }
@@ -247,6 +281,13 @@ public class MainActivity extends AppCompatActivity {
             MainLogTimer =        findViewById(R.id.MainLogTimer);
 
         }
+
+        @Override
+        public boolean isStarted() {
+            return isStarted;
+        }
+
+
         @Override
         protected void addListeners() {
             saveServerIP.setOnClickListener(new View.OnClickListener() {
@@ -277,13 +318,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void start() {
-
+        public void start() {
+            isStarted = true;
         }
 
         @Override
-        protected void stop() {
-
+        public void stop() {
+            isStarted = false;
         }
     }
 
@@ -291,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public class MainActivityFaceController extends ActivityFaceController {
-
+        private boolean isStarted = false;
         private String              ERROR_MSG;
         private Button              exitButton;
         private Button              registerButton;
@@ -329,6 +370,12 @@ public class MainActivity extends AppCompatActivity {
 
             dropRegistration();
         }
+
+        @Override
+        public boolean isStarted() {
+            return isStarted;
+        }
+
 
         @Override
         protected void initViewObjects() {
@@ -471,11 +518,13 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {new AskServerTime(ServerTime).execute();}
             }, TimerDelay, MainActivity.getTimerTimeout());
         }
-        protected void start() {
+        public void start() {
             startTimeSync();
+            isStarted = true;
         }
-        protected void stop() {
+        public void stop() {
             ServerTimer.cancel();
+            isStarted = false;
         }
 
 
@@ -522,7 +571,6 @@ public class MainActivity extends AppCompatActivity {
             setRace_id(0L);
             setStart_id(0L);
         }
-
 
         // ===================================================================================
 

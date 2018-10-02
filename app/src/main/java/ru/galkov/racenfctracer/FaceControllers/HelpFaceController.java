@@ -6,7 +6,7 @@ public class HelpFaceController extends ActivityFaceController {
 
     private TextView ekran;
     private String helpTopic;
-
+    private boolean isStarted = false;
 
     public HelpFaceController() {
     }
@@ -37,11 +37,17 @@ public class HelpFaceController extends ActivityFaceController {
     @Override
     public void start() {
         ekran.setText(helpTopic);
+        isStarted = true;
     }
 
     @Override
-    protected void stop() {
+    public void stop() {
+        isStarted = false;
+    }
 
+    @Override
+    public boolean isStarted() {
+        return isStarted;
     }
 
     @Deprecated

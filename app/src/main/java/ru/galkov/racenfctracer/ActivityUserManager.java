@@ -17,19 +17,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MainLogController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
-import ru.galkov.racenfctracer.common.AskForMainLog;
+import ru.galkov.racenfctracer.common.AskMasterMark;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
@@ -43,16 +43,19 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         private NfcAdapter nfcAdapter;
         private Tag myTag;
         private boolean writeMode;
+        private Timer MarkChekDelayTimer;
         PendingIntent pendingIntent;
         IntentFilter writeTagFilters[];
         private ActivityUserManagereController AUMC;
         private HelpFaceController HFC;
+        private MainLogController MLC;
+        private Date dt1;
+        private Date dt2;
+
         public static final String ERROR_DETECTED = "No NFC tag detected!";
         public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
         public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
         private Context activity;
-
-
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
 
@@ -83,18 +85,25 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.UserAccessHelp));
-                HFC.show();
+                HFC.start();
                 return true;
 
+            case  R.id.EventLog:
+                setContentView(R.layout.activity_race_events);
+                MLC = new MainLogController();
+                MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
+                MLC.setCaller(this.toString());
+                MLC.start();
+                return true;
 
             case R.id.exit:
-
-                /// TODO переписать на выход в геста после переделки фейсконтроллера.
-                setResult(RESULT_OK, new Intent());
-                finish();
+                setContentView(R.layout.activity_user_manager);
+                setActivity(this);
+                AUMC = new ActivityUserManagereController();
+                AUMC.start();
+                AUMC.setCurrentFace();
+                configureNFC();
                 return true;
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -115,6 +124,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         public void onPause(){
             super.onPause();
             AUMC.stop();
+            try { if (MLC.isStarted()) { MLC.stop(); } }   catch (Exception e) { e.printStackTrace(); }
             WriteModeOff();
 
         }
@@ -189,14 +199,41 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
             }
 
 
-            SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC.getUser_Monitor());
+                if (text.equals(MainActivity.getmASTER_MARK())) {
+                        Utilites.messager(this, "О, эталонная метка! Отмечай трэковую!");
+                        MainActivity.setmASTER_MARK_Flag(MainActivity.getmASTER_MARK());
+                        // таймер сброса считывания эталонной метки.
+                        MarkChekDelayTimer = new Timer(); // Создаем таймер
+                        dt1 = new Date();
+                        MarkChekDelayTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                MarkChekDelayTimer.cancel();
+                                MainActivity.setmASTER_MARK_Flag("");
+                            }
+                    }, MainActivity.getMarkChekTimerDelay(), MainActivity.getMarkChekDelayTimerTimeout());
 
-            NFC.setGPS_System(AUMC.getGPS_System());
-            NFC.setMark(text);
-            NFC.setContext(activity);
-            NFC.execute();
 
-        }
+                }
+                else if ((MainActivity.getmASTER_MARK()).equals(MainActivity.getmASTER_MARK_Flag())) {
+                    Utilites.messager(this, "О, трэковая метка!");
+                    dt2 = new Date();
+                    MainActivity.setmASTER_MARK_Flag("");
+
+                    SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC.getUser_Monitor());
+                    NFC.setMasterMark(MainActivity.getmASTER_MARK());
+                    // TODO вытащить число милисекунд между метками.
+                    NFC.setMarkDelta((dt2.getTime() - dt1.getTime())/1000);
+                    NFC.setGPS_System(AUMC.getGPS_System());
+                    NFC.setMark(text);
+                    NFC.setContext(activity);
+                    NFC.execute();
+                }
+                else {
+                    Utilites.messager(this, "Сначала считываем эталлонную метку, потом целевую!");
+                }
+
+            }
 
         //   **********************************Write to NFC Tag****************************
         private void write(String text, Tag tag) throws IOException, FormatException {
@@ -275,14 +312,13 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         public TextView ServerTime;
         public TextView gpsPosition;
         private Timer ServerTimer;
-        private  Button back_button;
         private Button register_button;
-        private Switch race_status;
-        private Timer ServerMainLogTimer;
         private TextView raceStart;
+        private TextView master_mark;
         private TextView loginInfo;
         private GPS GPS_System;
-
+        private Button get_master_mark_button;
+        private boolean isStarted = false;
 
         ActivityUserManagereController() {
             super();
@@ -290,15 +326,14 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
         @Override
         protected void initViewObjects() {
-            User_Monitor =  findViewById(R.id.User_Monitor);
-            ServerTime =  findViewById(R.id.ServerTime);
-            User_Monitor =          findViewById(R.id.User_Monitor);
-            gpsPosition = findViewById(R.id.gpsPosition);
-            back_button =           findViewById(R.id.back_button);
-            register_button =       findViewById(R.id.register_button);
-            raceStart =             findViewById(R.id.raceStart);
-            loginInfo =             findViewById(R.id.loginInfo);
-            race_status =           findViewById(R.id.race_status);
+            ServerTime =        findViewById(R.id.ServerTime);
+            User_Monitor =      findViewById(R.id.User_Monitor);
+            gpsPosition =       findViewById(R.id.gpsPosition);
+            master_mark =       findViewById(R.id.master_mark);
+            register_button =   findViewById(R.id.register_button);
+            raceStart =         findViewById(R.id.raceStart);
+            loginInfo =         findViewById(R.id.loginInfo);
+            get_master_mark_button =             findViewById(R.id.get_master_mark_button);
         }
 
         public TextView getUser_Monitor() {
@@ -312,12 +347,13 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         @Override
         protected void addListeners() {
 
-            back_button.setOnClickListener(new View.OnClickListener() {
+            get_master_mark_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    setResult(RESULT_OK, new Intent());
-                    finish();
+                    AskMasterMark AMM = new AskMasterMark(master_mark);
+                    AMM.execute();
                 }
             });
+
 
             register_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -326,19 +362,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                 }
             });
 
-
-            race_status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
-
-                    back_button.setEnabled(!bChecked);
-                    back_button.setActivated(!bChecked);
-                    back_button.setFocusable(!bChecked);
-
-                    if (bChecked) {  race_status.setText(R.string.race_on); }
-                    else { race_status.setText(R.string.race_off); }
-                }
-            });
         }
 
         @Override
@@ -347,17 +370,31 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                 constructStatusString();
         }
 
+
+
+        public  void setCurrentFace() {
+            raceStart.setText("Соревнование: " + MainActivity.getRace_id() + "\n Заезд: " + MainActivity.getStart_id());
+            master_mark.setText("Эталонная метка загружена: : " + MainActivity.getmASTER_MARK());
+        }
+
+
         @Override
-        protected void start() {
-            startMainLogSync();
+        public void start() {
             startTimeSync();
+            isStarted = true;
         }
 
         @Override
-        protected void stop() {
+        public void stop() {
             ServerTimer.cancel();
-
+            isStarted = false;
         }
+
+        @Override
+        public boolean isStarted() {
+            return isStarted;
+        }
+
 
         private void startTimeSync() {
             ServerTimer = new Timer(); // Создаем таймер
@@ -370,18 +407,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
         }
 
-        private void startMainLogSync() {
-            ServerMainLogTimer = new Timer(); // Создаем таймер
-            ServerMainLogTimer.schedule(new TimerTask() { // Определяем задачу
-                @Override
-                public void run() {
-                    if (race_status.isChecked())  {
-                        new AskForMainLog(User_Monitor, this.toString()).execute();
-                    }
-                }
-            }, TimerDelay, MainActivity.getMainLogTimeout());
-
-        }
 
         public void constructStatusString() {
             loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;

@@ -23,10 +23,21 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
     private long race =0L;
+    private long markDelta =0L;
     public DecimalFormat df = DECIMAL_FORMAT;
     private final String ASKER = "SendUserNFCDiscovery";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
+    private String masterMark;
+
+
+    public void setMarkDelta(long markDelta) {
+        this.markDelta = markDelta;
+    }
+
+    public void setMasterMark(String masterMark1) {
+        this.masterMark = masterMark1;
+    }
 
     public SendUserNFCDiscovery(TextView User_Monitor1) {
         User_Monitor = User_Monitor1;
@@ -82,6 +93,8 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.mark.toString(),mark);
+            outBoundJSON.put(f.master_mark_label.toString(), masterMark);
+            outBoundJSON.put(f.master_mark_delta.toString(), markDelta);
             outBoundJSON.put(f.login.toString(), MainActivity.getLogin());// повтор...
             outBoundJSON.put(f.longitude.toString(),longitude);
             outBoundJSON.put(f.altitude.toString(),altitude);

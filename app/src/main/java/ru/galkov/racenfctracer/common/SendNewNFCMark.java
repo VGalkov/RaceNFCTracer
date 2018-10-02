@@ -17,6 +17,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private MainActivity.fieldsJSON f;
     private MainActivity.trigger t;
     private String mark;
+    private String type;
     private long race = 0;
     private Double longitude = 0.00, latitude =0.00, altitude =0.00;
     private GPS GPS_system;
@@ -93,19 +94,18 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     }
 
+    public void setType(String type1) {
+        this.type = type1;
+    }
+
     private  void makeOutBoundJSON(){
 
-// {
-//  "race":0,
-//  "asker":"SendNewNFCMark",
-//  "mark":"42421",
-//  "key":"galkovvladimirandreevich"
-// }
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.mark.toString(),this.mark);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.mark_type.toString(),type);
             outBoundJSON.put(f.longitude.toString(), this.longitude);
             outBoundJSON.put(f.altitude.toString(), this.altitude);
             outBoundJSON.put(f.latitude.toString(), this.latitude);

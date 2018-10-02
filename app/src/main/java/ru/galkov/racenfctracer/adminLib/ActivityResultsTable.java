@@ -1,9 +1,9 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +23,7 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
-public class ActivityResultsTable  extends Activity {
+public class ActivityResultsTable  extends AppCompatActivity {
     private ActivityResultsTableController ARTC;
     private HelpFaceController HFC;
     private Context context;
@@ -105,6 +105,7 @@ public class ActivityResultsTable  extends Activity {
         private TextView loginInfo;
         private Timer ServerTimer;
         private Timer MainLogAskTimer;
+        private boolean isStarted = false;
 
         ActivityResultsTableController() {
             super();
@@ -126,11 +127,17 @@ public class ActivityResultsTable  extends Activity {
         public void stop() {
             ServerTimer.cancel();
             MainLogAskTimer.cancel();
+            isStarted = false;
+        }
+        @Override
+        public boolean isStarted() {
+            return isStarted;
         }
 
         public void start() {
             startTimeSync();
             startMainLogSync();
+            isStarted = true;
         }
 
         private void startTimeSync() {

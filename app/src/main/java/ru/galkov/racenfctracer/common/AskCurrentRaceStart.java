@@ -62,8 +62,8 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 if (status.equals(trigger.TRUE.toString())) {
                     MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
-                    str = "Соревнование: " + JOAnswer.getString(f.race_id.toString()) +
-                            "\n Заезд: " + JOAnswer.getString(f.start_id.toString());
+                    str = "Соревнование: " + MainActivity.getRace_id() +
+                            "\n Заезд: " + MainActivity.getStart_id();
                 }
                 else {
                     str = "заезд не создан админом!";

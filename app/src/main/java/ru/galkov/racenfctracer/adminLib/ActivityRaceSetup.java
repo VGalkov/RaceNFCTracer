@@ -1,9 +1,9 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +29,7 @@ import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
-public class ActivityRaceSetup  extends Activity {
+public class ActivityRaceSetup  extends AppCompatActivity {
 
     public ActivityRaceSetupController ARSController;
     public Context activity;
@@ -109,6 +109,7 @@ public class ActivityRaceSetup  extends Activity {
         private long start_id = 0L;
         private TextView loginInfo;
         private TextView gpsPosition;
+        private boolean isStarted = false;
 
         ActivityRaceSetupController() {
             super();
@@ -189,6 +190,12 @@ public class ActivityRaceSetup  extends Activity {
         }
 
         @Override
+        public boolean isStarted() {
+            return isStarted;
+        }
+
+
+        @Override
         protected void setDefaultFace() {
             constructStatusString();
             new GPS(getActivity(),gpsPosition);
@@ -203,13 +210,15 @@ public class ActivityRaceSetup  extends Activity {
         }
 
         @Override
-        protected void start() {
+        public void start() {
             startTimeSync();
+            isStarted = true;
         }
 
         @Override
-        protected void stop() {
+        public void stop() {
             ServerTimer.cancel();
+            isStarted = false;
         }
 
         private void constructStatusString() {

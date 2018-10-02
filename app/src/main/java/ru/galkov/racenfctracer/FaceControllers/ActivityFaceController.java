@@ -2,7 +2,6 @@ package ru.galkov.racenfctracer.FaceControllers;
 
 public abstract class ActivityFaceController {
 
-//        private Timer ServerTimer;
 
         public ActivityFaceController() {
             initViewObjects();
@@ -16,17 +15,11 @@ public abstract class ActivityFaceController {
 
         protected abstract void setDefaultFace();
 
-        protected abstract void start();
+        public abstract void start();
 
-        protected abstract void stop();
+        public abstract void stop();
 
-/*
-        protected abstract void start();
+        public abstract boolean isStarted();
 
-        void stop() {
-            ServerTimer.cancel();
-        }
-        protected abstract void startTimeSync(TextView ekran1);
-        */
     }
 

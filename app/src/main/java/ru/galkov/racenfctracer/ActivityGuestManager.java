@@ -101,7 +101,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
             private GPS GPS_System;
             private Timer ServerTimer;
             private Timer MainLogTimer;
-
+            private boolean isStarted = false;
             ActivityGuestManagereController() {
                 super();
             }
@@ -114,6 +114,10 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 ServerTime =   findViewById(R.id.ServerTime);
                 loginInfo =    findViewById(R.id.loginInfo);
                 gpsPosition =  findViewById(R.id.gpsPosition);
+            }
+            @Override
+            public boolean isStarted() {
+                return isStarted;
             }
 
 
@@ -134,14 +138,16 @@ public class ActivityGuestManager  extends AppCompatActivity {
             }
 
             @Override
-            protected void start() {
+            public void start() {
                 startMainLogSync();
                 startTimeSync();
+                isStarted = true;
             }
 
             @Override
-            protected void stop() {
+            public void stop() {
                 ServerTimer.cancel();
+                isStarted = false;
             }
 
 

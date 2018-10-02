@@ -38,6 +38,13 @@
                 android:inputType="textPersonName"
                 android:textColor="@android:color/black" />
 
+            <CheckBox
+                android:id="@+id/masterMarkSw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/masterMarkSw" />
+
             <Button
                 android:id="@+id/save_nfcButton"
                 android:layout_width="match_parent"

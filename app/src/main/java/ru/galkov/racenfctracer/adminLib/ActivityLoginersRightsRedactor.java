@@ -106,14 +106,13 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         private TextView LoginLevel;
         private TextView LoginToChng;
         private Timer ServerTimer;
-
         public TextView ServerTime;
         public TextView LoginLevelLabel;
         public Spinner spinnerUsers;
         public Spinner spinnerLevel;
         public TextView userLogger;
         private TextView loginInfo;
-
+        private boolean isStarted = false;
 
 
         ActivityLoginersRightsRedactorController() {
@@ -129,6 +128,10 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
                 }
             }, TimerDelay, MainActivity.getTimerTimeout());
 
+        }
+        @Override
+        public boolean isStarted() {
+            return isStarted;
         }
 
 
@@ -219,13 +222,15 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         }
 
         @Override
-        protected void start() {
+        public void start() {
             startTimeSync();
+            isStarted = true;
         }
 
         @Override
-        protected void stop() {
+        public void stop() {
             ServerTimer.cancel();
+            isStarted = false;
         }
     }
 }

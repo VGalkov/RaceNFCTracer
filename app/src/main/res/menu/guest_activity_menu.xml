@@ -3,12 +3,17 @@
 
     <item
         android:id="@+id/help"
-        android:orderInCategory="3"
+        android:orderInCategory="1"
         android:title="@string/help" />
 
     <item
         android:id="@+id/exit"
-        android:orderInCategory="3"
+        android:orderInCategory="2"
         android:title="@string/back" />
+
+    <item
+        android:id="@+id/EventLog"
+        android:orderInCategory="3"
+        android:title="@string/EventLog" />
 
 </menu>

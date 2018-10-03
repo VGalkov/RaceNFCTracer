@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,11 +16,11 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MainLogController;
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
-import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 
@@ -28,6 +29,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 public class ActivityAdminManager  extends AppCompatActivity {
     private ActivityAdminManagerController AAMC;
     private HelpFaceController HFC;
+    private MainLogController MLC;
     private static Context activity;
 
     @Override
@@ -36,7 +38,6 @@ public class ActivityAdminManager  extends AppCompatActivity {
         setContentView(R.layout.activity_admin_manager);
         setActivity(this);
         AAMC = new ActivityAdminManagerController();
-        AAMC.start();
     }
 
 
@@ -48,7 +49,6 @@ public class ActivityAdminManager  extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
 
@@ -57,16 +57,31 @@ public class ActivityAdminManager  extends AppCompatActivity {
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.AdminAccessHelp));
-                HFC.show(); //start!
+                HFC.start();
                 return true;
 
+
+            case  R.id.EventLog:
+                setContentView(R.layout.activity_race_events);
+                MLC = new MainLogController();
+                MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
+                MLC.setCaller(this.toString());
+                MLC.start();
+                return true;
+
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                setActivity(this);
+                WebBrowserController WB = new WebBrowserController(getActivity());
+//                WB.setWebBrowser((WebView) findViewById(R.id.mapWebView));
+                return true;
 
             case R.id.exit:
-                /// TODO переписать на выход в геста после переделки фейсконтроллера.
-                setResult(RESULT_OK, new Intent());
-                finish();
+                setContentView(R.layout.activity_admin_manager);
+                setActivity(this);
+                AAMC = new ActivityAdminManagerController();
+                AAMC.start();
                 return true;
-
 
         }
         return super.onOptionsItemSelected(item);
@@ -97,6 +112,49 @@ public class ActivityAdminManager  extends AppCompatActivity {
     }
 
 // ==============================================================
+
+    public class  WebBrowserController extends ActivityFaceController {
+// Вся система обмена метками для карты на основе javascript и yandex map
+
+        private Context context;
+        private WebView map;
+
+        public WebBrowserController(Context context1) {
+            this.context = context1;
+            initViewObjects();
+        }
+
+        @Override
+        protected void initViewObjects() {
+            map = findViewById(R.id.mapWebView);
+        }
+
+        @Override
+        protected void addListeners() {
+
+        }
+
+        @Override
+        protected void setDefaultFace() {
+
+        }
+
+        @Override
+        public void start() {
+
+        }
+
+        @Override
+        public void stop() {
+
+        }
+
+        @Override
+        public boolean isStarted() {
+            return false;
+        }
+    }
+
 public class ActivityAdminManagerController extends ActivityFaceController {
         private Button back_button;
         private Button results_table_button;
@@ -108,7 +166,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         private TextView loginInfo;
         private GPS GPS_System;
         private Timer ServerTimer;
-        private Timer MainLogTimer;
+  //      private Timer MainLogTimer;
         private TextView gpsPosition;
         private boolean isStarted = false;
 
@@ -180,14 +238,14 @@ public class ActivityAdminManagerController extends ActivityFaceController {
     @Override
     public void start() {
         startTimeSync();
-        startMainLogTimeSync();
+    //    startMainLogTimeSync();
         isStarted = true;
     }
 
     @Override
     public void stop() {
         ServerTimer.cancel();
-        MainLogTimer.cancel();
+//        MainLogTimer.cancel();
         isStarted = false;
     }
 
@@ -200,7 +258,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
                 TimerDelay, MainActivity.getTimerTimeout());
     }
 
-    private void startMainLogTimeSync() {
+   /* private void startMainLogTimeSync() {
         MainLogTimer = new Timer(); // Создаем таймер
         MainLogTimer.schedule(new TimerTask() { // Определяем задачу
             @Override
@@ -208,7 +266,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
             },
                 TimerDelay, MainActivity.getMainLogTimeout());
 
-    }
+    }*/
 
 
     private void constructStatusString() {

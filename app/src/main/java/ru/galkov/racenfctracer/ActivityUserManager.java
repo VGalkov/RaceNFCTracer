@@ -30,6 +30,7 @@ import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskMasterMark;
+import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
@@ -94,6 +95,15 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                 MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
                 MLC.setCaller(this.toString());
                 MLC.start();
+                return true;
+
+            case  R.id.GetResults:
+                setContentView(R.layout.activity_user_manager);
+                setActivity(this);
+                AUMC = new ActivityUserManagereController();
+                AUMC.start();
+                AUMC.setCurrentFace();
+                new AskResultsTable((TextView) findViewById(R.id.User_Monitor), MainActivity.fileType.Results, getActivity()).execute();
                 return true;
 
             case R.id.exit:

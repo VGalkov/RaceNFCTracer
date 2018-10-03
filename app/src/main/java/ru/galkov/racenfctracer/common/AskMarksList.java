@@ -63,8 +63,8 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
                     JSONObject obj = arr.getJSONObject(i);
                     response.append("Метка(сервер):" + obj.getString(f.label.toString())
                             + "(" + df.format(obj.getDouble(f.altitude.toString()))
-                            + "," + df.format(obj.getDouble(f.latitude.toString()))
-                            + "," + df.format(obj.getDouble(f.longitude.toString())) + ")" + "\n");
+                            + ";" + df.format(obj.getDouble(f.latitude.toString()))
+                            + ";" + df.format(obj.getDouble(f.longitude.toString())) + ")" + "\n");
                 }
             } else {
                 response = new StringBuffer("Ошибка ключа или версии клиента!");

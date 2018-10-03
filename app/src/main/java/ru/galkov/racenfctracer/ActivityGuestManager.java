@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.common.AskForMainLog;
+import ru.galkov.racenfctracer.FaceControllers.MainLogController;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
 
@@ -26,6 +26,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
     private ActivityGuestManagereController AGMC;
     private HelpFaceController HFC;
+    private MainLogController MLC;
     private static Context activity;
 
     @Override
@@ -54,15 +55,23 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.GuestAccessHelp));
-                HFC.show();
+                HFC.start();
                 return true;
 
+            case  R.id.EventLog:
+                setContentView(R.layout.activity_race_events);
+                MLC = new MainLogController();
+                MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
+                MLC.setCaller(this.toString());
+                MLC.start();
+                return true;
 
             case R.id.exit:
-                setResult(RESULT_OK, new Intent());
-                finish();
+                setContentView(R.layout.activity_guest_manager);
+                setActivity(this);
+                AGMC = new ActivityGuestManagereController();
+                AGMC.start();
                 return true;
-
 
         }
         return super.onOptionsItemSelected(item);
@@ -100,7 +109,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
             private TextView gpsPosition;
             private GPS GPS_System;
             private Timer ServerTimer;
-            private Timer MainLogTimer;
+//            private Timer MainLogTimer;
             private boolean isStarted = false;
             ActivityGuestManagereController() {
                 super();
@@ -139,7 +148,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
             @Override
             public void start() {
-                startMainLogSync();
+  //              startMainLogSync();
                 startTimeSync();
                 isStarted = true;
             }
@@ -160,7 +169,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
                         TimerDelay, MainActivity.getTimerTimeout());
 
             }
-
+/*
             private void startMainLogSync() {
                 // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
 
@@ -178,6 +187,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 }, TimerDelay, MainActivity.getMainLogTimeout());
 
             }
+            */
 
 
 

@@ -19,6 +19,7 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     private String level;
     private String login;
     private TextView userLogger;
+    private String masterMark;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
 
@@ -59,6 +60,10 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
 
     }
 
+    public  void setMasterMark(String masterMark1) {
+        this.masterMark = masterMark1;
+    }
+
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
 
@@ -73,6 +78,7 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.level.toString(),level);
             outBoundJSON.put(f.login.toString(),login);
             outBoundJSON.put(f.key.toString(),KEY);
+            outBoundJSON.put(f.master_mark_label.toString(),masterMark);
             outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
             outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
 

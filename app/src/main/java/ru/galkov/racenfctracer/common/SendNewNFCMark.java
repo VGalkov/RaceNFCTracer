@@ -32,6 +32,18 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         this.mark = mark1;
     }
 
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
+    }
+
     public void setGPS_System(GPS GPS_System1) {
             this.GPS_system = GPS_System1;
             this.latitude = GPS_system.getLatitude();
@@ -93,11 +105,11 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         method = method1;
 
     }
-
+/*
     public void setType(String type1) {
         this.type = type1;
     }
-
+*/
     private  void makeOutBoundJSON(){
 
         try {
@@ -105,7 +117,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.mark.toString(),this.mark);
             outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.mark_type.toString(),type);
+//            outBoundJSON.put(f.mark_type.toString(),type);
             outBoundJSON.put(f.longitude.toString(), this.longitude);
             outBoundJSON.put(f.altitude.toString(), this.altitude);
             outBoundJSON.put(f.latitude.toString(), this.latitude);

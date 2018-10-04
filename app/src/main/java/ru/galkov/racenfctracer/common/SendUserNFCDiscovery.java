@@ -20,6 +20,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private String mark;
     private TextView User_Monitor;
     private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
+    private Double masterLatitude = 0.00, masterLongitude = 0.00 , masterAltitude = 0.00;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
     private long race =0L;
@@ -30,6 +31,17 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private MainActivity.fieldsJSON f;
     private String masterMark;
 
+    public void setMasterAltitude(Double masterAltitude) {
+        this.masterAltitude = masterAltitude;
+    }
+
+    public void setMasterLatitude(Double masterLatitude) {
+        this.masterLatitude = masterLatitude;
+    }
+
+    public void setMasterLongitude(Double masterLongitude) {
+        this.masterLongitude = masterLongitude;
+    }
 
     public void setMarkDelta(long markDelta) {
         this.markDelta = markDelta;
@@ -96,6 +108,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.master_mark_label.toString(), masterMark);
             outBoundJSON.put(f.master_mark_delta.toString(), markDelta);
             outBoundJSON.put(f.login.toString(), MainActivity.getLogin());// повтор...
+            outBoundJSON.put(f.mark_master_longitude.toString(),longitude);
+            outBoundJSON.put(f.mark_master_altitude.toString(),altitude);
+            outBoundJSON.put(f.mark_master_latitude.toString(),latitude);
             outBoundJSON.put(f.longitude.toString(),longitude);
             outBoundJSON.put(f.altitude.toString(),altitude);
             outBoundJSON.put(f.latitude.toString(),latitude);

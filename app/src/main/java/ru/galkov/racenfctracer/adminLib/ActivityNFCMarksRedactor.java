@@ -312,8 +312,8 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                     NFC.setMark(markContent);
                     NFC.setMethod(METHOD);
                     NFC.setGPS_System(GPS_System);
-                    if (masterMarkSw.isChecked()) NFC.setType(MainActivity.marksTypes.master.toString());
-                    else NFC.setType(MainActivity.marksTypes.normal.toString());
+//                    if (masterMarkSw.isChecked()) NFC.setType(MainActivity.marksTypes.master.toString());
+//                    else NFC.setType(MainActivity.marksTypes.normal.toString());
                     NFC.execute();
                 }
             });

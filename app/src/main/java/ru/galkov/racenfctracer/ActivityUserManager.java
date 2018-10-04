@@ -52,7 +52,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         private MainLogController MLC;
         private Date dt1;
         private Date dt2;
-
+        private Double markMasterLatitude=0.0,markMasterAltitude=0.0,markMasterLongitude=0.0;
         public static final String ERROR_DETECTED = "No NFC tag detected!";
         public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
         public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
@@ -215,6 +215,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                         // таймер сброса считывания эталонной метки.
                         MarkChekDelayTimer = new Timer(); // Создаем таймер
                         dt1 = new Date();
+                        markMasterLatitude = AUMC.GPS_System.getLatitude();
+                        markMasterAltitude = AUMC.GPS_System.getAltitude();
+                        markMasterLongitude = AUMC.GPS_System.getLongitude();
                         MarkChekDelayTimer.schedule(new TimerTask() {
                             @Override
                             public void run() {
@@ -236,6 +239,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                     NFC.setMarkDelta((dt2.getTime() - dt1.getTime())/1000);
                     NFC.setGPS_System(AUMC.getGPS_System());
                     NFC.setMark(text);
+                    NFC.setMasterAltitude(markMasterAltitude);
+                    NFC.setMasterLatitude(markMasterLatitude);
+                    NFC.setMasterLongitude(markMasterLongitude);
                     NFC.setContext(activity);
                     NFC.execute();
                 }

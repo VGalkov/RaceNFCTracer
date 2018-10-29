@@ -81,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <TextView
@@ -98,6 +99,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="fill"
             android:orientation="horizontal">
 
             <Button
@@ -106,7 +108,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/back"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/Black" />
 
             <Button
                 android:id="@+id/setRaceConfig_button"
@@ -115,13 +118,15 @@
                 android:layout_weight="1"
                 android:text="@string/declare"
                 android:textAlignment="center"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/Black" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="top"
             android:orientation="vertical">
 
             <LinearLayout
@@ -134,11 +139,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/raceNo" />
+                    android:text="@string/raceNo"
+                    android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/spinnerRace"
-                    android:layout_width="match_parent"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
@@ -154,11 +160,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/startNo" />
+                    android:text="@string/startNo"
+                    android:textAlignment="viewStart"
+                    android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/spinnerStart"
-                    android:layout_width="match_parent"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 

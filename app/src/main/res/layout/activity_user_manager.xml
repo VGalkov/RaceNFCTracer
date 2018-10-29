@@ -11,8 +11,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="left"
-        android:orientation="vertical">
+        android:gravity="top|left"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <TextView
             android:id="@+id/loginInfo"
@@ -27,19 +29,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center_horizontal|fill"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/get_master_mark_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/get_master_mark_button" />
+                android:layout_width="189dp"
+                android:layout_height="wrap_content"
+                android:text="@string/get_master_mark_button"
+                android:textAlignment="viewStart"
+                android:textColor="@color/Black"
+                android:textSize="12sp"
+                android:typeface="normal" />
 
             <Button
                 android:id="@+id/register_button"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/raceStartRegister"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/Black"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -96,30 +105,23 @@
                 android:textAlignment="viewEnd"
                 android:textStyle="bold" />
         </LinearLayout>
+
         <ScrollView
             android:id="@+id/myview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:scrollbarStyle="insideOverlay">
-        <TextView
-            android:id="@+id/User_Monitor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/text_nfc_log" />
+
+            <TextView
+                android:id="@+id/User_Monitor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_nfc_log"
+                android:textStyle="italic" />
 
         </ScrollView>
 
-        <TextView
-            android:id="@+id/master_mark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/no_master_mark"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:visibility="visible" />
 
     </LinearLayout>
 

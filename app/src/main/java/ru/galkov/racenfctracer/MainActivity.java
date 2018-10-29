@@ -67,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
-    public static int SERVER_PORT = 8080;
-    public static String server =  "192.168.1.5"; // "127.0.0.1";
+//    public static int SERVER_PORT = 8080;
+    public static int SERVER_PORT = 8095;
+    //public static String server =  "192.168.1.5"; // "127.0.0.1";
+    public static String server =  "185.251.240.3";
     //  192.168.1.5:8080
     public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
 

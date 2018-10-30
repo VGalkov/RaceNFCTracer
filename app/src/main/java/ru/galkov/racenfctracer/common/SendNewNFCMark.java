@@ -23,9 +23,14 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private GPS GPS_system;
     private TextView NFC_ConfigurationLog;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private int PositionMethod = 1;
 
     public SendNewNFCMark(TextView NFC_ConfigurationLog1) {
         this.NFC_ConfigurationLog = NFC_ConfigurationLog1;
+    }
+
+    public void setMarkPositionMethod(int method) {
+        this.PositionMethod = method;
     }
 
     public void setMark(String mark1) {
@@ -45,10 +50,26 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     }
 
     public void setGPS_System(GPS GPS_System1) {
+        if (PositionMethod== 1) {
+            // ручная установка долготы и широты. высота=0. ручная установка
+            this.GPS_system = null;
+            this.altitude = 0.0;
+        }
+        else if (PositionMethod== 2) {
+            // автоматические координаты.
             this.GPS_system = GPS_System1;
             this.latitude = GPS_system.getLatitude();
             this.longitude = GPS_system.getLongitude();
             this.altitude = GPS_system.getAltitude();
+        }
+        else if (PositionMethod== 3) {
+            // нет координат.
+            this.GPS_system = null;
+            this.latitude = 0.0;
+            this.longitude = 0.0;
+            this.altitude = 0.0;
+        }
+
     }
 
     public void setRace(long race1) {

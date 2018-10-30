@@ -11,4 +11,9 @@
         android:orderInCategory="2"
         android:title="@string/back" />
 
+    <item
+        android:id="@+id/grRes"
+        android:orderInCategory="3"
+        android:title="@string/grRes" />
+
 </menu>

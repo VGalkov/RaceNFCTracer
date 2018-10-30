@@ -22,4 +22,9 @@
         android:orderInCategory="4"
         android:title="@string/GetResults" />
 
+    <item
+        android:id="@+id/grRes"
+        android:orderInCategory="5"
+        android:title="@string/grRes" />
+
 </menu>

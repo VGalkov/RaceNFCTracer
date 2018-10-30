@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -275,6 +277,12 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         public TextView NFC_ConfigurationLog;
         private TextView NfS_Mark_Editor;
         private boolean isStarted = false;
+        private RadioButton RadioButton1;
+        private RadioButton RadioButton2;
+        private RadioButton RadioButton3;
+        private EditText Longtitude;
+        private EditText Latitude;
+
 
         @Override
         protected void initViewObjects() {
@@ -286,7 +294,12 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
             gpsPosition =                       findViewById(R.id.gpsPosition);
             loginInfo =             findViewById(R.id.loginInfo);
-            masterMarkSw =          findViewById(R.id.masterMarkSw);
+            //masterMarkSw =          findViewById(R.id.masterMarkSw);
+            RadioButton1   =  findViewById(R.id.radioButton1);
+            RadioButton2  =  findViewById(R.id.radioButton2);
+            RadioButton3  =   findViewById(R.id.radioButton3);
+            Longtitude =        findViewById(R.id.Longtitude);
+            Latitude =        findViewById(R.id.Latitude);
         }
 
         @Override
@@ -309,15 +322,28 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                 public void onClick(View view) {
                     NFC_ConfigurationLog.append("Сохраняется метка -> \n ");
                     SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
+
+                    if (RadioButton1.isChecked())       NFC.setMarkPositionMethod(1);
+                    else if (RadioButton2.isChecked())  NFC.setMarkPositionMethod(2);
+                    else if (RadioButton3.isChecked()) {
+                        NFC.setMarkPositionMethod(3);
+                        NFC.setLatitude (Double.parseDouble(Latitude.getText().toString()));
+                        NFC.setLongitude(Double.parseDouble(Longtitude.getText().toString()));
+                        clearManualGPSPanel();
+                    }
                     NFC.setMark(markContent);
                     NFC.setMethod(METHOD);
                     NFC.setGPS_System(GPS_System);
-//                    if (masterMarkSw.isChecked()) NFC.setType(MainActivity.marksTypes.master.toString());
-//                    else NFC.setType(MainActivity.marksTypes.normal.toString());
                     NFC.execute();
                 }
             });
 
+            RadioButton3. setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    if (RadioButton3.isChecked())   setManualVisibilityPanel(View.VISIBLE);
+                    else                            setManualVisibilityPanel(View.INVISIBLE);
+                }
+            });
 
             back_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -325,6 +351,17 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                     finish();
                 }
             });
+        }
+
+        private void clearManualGPSPanel() {
+            Latitude.setText("");
+            Longtitude.setText("");
+        }
+
+        private void setManualVisibilityPanel(int flag1) {
+            Latitude.setVisibility(flag1);
+            Latitude.setVisibility(flag1);
+
         }
 
         @Override

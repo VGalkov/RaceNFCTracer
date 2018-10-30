@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/l4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="left"
@@ -38,14 +39,23 @@
                 android:inputType="textPersonName"
                 android:textColor="@android:color/black" />
 
-            <CheckBox
+            <TextView
+                android:id="@+id/CurrentNFC_Label"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+      <!--      <CheckBox
                 android:id="@+id/masterMarkSw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/masterMarkSw"
                 android:visibility="invisible" />
-
+-->
         </LinearLayout>
 
         <TextView
@@ -79,14 +89,64 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/CurrentNFC_Label"
+        <RadioGroup
+            android:id="@+id/rg1"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:textAlignment="center"
-            android:textColor="@android:color/holo_red_dark"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/UseNoGPS"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/UseAutoGPS"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/UseManualGPS"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <EditText
+                android:id="@+id/Longtitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName|numberDecimal"
+                android:text="@string/Longtitude"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/Latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:text="@string/Latitude"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -95,13 +155,6 @@
             android:orientation="horizontal"
             android:visibility="visible">
 
-            <Button
-                android:id="@+id/CommitButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/CommitButton"
-                android:textColor="@color/Black"
-                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/save_nfcButton"
@@ -113,6 +166,15 @@
                 android:textSize="12sp" />
 
             <Button
+                android:id="@+id/CommitButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/CommitButton"
+                android:textColor="@color/Black"
+                android:textSize="12sp" />
+
+
+            <Button
                 android:id="@+id/back_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,6 +182,7 @@
                 android:textColor="@color/Black"
                 android:textSize="12sp" />
         </LinearLayout>
+
         <ScrollView
             android:id="@+id/myview"
             android:layout_width="fill_parent"
@@ -127,11 +190,11 @@
             android:orientation="vertical"
             android:scrollbarStyle="insideOverlay">
 
-        <TextView
-            android:id="@+id/NFC_ConfigurationLog"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/text_nfc_log" />
+            <TextView
+                android:id="@+id/NFC_ConfigurationLog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/text_nfc_log" />
         </ScrollView>
     </LinearLayout>
 

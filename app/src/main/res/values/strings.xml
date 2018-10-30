@@ -95,6 +95,14 @@
     <string name="registration_table">Таблица регистрации</string>
 
 
+    <string name="grRes">График результатов</string>
+    <string name="stopTime">stopTime</string>
+    <string name="startTime">startTime</string>
+    <string name="Longtitude">Longtitude</string>
+    <string name="Latitude">Latitude</string>
+    <string name="UseAutoGPS">Использовать для меток координаты места.</string>
+    <string name="UseManualGPS">Вручную ввести координаты меток. Высота = 0!</string>
+    <string name="UseNoGPS">Метки без координат</string>
     <string name="masterMarkSw">Эталонная марка?</string>
     <string name="users_table">Таблица участников</string>
     <string name="EventLog">Лог событий</string>

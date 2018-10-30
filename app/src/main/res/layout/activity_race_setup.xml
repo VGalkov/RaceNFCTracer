@@ -144,7 +144,7 @@
 
                 <Spinner
                     android:id="@+id/spinnerRace"
-                    android:layout_width="150dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
@@ -166,11 +166,31 @@
 
                 <Spinner
                     android:id="@+id/spinnerStart"
-                    android:layout_width="150dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/startTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal|datetime"
+                android:text="@string/startTime"
+                android:textSize="12sp"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/stopTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName|datetime"
+                android:text="@string/stopTime"
+                android:textSize="12sp"
+                android:visibility="visible" />
         </LinearLayout>
 
     </LinearLayout>

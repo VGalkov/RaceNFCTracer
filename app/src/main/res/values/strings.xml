@@ -96,8 +96,8 @@
 
 
     <string name="grRes">График результатов</string>
-    <string name="stopTime">stopTime</string>
-    <string name="startTime">startTime</string>
+    <string name="stopTime">При изменении установится дата завершения</string>
+    <string name="startTime">При изменении установится дата старта</string>
     <string name="Longtitude">Longtitude</string>
     <string name="Latitude">Latitude</string>
     <string name="UseAutoGPS">Использовать для меток координаты места.</string>

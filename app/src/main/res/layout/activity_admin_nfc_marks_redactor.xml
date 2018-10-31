@@ -89,65 +89,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/rg1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/radioButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/UseNoGPS"
-                android:textSize="12sp" />
-
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="@string/UseAutoGPS"
-                android:textSize="12sp" />
-
-            <RadioButton
-                android:id="@+id/radioButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/UseManualGPS"
-                android:textSize="12sp" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="top|center_horizontal"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <EditText
-                android:id="@+id/Longtitude"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName|numberDecimal"
-                android:text="@string/Longtitude"
-                android:textSize="12sp"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/Latitude"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="numberDecimal"
-                android:text="@string/Latitude"
-                android:textSize="12sp"
-                android:visibility="invisible" />
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

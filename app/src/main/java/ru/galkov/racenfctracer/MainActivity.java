@@ -21,11 +21,12 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.GPS;
@@ -55,12 +56,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String backDoreUser =  "+84873967849";
 
     // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
-    public enum fieldsJSON {mark_master_latitude,mark_master_altitude,mark_master_longitude,master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public enum fieldsJSON {start_time, stop_time,mark_master_latitude,mark_master_altitude,mark_master_longitude,master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public enum trigger {TRUE, FALSE}
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
     public enum fileType {Results, Marcs, Log}
     public enum marksTypes {master, normal}
+    public enum changeType {start, stop} // for race date
 
 
     public enum helpType {login}
@@ -85,8 +87,25 @@ public class MainActivity extends AppCompatActivity {
     public static int TimerTimeout = 15000;
     public static int MainLogTimeout = 60000;
     public static int BlameTimeout = 600000;
+    private static Date startDate= new Date(); // даты старта. пока только даты!!
+    private static Date stopDate = new Date();
 
 
+    public static void setStartDate(Date startDate) {
+        MainActivity.startDate = startDate;
+    }
+
+    public static void setStopDate(Date stopDate) {
+        MainActivity.stopDate = stopDate;
+    }
+
+    public static Date getStartDate() {
+        return startDate;
+    }
+
+    public static Date getStopDate() {
+        return stopDate;
+    }
 
     public static int getMarkChekTimerDelay() {
         return MarkChekTimerDelay;

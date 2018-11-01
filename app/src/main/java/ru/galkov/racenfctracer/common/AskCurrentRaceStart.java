@@ -17,14 +17,19 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     private MainActivity.fieldsJSON f;
     private MainActivity.trigger trigger;
     private TextView ekran;
+    private TextView showStop;
+    private TextView showStart;
+
 
 
     // fields
 
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
-    public AskCurrentRaceStart(TextView ekran1) {
+    public AskCurrentRaceStart(TextView ekran1, TextView showStop2, TextView showStart3) {
         this.ekran = ekran1;
+        this.showStart = showStart3;
+        this.showStop = showStop2;
     }
 
 
@@ -62,8 +67,13 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 if (status.equals(trigger.TRUE.toString())) {
                     MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
+// TODO !!
+//                    MainActivity.setStartDate(formatForDate.parse(JOAnswer.getString(f.start_time.toString())));
+//                    MainActivity.setStopDate(formatForDate.parse(JOAnswer.getString(f.stop_time.toString())));
                     str = "Соревнование: " + MainActivity.getRace_id() +
                             "\n Заезд: " + MainActivity.getStart_id();
+//                    showStop.setText(JOAnswer.getString(f.start_time.toString()));
+//                    showStart.setText(JOAnswer.getString(f.stop_time.toString()));
                 }
                 else {
                     str = "заезд не создан админом!";
@@ -76,7 +86,8 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 else    ekran.setText(str);
             }
 
-        } catch (JSONException e) {	e.printStackTrace();}
+//        } catch (JSONException | ParseException e) {	e.printStackTrace();}
+        } catch (JSONException  e) {	e.printStackTrace();}
     }
 
 
@@ -93,3 +104,4 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     }
 
 }
+

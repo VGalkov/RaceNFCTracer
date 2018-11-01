@@ -331,10 +331,13 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         private Button register_button;
         private TextView raceStart;
         private TextView master_mark;
+        private TextView showStart;
+        private TextView showStop;
         private TextView loginInfo;
         private GPS GPS_System;
         private Button get_master_mark_button;
         private boolean isStarted = false;
+
 
         ActivityUserManagereController() {
             super();
@@ -350,6 +353,8 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
             raceStart =         findViewById(R.id.raceStart);
             loginInfo =         findViewById(R.id.loginInfo);
             get_master_mark_button =             findViewById(R.id.get_master_mark_button);
+            showStart =             findViewById(R.id.showStart);
+            showStop =             findViewById(R.id.showStop);
         }
 
         public TextView getUser_Monitor() {
@@ -373,7 +378,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
             register_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart);
+                    AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart, showStart, showStop);
                     ACRS.execute();
                 }
             });

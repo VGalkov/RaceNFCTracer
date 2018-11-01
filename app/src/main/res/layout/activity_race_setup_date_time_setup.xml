@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".adminLib.ActivityRaceSetup"
+    tools:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|center_horizontal|center"
+        android:orientation="vertical">
+
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="205dp"
+            android:layout_height="338dp"
+            android:calendarViewShown="true"
+            android:spinnersShown="false"
+            android:visibility="visible" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="436dp"
+            android:calendarViewShown="true"
+            android:spinnersShown="false"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

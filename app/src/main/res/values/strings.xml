@@ -94,7 +94,11 @@
     <!-- Admin -->
     <string name="registration_table">Таблица регистрации</string>
 
-
+    <string name="showStartTime">Время и дата начала:</string>
+    <string name="showStopTime">Время и дата окончания:</string>
+    <string name="setDateTime">Установить дату и время события</string>
+    <string name="setTime">Установить время</string>
+    <string name="setDate">Установить дату</string>
     <string name="grRes">График результатов</string>
     <string name="stopTime">При изменении установится дата завершения</string>
     <string name="startTime">При изменении установится дата старта</string>

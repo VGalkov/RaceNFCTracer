@@ -10,14 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -116,14 +112,10 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         private TextView loginInfo;
         private TextView gpsPosition;
         private boolean isStarted = false;
-        private DatePicker datePicker;
-        private Calendar today = Calendar.getInstance();
-        private final Calendar calendar = Calendar.getInstance();
-        private int year = calendar.get(Calendar.YEAR);
-        private int month = calendar.get(Calendar.MONTH);
-        private int day = calendar.get(Calendar.DAY_OF_MONTH);
         private String changeType = MainActivity.changeType.start.toString();
         private Switch changeTypeSw;
+        private TextView showStart;
+        private TextView showStop;
 
         ActivityRaceSetupController() {
             super();
@@ -153,13 +145,16 @@ public class ActivityRaceSetup  extends AppCompatActivity {
             loginInfo =             findViewById(R.id.loginInfo);
             ServerTime =             findViewById(R.id.ServerTime);
             gpsPosition=             findViewById(R.id.gpsPosition);
-            datePicker =            findViewById(R.id.datePicker);
             changeTypeSw =            findViewById(R.id.changeTypeSw);
+            showStart =             findViewById(R.id.showStart);
+            showStop =             findViewById(R.id.showStop);
         }
 
 
         @Override
         protected void addListeners() {
+
+//  https://metanit.com/java/android/18.1.php
 
             changeTypeSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -175,30 +170,10 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                 }
             });
 
-// http://developer.alexanderklimov.ru/android/views/datepicker.php
-            datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                    today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-
-                        @Override
-                        public void onDateChanged(DatePicker view, int year1,
-                                                  int monthOfYear2, int dayOfMonth3) {
-//                            Toast.makeText(getApplicationContext(),  "onDateChanged", Toast.LENGTH_SHORT).show();
-                            //TODO global vars with date like login/pass AND ADD TIME!!!
-
-                            try {
-                                Date dt = MainActivity.formatForDate.parse(year1+"-"+monthOfYear2+"-"+dayOfMonth3 + "00:00:00");
-                                if (changeType.equals( MainActivity.changeType.start.toString())) MainActivity.setStartDate(dt);
-                                else if (changeType.equals( MainActivity.changeType.start.toString()))   MainActivity.setStopDate(dt);
-                            } catch (ParseException e) { e.printStackTrace();   }
-
-                        }
-                    });
 
             back_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     setResult(RESULT_OK, new Intent());
-                    // Устанавливаем текущую дату для DatePicker
-                    datePicker.init(year, month, day, null);
                     finish();
                 }
             });
@@ -250,7 +225,8 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         protected void setDefaultFace() {
             constructStatusString();
             new GPS(getActivity(),gpsPosition);
-            AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
+//            AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
+            AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig, showStart, showStop);
             ACRS.execute();
 
             // спинеры собираются тут ...

@@ -9,9 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -112,8 +110,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         private TextView loginInfo;
         private TextView gpsPosition;
         private boolean isStarted = false;
-        private String changeType = MainActivity.changeType.start.toString();
-        private Switch changeTypeSw;
         private TextView showStart;
         private TextView showStop;
 
@@ -145,7 +141,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
             loginInfo =             findViewById(R.id.loginInfo);
             ServerTime =             findViewById(R.id.ServerTime);
             gpsPosition=             findViewById(R.id.gpsPosition);
-            changeTypeSw =            findViewById(R.id.changeTypeSw);
             showStart =             findViewById(R.id.showStart);
             showStop =             findViewById(R.id.showStop);
         }
@@ -156,19 +151,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
 //  https://metanit.com/java/android/18.1.php
 
-            changeTypeSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        changeTypeSw.setText(R.string.startTime);
-                        changeType = MainActivity.changeType.start.toString();
-                    }
-                    else  {
-                        changeTypeSw.setText(R.string.stopTime);
-                        changeType = MainActivity.changeType.stop.toString();
-                    }
-                }
-            });
 
 
             back_button.setOnClickListener(new View.OnClickListener() {

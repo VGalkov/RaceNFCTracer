@@ -2,12 +2,14 @@ package ru.galkov.racenfctracer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -16,8 +18,8 @@ import java.util.TimerTask;
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
+import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.GPS;
 
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
@@ -102,26 +104,30 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
 
         public class ActivityGuestManagereController extends ActivityFaceController {
-            private Button back_button;
+            //private ImageButton back_button;
+            private ImageButton exitButton;
             public TextView UserLogger;
             public TextView ServerTime;
             private TextView loginInfo;
             private TextView gpsPosition;
-            private GPS GPS_System;
+            private TextView showStart;
+            private TextView showStop;
+            private TextView raceStart;
             private Timer ServerTimer;
-//            private Timer MainLogTimer;
             private boolean isStarted = false;
             ActivityGuestManagereController() {
                 super();
             }
 
-
             @Override
             protected void initViewObjects() {
-                back_button =  findViewById(R.id.back_button);
+                exitButton =  findViewById(R.id.back_button);
                 UserLogger =   findViewById(R.id.UserLogger);
                 ServerTime =   findViewById(R.id.ServerTime);
                 loginInfo =    findViewById(R.id.loginInfo);
+                showStart =  findViewById(R.id.showStart);
+                showStop =  findViewById(R.id.showStop);
+                raceStart =  findViewById(R.id.raceStart);
                 gpsPosition =  findViewById(R.id.gpsPosition);
             }
             @Override
@@ -132,7 +138,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
             @Override
             protected void addListeners() {
-                back_button.setOnClickListener(new View.OnClickListener() {
+                exitButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         setResult(RESULT_OK, new Intent());
                         finish();
@@ -142,7 +148,6 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
             @Override
             protected void setDefaultFace() {
-                GPS_System = new GPS(MainActivity.getActivity(), gpsPosition);
                 constructStatusString();
             }
 
@@ -150,6 +155,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
             public void start() {
   //              startMainLogSync();
                 startTimeSync();
+                MainActivity.setGPSMonitor(gpsPosition);
                 isStarted = true;
             }
 
@@ -169,30 +175,11 @@ public class ActivityGuestManager  extends AppCompatActivity {
                         TimerDelay, MainActivity.getTimerTimeout());
 
             }
-/*
-            private void startMainLogSync() {
-                // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
-                MainLogTimer = new Timer(); // Создаем таймер
-                MainLogTimer.schedule(new TimerTask() { // Определяем задачу
-                    @Override
-                    public void run() {
-                        MainActivity.writeMethod wMethod = MainActivity.writeMethod.Set;
-                        AskForMainLog AForML = new AskForMainLog(UserLogger);
-                        AForML.setMethod(wMethod);
-//                        AForML.setMethod(MainActivity.writeMethod.Append);
-                        AForML.setCaller(this.toString());
-                        AForML.execute();
-                    }
-                }, TimerDelay, MainActivity.getMainLogTimeout());
-
-            }
-            */
-
-
 
             private void constructStatusString() {
                 loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+                AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart, showStart, showStop);
+                ACRS.execute();
             }
 
         }

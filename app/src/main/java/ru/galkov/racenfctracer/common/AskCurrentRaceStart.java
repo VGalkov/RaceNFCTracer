@@ -6,6 +6,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+
 import ru.galkov.racenfctracer.MainActivity;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
@@ -68,12 +70,12 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                     MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
 // TODO !!
-//                    MainActivity.setStartDate(formatForDate.parse(JOAnswer.getString(f.start_time.toString())));
-//                    MainActivity.setStopDate(formatForDate.parse(JOAnswer.getString(f.stop_time.toString())));
+                    MainActivity.setStartDate(MainActivity.formatForDate.parse(JOAnswer.getString(f.start_time.toString())));
+                    MainActivity.setStopDate(MainActivity.formatForDate.parse(JOAnswer.getString(f.stop_time.toString())));
                     str = "Соревнование: " + MainActivity.getRace_id() +
                             "\n Заезд: " + MainActivity.getStart_id();
-//                    showStop.setText(JOAnswer.getString(f.start_time.toString()));
-//                    showStart.setText(JOAnswer.getString(f.stop_time.toString()));
+                    showStop.setText(JOAnswer.getString(f.start_time.toString()));
+                    showStart.setText(JOAnswer.getString(f.stop_time.toString()));
                 }
                 else {
                     str = "заезд не создан админом!";
@@ -86,8 +88,8 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 else    ekran.setText(str);
             }
 
-//        } catch (JSONException | ParseException e) {	e.printStackTrace();}
-        } catch (JSONException  e) {	e.printStackTrace();}
+        } catch (JSONException | ParseException e) {	e.printStackTrace();}
+        // } catch (JSONException  e) {	e.printStackTrace();}
     }
 
 

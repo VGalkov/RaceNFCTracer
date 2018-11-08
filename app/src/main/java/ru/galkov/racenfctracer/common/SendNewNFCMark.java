@@ -20,7 +20,6 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private String type;
     private long race = 0;
     private Double longitude = 0.00, latitude =0.00, altitude =0.00;
-    private GPS GPS_system;
     private TextView NFC_ConfigurationLog;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private int PositionMethod = 1;
@@ -49,22 +48,19 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         this.altitude = altitude;
     }
 
-    public void setGPS_System(GPS GPS_System1) {
+    public void setGPS_System() {
         if (PositionMethod== 1) {
             // ручная установка долготы и широты. высота=0. ручная установка
-            this.GPS_system = null;
             this.altitude = 0.0;
         }
         else if (PositionMethod== 2) {
             // автоматические координаты.
-            this.GPS_system = GPS_System1;
-            this.latitude = GPS_system.getLatitude();
-            this.longitude = GPS_system.getLongitude();
-            this.altitude = GPS_system.getAltitude();
-        }
+            this.latitude = MainActivity.getLatitude();
+            this.longitude = MainActivity.getLongitude();
+            this.altitude = MainActivity.getAltitude();
+        } // MainActivity.setGPSMonitor(gpsPosition);
         else if (PositionMethod== 3) {
             // нет координат.
-            this.GPS_system = null;
             this.latitude = 0.0;
             this.longitude = 0.0;
             this.altitude = 0.0;

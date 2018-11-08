@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ActivityGuestManager"
     android:layout_width="match_parent"
@@ -12,6 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_delete" />
+
         <TextView
             android:id="@+id/loginInfo"
             android:layout_width="match_parent"
@@ -20,13 +27,6 @@
             android:textAlignment="center"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold"
-            android:visibility="visible" />
-
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/exit"
             android:visibility="visible" />
 
         <TextView
@@ -39,6 +39,17 @@
             android:visibility="visible" />
 
 
+        <TextView
+            android:id="@+id/raceStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/noRaceStart"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,7 +61,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/startDateTime2"
+                    android:id="@+id/startDateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -74,7 +85,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/stopDateTime2"
+                    android:id="@+id/stopDateTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -113,6 +124,7 @@
                 android:textAlignment="viewEnd"
                 android:textStyle="bold" />
         </LinearLayout>
+
 
         <ScrollView
             android:id="@+id/myview"

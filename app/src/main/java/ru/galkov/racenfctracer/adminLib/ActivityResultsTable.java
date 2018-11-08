@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -96,7 +97,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
 // =======================================================
 
     public class ActivityResultsTableController extends ActivityFaceController {
-        private Button back_button;
+        private ImageButton back_button;
         private Button downLoadResultsCVS;
         private Button downLoadLogCVS;
         private Button downLoadMarksCVS;

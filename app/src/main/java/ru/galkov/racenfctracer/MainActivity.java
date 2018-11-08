@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,8 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -29,26 +31,23 @@ import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.Utilites;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationListener {
 // тут объявляем и глобальные переменные, когда разрастётся выделить в отдельный класс с геттерами
 
 
-    private MainActivityFaceController MAFC;
-    private SettingsFaceController SFC;
-    private HelpFaceController HFC;
+    MainActivityFaceController MAFC;
+//    private SettingsFaceController SFC;
+    HelpFaceController HFC;
 
     public static final String KEY = "galkovvladimirandreevich";
 
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
-    public static final int HTTP_TIMEOUT = 15000;
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
     public static final int MarkChekDelayTimerTimeout = 5000;
     public static final int MarkChekTimerDelay = 5000;
-
     public static final int TimerDelay = 1000;
     public static final short LoginLength = 12;
     public static final short PasswordLength =5;
@@ -61,22 +60,24 @@ public class MainActivity extends AppCompatActivity {
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
     public enum fileType {Results, Marcs, Log}
-    public enum marksTypes {master, normal}
-    public enum changeType {start, stop} // for race date
-
-
-    public enum helpType {login}
+//    public enum marksTypes {master, normal}
+//    public enum changeType {start, stop} // for race date
+//    public enum helpType {login}
 
 
     // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
-//    public static int SERVER_PORT = 8080;
-    public static int SERVER_PORT = 8095;
-    //public static String server =  "192.168.1.5"; // "127.0.0.1";
-    public static String server =  "185.251.240.3";
+    public static int SERVER_PORT = 8080;
+//    public static int SERVER_PORT = 8095;
+   public static String server =  "192.168.1.5"; // "127.0.0.1";
+//    public static String server =  "185.251.240.3";
     //  192.168.1.5:8080
     public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
 
-    private static Context activity;
+    boolean PermissionGranted = false;
+    final int PERMISSIONS_CODE_ACCESS_FINE_LOCATION = 1;
+    final int PERMISSIONS_CODE_READ_PHONE_NUMBERS = 2;
+
+    private Context activity;
     private static String login;
     private static String password;
     private static registrationLevel level;
@@ -89,7 +90,18 @@ public class MainActivity extends AppCompatActivity {
     public static int BlameTimeout = 600000;
     private static Date startDate= new Date(); // даты старта. пока только даты!!
     private static Date stopDate = new Date();
+    int minDistance = 1;
+    int minTime = 1;
+    public static Double Longitude = 0.00, Latitude = 0.00, Altitude = 0.00;
+    private static  TextView GPSMonitor;
 
+    public static void setGPSMonitor(TextView GPSMonitor1) {
+        GPSMonitor = GPSMonitor1;
+    }
+
+    public static  TextView getGPSMonitor() {
+        return GPSMonitor;
+    }
 
     public static void setStartDate(Date startDate) {
         MainActivity.startDate = startDate;
@@ -148,14 +160,98 @@ public class MainActivity extends AppCompatActivity {
         return MainLogTimeout;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setActivity(this);
+
         MAFC = new MainActivityFaceController();
         MAFC.start();
+        activateGPSSystem();
     }
+
+    private void activateGPSSystem() {
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                ){
+            String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_CODE_ACCESS_FINE_LOCATION);
+        } else {    PermissionGranted = true;     }
+        if (PermissionGranted) {
+            try {lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this); }
+            catch (NullPointerException e) { e.printStackTrace(); }
+        }
+        else {  Utilites.messager(getActivity(),"Права на GPS!"); }
+        PermissionGranted = false;
+    }
+
+    String getMyPhoneNumber() {
+        String res = "";
+        TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE};
+            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_CODE_READ_PHONE_NUMBERS);
+        } else {    PermissionGranted = true;     }
+        if (PermissionGranted) { res = mTelephonyMgr.getLine1Number(); }
+        else { Utilites.messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами."); }
+        PermissionGranted = false;
+        return res;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_CODE_ACCESS_FINE_LOCATION:
+                    PermissionGranted = (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                return;
+            case PERMISSIONS_CODE_READ_PHONE_NUMBERS:
+                PermissionGranted = (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+        }
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null)     {
+            Latitude = location.getLatitude();
+            Longitude = location.getLongitude();
+            Altitude = location.getAltitude();
+            setGPSString("Координаты: " + DECIMAL_FORMAT.format(Latitude) + ", " + DECIMAL_FORMAT.format(Longitude) + ", " + DECIMAL_FORMAT.format(Altitude));
+        }
+    }
+
+    public static Double getLongitude() {
+        return Longitude;
+    }
+    public static Double getLatitude() {
+        return Latitude;
+    }
+    public static Double getAltitude() {
+        return Altitude;
+    }
+
+    public void setGPSString(String str1) {
+//        MAFC.gpsPosition.setText(str1);
+        GPSMonitor.setText(str1);
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {    }
+
+    @Override
+    public void onProviderEnabled(String s)  {     }
+
+    @Override
+    public void onProviderDisabled(String s) {     }
 
 
     @Override
@@ -166,12 +262,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
             case R.id.settings :
                 setContentView(R.layout.activity_settings);
-                SFC = new SettingsFaceController();
+                new SettingsFaceController();
                 return true;
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
@@ -219,11 +314,11 @@ public class MainActivity extends AppCompatActivity {
 
 // =======================================================
 
-    public static void setActivity(Context activity) {
-        MainActivity.activity = activity;
+    public void setActivity(Context activity1) {
+        activity = activity1;
     }
 
-    public static Context  getActivity() {
+    public Context  getActivity() {
         return activity;
     }
 
@@ -236,9 +331,9 @@ public class MainActivity extends AppCompatActivity {
         return server;
     }
 
-    public static String getServerUrl() {
+    /*public static String getServerUrl() {
         return SERVER_URL;
-    }
+    }*/
 
     public static String getLogin() {
         return login;
@@ -289,7 +384,8 @@ public class MainActivity extends AppCompatActivity {
         private TextView TimeTimer;
         private TextView MainLogTimer;
         private boolean isStarted = false;
-        protected SettingsFaceController() {
+
+        SettingsFaceController() {
             super();
         }
 
@@ -336,6 +432,8 @@ public class MainActivity extends AppCompatActivity {
             MainLogTimer.setText(timer);
             timer = Integer.toString(MainActivity.getTimerTimeout()/1000);
             TimeTimer.setText(timer);
+
+            //@string/noStr
         }
 
         @Override
@@ -350,26 +448,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public class MainActivityFaceController extends ActivityFaceController {
         private boolean isStarted = false;
         private String              ERROR_MSG;
-        private Button              exitButton;
+        private ImageButton         exitButton;
         private Button              registerButton;
         private Button              enterButton;
-        private RadioGroup          LoginType_radio_group;
         private TextView            password;
         public TextView             RegAsLabel;
         private TextView            phone;
         public  registrationLevel   REGLEVEL = registrationLevel.Guest;
-        private RadioButton         AdminRadioButton;
-        private RadioButton         UserRadioButton;
-        private RadioButton         GuestRadioButton;
         public TextView             ServerTime;
         private Timer               ServerTimer;
         private TextView            gpsPosition;
-        private GPS                 GPS_System;
 
         //      Constructor; ============================================
         MainActivityFaceController() {
@@ -380,11 +471,9 @@ public class MainActivity extends AppCompatActivity {
         // ======================================================================================
         @Override
         protected void setDefaultFace() {
-            GPS_System = new GPS(getActivity(), gpsPosition);
-            setButton(exitButton, true);
+            setImgButton(exitButton, true);
             setButton(registerButton, true);
             setButton(enterButton, false);
-            setRadioSystem(LoginType_radio_group, true);
             setTextFields(password, true);
             setTextFields(phone, true);
             ERROR_MSG = "Данных вообще нет";
@@ -400,13 +489,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void initViewObjects() {
-            exitButton =            findViewById(R.id.exit_button);
+            exitButton =            findViewById(R.id.exitButton);
             enterButton =           findViewById(R.id.enter_button);
             registerButton =        findViewById(R.id.register_button);
-            LoginType_radio_group = findViewById(R.id.LoginType_radio_group);
-            AdminRadioButton =      findViewById(R.id.AdminRadioButton);
-            UserRadioButton =       findViewById(R.id.UserRadioButton);
-            GuestRadioButton =      findViewById(R.id.GuestRadioButton);
             RegAsLabel =            findViewById(R.id.RegAsLabel);
             phone =                 findViewById(R.id.phone);
             password =              findViewById(R.id.password);
@@ -520,10 +605,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void setRegistredFace() {
-            setButton(exitButton, true);
+            setImgButton(exitButton, true);
             setButton(registerButton, false);
             setButton(enterButton, true);
-            setRadioSystem(LoginType_radio_group, false);
+//            setRadioSystem(LoginType_radio_group, false);
             setTextFields(password, false);
             setTextFields(phone, false);
         }
@@ -541,7 +626,9 @@ public class MainActivity extends AppCompatActivity {
         }
         public void start() {
             startTimeSync();
+            setGPSMonitor(gpsPosition);
             isStarted = true;
+            dropRegistration();
         }
         public void stop() {
             ServerTimer.cancel();
@@ -549,32 +636,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        private String getMyPhoneNumber() {
-            TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-              if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                Utilites.messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами.");
-                return "";}
-              else {         return mTelephonyMgr.getLine1Number(); }
-        }
-
         private void setTextFields(TextView tv1, boolean trigger2) {
             tv1.setEnabled(trigger2);
             tv1.setClickable(trigger2);
         }
 
-        private void setRadioSystem(RadioGroup rg1, boolean trigger2) {
-            rg1.setEnabled(trigger2);
-            rg1.setClickable(trigger2);
 
-            GuestRadioButton.setEnabled(trigger2);
-            UserRadioButton.setEnabled(trigger2);
-            AdminRadioButton.setEnabled(trigger2);
-
-            GuestRadioButton.setClickable(trigger2);
-            UserRadioButton.setClickable(trigger2);
-            AdminRadioButton.setClickable(trigger2);
-
+        private void setImgButton(ImageButton btn1, boolean trigger2) {
+            btn1.setEnabled(trigger2);
+            btn1.setClickable(trigger2);
         }
+
 
         private void setButton(Button btn1, boolean trigger2) {
             btn1.setEnabled(trigger2);
@@ -611,26 +683,25 @@ public class MainActivity extends AppCompatActivity {
         private void RegisterThisUser(){
 // поверка логина-пароля - видоизменяет интерфейс пользователя.
 // Backdore Admin
-            if ((phone.getText().toString()).equals(backDoreAdmin)) {
-                REGLEVEL = MainActivity.registrationLevel.Admin;;
-                RegAsLabel.setText(REGLEVEL.toString());
-                setRegistredFace();
-            }
-// BAckDore User
-            else if ((phone.getText().toString()).equals(backDoreUser)) {
-                REGLEVEL = MainActivity.registrationLevel.User;
-                RegAsLabel.setText(REGLEVEL.toString());
-                setRegistredFace();
-            }
-// BackDore Normal
-            else {
-
-                AskForLogin Post = new AskForLogin(MAFC);
-                Post.setLevel(getLevel());
-                Post.setLogin(phone.getText().toString());
-                Post.setPassword(password.getText().toString());
-                Post.setParentActivity(activity);
-                Post.execute();
+            switch (phone.getText().toString()) {
+                case backDoreAdmin:
+                    REGLEVEL = MainActivity.registrationLevel.Admin;
+                    RegAsLabel.setText(REGLEVEL.toString());
+                    setRegistredFace();
+                    break;
+                case backDoreUser:
+                    REGLEVEL = MainActivity.registrationLevel.User;
+                    RegAsLabel.setText(REGLEVEL.toString());
+                    setRegistredFace();
+                    break;
+                default:
+                    AskForLogin Post = new AskForLogin(MAFC);
+                    Post.setLevel(getLevel());
+                    Post.setLogin(phone.getText().toString());
+                    Post.setPassword(password.getText().toString());
+                    Post.setParentActivity(activity);
+                    Post.execute();
+                    break;
             }
        }
 
@@ -642,15 +713,6 @@ public class MainActivity extends AppCompatActivity {
             setLogin(phone.getText().toString());
         }
 
-
-        private registrationLevel getLevel(){
-            registrationLevel level = null;
-            if (GuestRadioButton.isChecked())       level = registrationLevel.Guest;
-            else if (AdminRadioButton.isChecked())  level = registrationLevel.Admin;
-            else if (UserRadioButton.isChecked())   level = registrationLevel.User;
-
-            return level;
-        }
     }
 
 }

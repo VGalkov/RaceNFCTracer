@@ -19,21 +19,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMarksList;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendNewNFCMark;
 import ru.galkov.racenfctracer.common.Utilites;
 
@@ -268,10 +266,9 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         public TextView ServerTime;
         private CheckBox masterMarkSw;
         private TextView gpsPosition;
-        private GPS GPS_System;
         private Timer ServerTimer;
         private TextView CurrentNFC_Label;
-        private Button back_button;
+        private ImageButton back_button;
         private Button CommitButton;
         private TextView loginInfo;
         public TextView NFC_ConfigurationLog;
@@ -320,7 +317,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                     SendNewNFCMark NFC = new SendNewNFCMark(NFC_ConfigurationLog);
                     NFC.setMark(markContent);
                     NFC.setMethod(METHOD);
-                    NFC.setGPS_System(GPS_System);
+                    NFC.setGPS_System();
                     NFC.execute();
                 }
             });
@@ -345,6 +342,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         @Override
         public void start() {
             startTimeSync();
+            MainActivity.setGPSMonitor(gpsPosition);
             isStarted = true;
         }
 
@@ -356,7 +354,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
         private void constructStatusString() {
             loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
-            GPS_System = new GPS(getActivity(),gpsPosition);
         }
 
         private void startTimeSync() {

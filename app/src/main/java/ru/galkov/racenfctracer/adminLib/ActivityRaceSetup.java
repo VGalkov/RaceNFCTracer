@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,7 +24,6 @@ import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskStartSructure;
-import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendActiveRaceStart;
 import ru.galkov.racenfctracer.common.Utilites;
 
@@ -99,7 +99,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
     public class ActivityRaceSetupController extends ActivityFaceController {
         private TextView ServerTime;
-        private Button back_button;
+        private ImageButton back_button;
         private Timer ServerTimer;
         private TextView raceConfig;
         private Button setRaceConfig_button;
@@ -206,8 +206,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         @Override
         protected void setDefaultFace() {
             constructStatusString();
-            new GPS(getActivity(),gpsPosition);
-//            AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig);
             AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceConfig, showStart, showStop);
             ACRS.execute();
 
@@ -221,6 +219,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         @Override
         public void start() {
             startTimeSync();
+            MainActivity.setGPSMonitor(gpsPosition);
             isStarted = true;
         }
 

@@ -32,7 +32,6 @@ import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskMasterMark;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.GPS;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 import ru.galkov.racenfctracer.common.Utilites;
 
@@ -215,9 +214,9 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                         // таймер сброса считывания эталонной метки.
                         MarkChekDelayTimer = new Timer(); // Создаем таймер
                         dt1 = new Date();
-                        markMasterLatitude = AUMC.GPS_System.getLatitude();
-                        markMasterAltitude = AUMC.GPS_System.getAltitude();
-                        markMasterLongitude = AUMC.GPS_System.getLongitude();
+                        markMasterLatitude = MainActivity.getLatitude();
+                        markMasterAltitude = MainActivity.getAltitude();
+                        markMasterLongitude = MainActivity.getLongitude();
                         MarkChekDelayTimer.schedule(new TimerTask() {
                             @Override
                             public void run() {
@@ -237,7 +236,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                     NFC.setMasterMark(MainActivity.getmASTER_MARK());
                     // TODO вытащить число милисекунд между метками.
                     NFC.setMarkDelta((dt2.getTime() - dt1.getTime())/1000);
-                    NFC.setGPS_System(AUMC.getGPS_System());
+                    NFC.setGPS_System();
                     NFC.setMark(text);
                     NFC.setMasterAltitude(markMasterAltitude);
                     NFC.setMasterLatitude(markMasterLatitude);
@@ -334,7 +333,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         private TextView showStart;
         private TextView showStop;
         private TextView loginInfo;
-        private GPS GPS_System;
         private Button get_master_mark_button;
         private boolean isStarted = false;
 
@@ -361,9 +359,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
             return User_Monitor;
         }
 
-        public GPS getGPS_System() {
-            return GPS_System;
-        }
 
         @Override
         protected void addListeners() {
@@ -387,7 +382,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
         @Override
         protected void setDefaultFace(){
-                GPS_System = new GPS(getActivity(),gpsPosition);
                 constructStatusString();
         }
 
@@ -402,6 +396,7 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         @Override
         public void start() {
             startTimeSync();
+            MainActivity.setGPSMonitor(gpsPosition);
             isStarted = true;
         }
 

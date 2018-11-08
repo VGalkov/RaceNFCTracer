@@ -9,11 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
@@ -22,8 +21,6 @@ import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.GPS;
-
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 
 public class ActivityAdminManager  extends AppCompatActivity {
@@ -156,7 +153,7 @@ public class ActivityAdminManager  extends AppCompatActivity {
     }
 
 public class ActivityAdminManagerController extends ActivityFaceController {
-        private Button back_button;
+        private ImageButton back_button;
         private Button results_table_button;
         private Button register_editor_button;
         private Button nfc_marks_editor_button;
@@ -164,9 +161,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         public TextView UserLogger;
         public TextView ServerTime;
         private TextView loginInfo;
-        private GPS GPS_System;
         private Timer ServerTimer;
-  //      private Timer MainLogTimer;
         private TextView gpsPosition;
         private boolean isStarted = false;
 
@@ -231,14 +226,13 @@ public class ActivityAdminManagerController extends ActivityFaceController {
     // ============================
     @Override
     protected void setDefaultFace() {
-        GPS_System = new GPS(getActivity(),gpsPosition);
         constructStatusString();
     }
 
     @Override
     public void start() {
         startTimeSync();
-    //    startMainLogTimeSync();
+        MainActivity.setGPSMonitor(gpsPosition);
         isStarted = true;
     }
 

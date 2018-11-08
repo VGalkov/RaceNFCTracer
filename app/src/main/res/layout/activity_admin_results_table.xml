@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".adminLib.ActivityResultsTable"
     android:layout_width="match_parent"
@@ -55,14 +56,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <Button
+            <ImageButton
                 android:id="@+id/back_button"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:textColor="@color/Black"
-                android:textSize="12sp" />
+                app:srcCompat="@android:drawable/ic_delete" />
 
             <Button
                 android:id="@+id/downLoadLogCVS"
@@ -112,5 +110,6 @@
             android:text="TextView" />
         </ScrollView>
         </LinearLayout>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

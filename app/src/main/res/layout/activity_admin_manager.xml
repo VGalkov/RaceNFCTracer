@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ActivityAdminManager"
     android:layout_width="match_parent"
@@ -63,12 +64,12 @@
                 android:text="@string/results"
                 android:textSize="12sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/back_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:textSize="12sp" />
+                app:srcCompat="@android:drawable/ic_delete" />
+
         </LinearLayout>
 
         <TextView

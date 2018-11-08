@@ -24,6 +24,7 @@
             android:layout_weight="1"
             android:text="@string/RegistratinInctruction"
             android:textAlignment="viewStart"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -16,7 +16,6 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
-    private GPS GPS_System;
     private String mark;
     private TextView User_Monitor;
     private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
@@ -132,11 +131,10 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
         activity = c1;
     }
 
-    public void setGPS_System(GPS GPS_System1) {
-        this.GPS_System = GPS_System1;
-        this.altitude = GPS_System.getAltitude();
-        this.longitude = GPS_System.getLongitude();
-        this.latitude = GPS_System.getLatitude();
+    public void setGPS_System() {
+        this.altitude = MainActivity.getAltitude();
+        this.longitude = MainActivity.getLongitude();
+        this.latitude = MainActivity.getLatitude();
     }
 
     public void setMark(String mark1) {

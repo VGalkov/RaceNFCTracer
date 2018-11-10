@@ -69,11 +69,11 @@
                     android:visibility="visible" />
 
 
-
                 <ImageButton
                     android:id="@+id/exitButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/exit"
                     app:srcCompat="@android:drawable/ic_delete" />
 
             </LinearLayout>
@@ -128,7 +128,7 @@
         <LinearLayout
             android:id="@+id/l4"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 

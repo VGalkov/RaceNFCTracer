@@ -21,6 +21,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.yandex.mapkit.Animation;
+import com.yandex.mapkit.MapKitFactory;
+import com.yandex.mapkit.geometry.Point;
+import com.yandex.mapkit.map.CameraPosition;
+import com.yandex.mapkit.mapview.MapView;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +35,9 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.common.AskForLogin;
+import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.Utilites;
 
@@ -37,15 +45,15 @@ import ru.galkov.racenfctracer.common.Utilites;
 public class MainActivity extends AppCompatActivity implements LocationListener {
 // тут объявляем и глобальные переменные, когда разрастётся выделить в отдельный класс с геттерами
 
-
     MainActivityFaceController MAFC;
 //    private SettingsFaceController SFC;
+    public static MapViewController MV;
     HelpFaceController HFC;
 
     public static final String KEY = "galkovvladimirandreevich";
 
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
     public static final int MarkChekDelayTimerTimeout = 5000;
     public static final int MarkChekTimerDelay = 5000;
     public static final int TimerDelay = 1000;
@@ -60,8 +68,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
     public enum fileType {Results, Marcs, Log}
+    public enum points_types {mark,master_mark,user,guest,admin,unknown}
 //    public enum marksTypes {master, normal}
-//    public enum changeType {start, stop} // for race date
+    public enum changeType {start, stop} // for race date
 //    public enum helpType {login}
 
 
@@ -92,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private static Date stopDate = new Date();
     int minDistance = 1;
     int minTime = 1;
+
+    //YandexMapSystem
+    public static MapView mapview;
+    private static final String MAPKIT_API_KEY = "ce7f5884-77aa-4324-9bcc-dd0cf2bc3baa";
+    public static final Point TARGET_LOCATION = new Point(53.2, 50.14);
+    public static final float DEFAULT_ZOOM = 17.0f;
+
     public static Double Longitude = 0.00, Latitude = 0.00, Altitude = 0.00;
     private static  TextView GPSMonitor;
 
@@ -163,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MapKitFactory.setApiKey(MAPKIT_API_KEY);
+        MapKitFactory.initialize(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setActivity(this);
@@ -290,6 +308,22 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 HFC.start();
                 return true;
 
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+// активные элементы view надо ли?
+//                MV = new MapViewController(mapview);
+//                MV.start();
+
+                // управляет размещением объектов на карте
+                // асинхронно запросить все поинты и разместить их на карте.
+                AskMapPoints AMP = new AskMapPoints();
+                AMP.setMapView(mapview);
+                AMP.execute();
+                return true;
+
             case R.id.exit:
                 setResult(RESULT_OK, new Intent());
                 finish();
@@ -299,15 +333,46 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         MAFC.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         MAFC.stop();
     }
 

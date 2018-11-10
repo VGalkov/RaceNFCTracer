@@ -1,28 +1,35 @@
 package ru.galkov.racenfctracer.common;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.TextView;
 
+import com.yandex.mapkit.geometry.Point;
+import com.yandex.mapkit.mapview.MapView;
+import com.yandex.runtime.image.ImageProvider;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ru.galkov.racenfctracer.MainActivity;
-import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
-
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
-public class AskServerTime extends AsyncTask<String, Void, String> {
+public class AskMapPoints extends AsyncTask<String, Void, String> {
 
-    private ActivityResultsTable.ActivityResultsTableController ARTC;
-    private TextView TimeLabel;
-    private final String ASKER = "AskServerTime";
+    private Context activityContext;
+    private final String ASKER = "AskMapPoints";
     private JSONObject outBoundJSON;
     private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private MapView mapView;
 
 
-    public AskServerTime(TextView TimeLabel1) {
-        TimeLabel = TimeLabel1;
+    public AskMapPoints() {
+
+    }
+
+    public void setMapView(MapView mapview1) {
+        mapView = mapview1;
     }
 
 
@@ -30,6 +37,7 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
     protected void onPreExecute(){
         makeOutBoundJSON();
     }
+
 
     @Override
     protected String doInBackground(String... strings) {
@@ -39,40 +47,43 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
         return HP.execute();
     }
 
+    /*
+    type = mark,user,admin,guest
+    {
+        "points":[
+        {"longitude":0.0,"altitude":0.0,"latitude":0.0,"type":"","label":"1"},
+        {"longitude":0.0,"altitude":0.0,"latitude":0.0,"type":"","label":"1"},
+        "asker":"AskStartSructure",
+        "key":"galkovvladimirandreevich",
+        "exec_login":"",
+        "exec_level":""
+    } */
+
+
     @Override
     protected void onPostExecute(String result) {
+
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            if (Utilites.chkKey((String) JOAnswer.get(f.key.toString()))) {
-                   String regRecord = JOAnswer.get(f.date.toString()).toString();
-                   TimeLabel.setText(regRecord);
-            }
-        }
-        catch (JSONException e) {	e.printStackTrace();}
+            String serverKEY = JOAnswer.getString(f.key.toString());
 
+        } catch (JSONException e) {	e.printStackTrace();}
     }
 
-// ========================================================
+    public void setMethod(MainActivity.writeMethod method1) {
+        method = method1;
+    }
+
     private  void makeOutBoundJSON(){
-//        {"asker":"AskServerTime", "key":"galkovvladimirandreevich"}
+//         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(f.asker.toString(),ASKER);
             outBoundJSON.put(f.key.toString(),KEY);
             outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
             outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
-            outBoundJSON.put(f.latitude.toString(),MainActivity.getLatitude());
-            outBoundJSON.put(f.altitude.toString(),MainActivity.getAltitude());
-            outBoundJSON.put(f.longitude.toString(),MainActivity.getLongitude());
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    public void setMethod(MainActivity.writeMethod method1) {
-        method = method1;
-
-    }
-
 }

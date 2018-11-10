@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.yandex.mapkit.MapKitFactory;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -28,16 +30,20 @@ import java.util.TimerTask;
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
+import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskMasterMark;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 import ru.galkov.racenfctracer.common.Utilites;
 
+import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.mapview;
 
-    public class ActivityUserManager extends AppCompatActivity {
+public class ActivityUserManager extends AppCompatActivity {
 
 
         private NfcAdapter nfcAdapter;
@@ -105,6 +111,22 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
                 new AskResultsTable((TextView) findViewById(R.id.User_Monitor), MainActivity.fileType.Results, getActivity()).execute();
                 return true;
 
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+// активные элементы view надо ли?
+                MV = new MapViewController(mapview);
+                MV.start();
+
+                // управляет размещением объектов на карте
+                // асинхронно запросить все поинты и разместить их на карте.
+                AskMapPoints AMP = new AskMapPoints();
+                AMP.setMapView(mapview);
+                AMP.execute();
+                return true;
+
             case R.id.exit:
                 setContentView(R.layout.activity_user_manager);
                 setActivity(this);
@@ -118,8 +140,6 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
     }
 
 
-
-
         @Override
         protected void onNewIntent(Intent intent) {
             setIntent(intent);
@@ -129,9 +149,16 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
             }
         }
 
+
+
         @Override
         public void onPause(){
             super.onPause();
+            try {
+                mapview.onStop();
+                MapKitFactory.getInstance().onStop();
+            }
+            catch (NullPointerException e) { e.printStackTrace();}
             AUMC.stop();
             try { if (MLC.isStarted()) { MLC.stop(); } }   catch (Exception e) { e.printStackTrace(); }
             WriteModeOff();
@@ -141,12 +168,40 @@ import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
         @Override
         public void onResume(){
             super.onResume();
+            try {
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+            }
+            catch (NullPointerException e) { e.printStackTrace();}
             AUMC.start();
             WriteModeOn();
         }
+/*
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        AUMC.stop();
+        try { if (MLC.isStarted()) { MLC.stop(); } }   catch (Exception e) { e.printStackTrace(); }
+        WriteModeOff();
+    }
 
-
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        AUMC.start();
+  //      WriteModeOn();
+    }
+*/
     public void setActivity(Context activity1) {
         activity = activity1;
     }

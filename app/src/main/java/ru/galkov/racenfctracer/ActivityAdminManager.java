@@ -11,17 +11,24 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.yandex.mapkit.MapKitFactory;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
+
+import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityAdminManager  extends AppCompatActivity {
     private ActivityAdminManagerController AAMC;
@@ -68,9 +75,12 @@ public class ActivityAdminManager  extends AppCompatActivity {
 
             case R.id.map:
                 setContentView(R.layout.activity_map);
-                setActivity(this);
-                WebBrowserController WB = new WebBrowserController(getActivity());
-//                WB.setWebBrowser((WebView) findViewById(R.id.mapWebView));
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+                // активные элементы view надо ли?
+                MV = new MapViewController(mapview);
+                MV.start();
                 return true;
 
             case R.id.exit:
@@ -84,11 +94,40 @@ public class ActivityAdminManager  extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+/*
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        AAMC.stop();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        AAMC = new ActivityAdminManagerController();
+        AAMC.start();
+    }
+
+ */
 
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         AAMC = new ActivityAdminManagerController();
         AAMC.start();
     }
@@ -96,6 +135,11 @@ public class ActivityAdminManager  extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         AAMC.stop();
 
     }
@@ -114,7 +158,7 @@ public class ActivityAdminManager  extends AppCompatActivity {
 // Вся система обмена метками для карты на основе javascript и yandex map
 
         private Context context;
-        private WebView map;
+
 
         public WebBrowserController(Context context1) {
             this.context = context1;
@@ -123,7 +167,7 @@ public class ActivityAdminManager  extends AppCompatActivity {
 
         @Override
         protected void initViewObjects() {
-            map = findViewById(R.id.mapWebView);
+
         }
 
         @Override

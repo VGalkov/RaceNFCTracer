@@ -11,18 +11,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.yandex.mapkit.MapKitFactory;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
+import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityResultsTable  extends AppCompatActivity {
     private ActivityResultsTableController ARTC;
@@ -50,13 +55,45 @@ public class ActivityResultsTable  extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         ARTC.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         ARTC.stop();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        ARTC.stop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        ARTC.start();
     }
 
 
@@ -80,7 +117,15 @@ public class ActivityResultsTable  extends AppCompatActivity {
                 HFC.start();
                 return true;
 
-
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+                // активные элементы view надо ли?
+                MV = new MapViewController(mapview);
+                MV.start();
+                return true;
             case R.id.exit:
                 /// TODO переписать на выход в геста после переделки фейсконтроллера.
                 setResult(RESULT_OK, new Intent());

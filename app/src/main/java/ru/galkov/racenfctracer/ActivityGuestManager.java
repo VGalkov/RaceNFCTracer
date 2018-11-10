@@ -12,16 +12,21 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.yandex.mapkit.MapKitFactory;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
+import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 
 public class ActivityGuestManager  extends AppCompatActivity {
@@ -68,6 +73,16 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 MLC.start();
                 return true;
 
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+                // активные элементы view надо ли?
+                MV = new MapViewController(mapview);
+                MV.start();
+                return true;
+
             case R.id.exit:
                 setContentView(R.layout.activity_guest_manager);
                 setActivity(this);
@@ -91,6 +106,11 @@ public class ActivityGuestManager  extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         AGMC.start();
 
     }
@@ -98,11 +118,36 @@ public class ActivityGuestManager  extends AppCompatActivity {
         @Override
         protected void onPause () {
             super.onPause();
+            try {
+                mapview.onStop();
+                MapKitFactory.getInstance().onStop();
+            }
+            catch (NullPointerException e) { e.printStackTrace();}
             AGMC.stop();
         }
+/*
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        AGMC.start();
+    }
 
-
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        AGMC.stop();
+    }
+*/
         public class ActivityGuestManagereController extends ActivityFaceController {
             //private ImageButton back_button;
             private ImageButton exitButton;

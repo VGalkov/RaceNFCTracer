@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.yandex.mapkit.MapKitFactory;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
@@ -29,6 +31,7 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskServerTime;
@@ -36,7 +39,9 @@ import ru.galkov.racenfctracer.common.AskUserTable;
 import ru.galkov.racenfctracer.common.SendUserLevel;
 import ru.galkov.racenfctracer.common.Utilites;
 
+import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 
 public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
@@ -75,6 +80,11 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         ALRRC = new ActivityLoginersRightsRedactorController();
         ALRRC.start();
         WriteModeOn();
@@ -83,9 +93,27 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         ALRRC.stop();
         WriteModeOff();
     }
+/*
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }*/
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -116,6 +144,15 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
                 HFC.start();
                 return true;
 
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+                // активные элементы view надо ли?
+                MV = new MapViewController(mapview);
+                MV.start();
+                return true;
 
             case R.id.exit:
                 setResult(RESULT_OK, new Intent());

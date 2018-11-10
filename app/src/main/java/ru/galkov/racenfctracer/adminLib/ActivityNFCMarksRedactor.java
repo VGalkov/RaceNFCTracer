@@ -22,12 +22,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.yandex.mapkit.MapKitFactory;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMarksList;
@@ -35,7 +39,9 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.SendNewNFCMark;
 import ru.galkov.racenfctracer.common.Utilites;
 
+import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
 public class ActivityNFCMarksRedactor   extends AppCompatActivity {
@@ -76,7 +82,15 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                 HFC.start();
                 return true;
 
-
+            case R.id.map:
+                setContentView(R.layout.activity_map);
+                mapview = findViewById(R.id.mapview);
+                mapview.onStart();
+                MapKitFactory.getInstance().onStart();
+                // активные элементы view надо ли?
+                MV = new MapViewController(mapview);
+                MV.start();
+                return true;
             case R.id.exit:
                 /// TODO переписать на выход в геста после переделки фейсконтроллера.
                 setResult(RESULT_OK, new Intent());
@@ -162,6 +176,11 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         NFCRedactorController.stop();
         WriteModeOff();
     }
@@ -169,10 +188,40 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
         NFCRedactorController = new ActivityNFCMarksRedactorFaceController();
         NFCRedactorController.start();
         WriteModeOn();
     }
+/*
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mapview.onStop();
+            MapKitFactory.getInstance().onStop();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        NFCRedactorController.stop();
+        WriteModeOff();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mapview.onStart();
+            MapKitFactory.getInstance().onStart();
+        }
+        catch (NullPointerException e) { e.printStackTrace();}
+        NFCRedactorController = new ActivityNFCMarksRedactorFaceController();
+        NFCRedactorController.start();
+  //      WriteModeOn();
+    }*/
 
     // **********************************Read From NFC Tag***************************
 

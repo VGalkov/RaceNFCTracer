@@ -3,12 +3,17 @@
 
     <item
         android:id="@+id/help"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:title="@string/help" />
 
     <item
         android:id="@+id/exit"
-        android:orderInCategory="2"
+        android:orderInCategory="1"
         android:title="@string/back" />
+
+    <item
+        android:id="@+id/map"
+        android:orderInCategory="5"
+        android:title="@string/map" />
 
 </menu>

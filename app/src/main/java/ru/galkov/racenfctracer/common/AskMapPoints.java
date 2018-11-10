@@ -23,11 +23,11 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private MapView mapView;
 
-
+/*
     public AskMapPoints() {
 
     }
-
+*/
     public void setMapView(MapView mapview1) {
         mapView = mapview1;
     }

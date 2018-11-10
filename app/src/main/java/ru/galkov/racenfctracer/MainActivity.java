@@ -314,11 +314,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 mapview.onStart();
                 MapKitFactory.getInstance().onStart();
 // активные элементы view надо ли?
-//                MV = new MapViewController(mapview);
-//                MV.start();
+                MV = new MapViewController(mapview);
+                MV.start();
 
                 // управляет размещением объектов на карте
                 // асинхронно запросить все поинты и разместить их на карте.
+                // это какого-то хера не запрашивает вообще
                 AskMapPoints AMP = new AskMapPoints();
                 AMP.setMapView(mapview);
                 AMP.execute();
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return super.onOptionsItemSelected(item);
     }
 
-
+/*
 
     @Override
     protected void onStop() {
@@ -353,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         catch (NullPointerException e) { e.printStackTrace();}
     }
-
+*/
     @Override
     protected void onResume() {
         super.onResume();

@@ -92,6 +92,8 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        System.out.println(outBoundJSON);
     }
 
     public  void setContext(Context c1) {

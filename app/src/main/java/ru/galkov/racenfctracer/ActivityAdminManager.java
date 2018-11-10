@@ -24,6 +24,7 @@ import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
+import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
@@ -78,9 +79,16 @@ public class ActivityAdminManager  extends AppCompatActivity {
                 mapview = findViewById(R.id.mapview);
                 mapview.onStart();
                 MapKitFactory.getInstance().onStart();
-                // активные элементы view надо ли?
+
                 MV = new MapViewController(mapview);
                 MV.start();
+
+                // управляет размещением объектов на карте
+                // асинхронно запросить все поинты и разместить их на карте.
+                AskMapPoints AMP = new AskMapPoints();
+                AMP.setMapView(mapview);
+                AMP.execute();
+
                 return true;
 
             case R.id.exit:

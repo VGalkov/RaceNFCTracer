@@ -22,6 +22,7 @@ import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskForMainLog;
+import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
@@ -125,6 +126,11 @@ public class ActivityResultsTable  extends AppCompatActivity {
                 // активные элементы view надо ли?
                 MV = new MapViewController(mapview);
                 MV.start();
+                // управляет размещением объектов на карте
+                // асинхронно запросить все поинты и разместить их на карте.
+                AskMapPoints AMP = new AskMapPoints();
+                AMP.setMapView(mapview);
+                AMP.execute();
                 return true;
             case R.id.exit:
                 /// TODO переписать на выход в геста после переделки фейсконтроллера.

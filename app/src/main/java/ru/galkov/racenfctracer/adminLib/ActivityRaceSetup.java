@@ -33,6 +33,7 @@ import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
+import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskRaceStructure;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskStartSructure;
@@ -137,6 +138,11 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                 // активные элементы view надо ли?
                 MV = new MapViewController(mapview);
                 MV.start();
+                // управляет размещением объектов на карте
+                // асинхронно запросить все поинты и разместить их на карте.
+                AskMapPoints AMP = new AskMapPoints();
+                AMP.setMapView(mapview);
+                AMP.execute();
                 return true;
             case R.id.exit:
                 setResult(RESULT_OK, new Intent());

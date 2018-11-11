@@ -193,13 +193,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         MapKitFactory.setApiKey(MAPKIT_API_KEY);
         MapKitFactory.initialize(this);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_for_start);
         setActivity(this);
-//        MAFC = new MainActivityFaceController();
-//        MAFC.start();
         activateGPSSystem();
     }
 

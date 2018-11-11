@@ -81,6 +81,9 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.master_mark_label.toString(),masterMark);
             outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
             outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(f.longitude.toString(), MainActivity.getLongitude());
+            outBoundJSON.put(f.altitude.toString(), MainActivity.getAltitude());
+            outBoundJSON.put(f.latitude.toString(), MainActivity.getLatitude());
 
         } catch (JSONException e) {
             e.printStackTrace();

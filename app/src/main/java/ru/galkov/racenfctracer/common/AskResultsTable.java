@@ -47,7 +47,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
+/*
         // если в JSON преобразуется - в ответе не файл :)
         try {
                 JSONObject JOAnswer = new JSONObject(result);
@@ -61,7 +61,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
                 if (method == MainActivity.writeMethod.Append) userLogger.append(res);
                 else userLogger.setText(res);
 
-            } catch (JSONException e) {
+            } catch (JSONException e) {*/
             try {
                     String filePath = context.getExternalCacheDir().toString() + "/"+fileType+".csv"; // папка приложения на SD
                     // String filePath =  Environment.getExternalStorageDirectory().toString() + "/"+fileType+".csv"; //корень SD
@@ -82,7 +82,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
             }
 
 
-        }
+        //}
 
     }
 

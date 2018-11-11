@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yandex.mapkit.Animation;
@@ -27,6 +30,16 @@ import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.map.CameraPosition;
 import com.yandex.mapkit.mapview.MapView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,6 +51,7 @@ import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.Utilites;
 
@@ -308,6 +322,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 HFC.start();
                 return true;
 
+
+            case R.id.graph:
+                setContentView(R.layout.activity_results_img);
+                ImageView iV = findViewById(R.id.imageView);
+                AskResultsImgTable ARIT = new AskResultsImgTable();
+                ARIT.setImage(iV);
+                ARIT.execute();
+
+//TODO создать контроллер активити
+                return true;
+
+
             case R.id.map:
                 setContentView(R.layout.activity_map);
                 mapview = findViewById(R.id.mapview);
@@ -333,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return super.onOptionsItemSelected(item);
     }
 
-/*
+
 
     @Override
     protected void onStop() {
@@ -354,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         catch (NullPointerException e) { e.printStackTrace();}
     }
-*/
+
     @Override
     protected void onResume() {
         super.onResume();

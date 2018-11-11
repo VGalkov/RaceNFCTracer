@@ -94,6 +94,7 @@
 
     <!-- Admin -->
     <string name="registration_table">Таблица регистрации</string>
+    <string name="graph">График результатов</string>
 
     <string name="showStartTime">Время и дата начала:</string>
     <string name="showStopTime">Время и дата окончания:</string>

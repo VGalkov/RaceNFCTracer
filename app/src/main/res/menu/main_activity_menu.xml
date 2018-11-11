@@ -31,9 +31,16 @@
         android:title="@string/map" />
 
     <item
-        android:id="@+id/exit"
+        android:id="@+id/graph"
         android:icon="@android:drawable/ic_delete"
         android:orderInCategory="5"
+        android:title="@string/graph" />
+
+
+    <item
+        android:id="@+id/exit"
+        android:icon="@android:drawable/ic_delete"
+        android:orderInCategory="10"
         android:title="@string/exit" />
 
 </menu>

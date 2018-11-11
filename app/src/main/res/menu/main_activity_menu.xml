@@ -36,6 +36,11 @@
         android:orderInCategory="5"
         android:title="@string/graph" />
 
+    <item
+        android:id="@+id/mainPanel"
+        android:icon="@android:drawable/ic_delete"
+        android:orderInCategory="7"
+        android:title="@string/mainPanel" />
 
     <item
         android:id="@+id/exit"

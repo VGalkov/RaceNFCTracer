@@ -10,6 +10,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yandex.mapkit.MapKitFactory;
@@ -25,6 +26,7 @@ import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
@@ -89,6 +91,17 @@ public class ActivityAdminManager  extends AppCompatActivity {
                 AMP.setMapView(mapview);
                 AMP.execute();
 
+                return true;
+
+            case R.id.graph:
+                setContentView(R.layout.activity_results_img);
+                setActivity(this);
+                ImageView iV = findViewById(R.id.imageView);
+                AskResultsImgTable ARIT = new AskResultsImgTable();
+                ARIT.setImage(iV);
+                ARIT.execute();
+
+//TODO создать контроллер активити
                 return true;
 
             case R.id.exit:

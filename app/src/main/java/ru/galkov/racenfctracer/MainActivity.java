@@ -59,15 +59,33 @@ import ru.galkov.racenfctracer.common.Utilites;
 public class MainActivity extends AppCompatActivity implements LocationListener {
 // тут объявляем и глобальные переменные, когда разрастётся выделить в отдельный класс с геттерами
 
-    MainActivityFaceController MAFC;
-//    private SettingsFaceController SFC;
     public static MapViewController MV;
     HelpFaceController HFC;
+    MainActivityFaceController MAFC;
 
-    public static final String KEY = "galkovvladimirandreevich";
-
+    // названия разных типизированных полей. для защиты от опечаток. одинаково определены и на клиенте и на сервере.
+    // возможно нужно вынести это в отдельный класс.
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
+    public enum fieldsJSON {start_time, stop_time,mark_master_latitude,mark_master_altitude,mark_master_longitude,master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public enum trigger {TRUE, FALSE}
+    public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
+    public enum writeMethod {Set, Append}
+    public enum fileType {Results, Marcs, Log}
+    public enum points_types {mark,master_mark,user,guest,admin,unknown}
+
+
+    // Client settings =================================================================
+    //
+    public static int SERVER_PORT = 8080;
+    //    public static int SERVER_PORT = 8095;
+    public static String server =  "192.168.1.5"; // "127.0.0.1";
+    //    public static String server =  "185.251.240.3";
+    //  192.168.1.5:8080
+    // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента
+    // клиент не работает.
+    public static final String KEY = "galkovvladimirandreevich";
+    public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
     public static final int MarkChekDelayTimerTimeout = 5000;
     public static final int MarkChekTimerDelay = 5000;
     public static final int TimerDelay = 1000;
@@ -75,44 +93,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static final short PasswordLength =5;
     public static final String backDoreAdmin = "+84873967848";
     public static final String backDoreUser =  "+84873967849";
-
-    // названия разных типизированных полей. для защиты от опечаток. racesConfig, startsConfig
-    public enum fieldsJSON {start_time, stop_time,mark_master_latitude,mark_master_altitude,mark_master_longitude,master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
-    public enum trigger {TRUE, FALSE}
-    public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
-    public enum writeMethod {Set, Append}
-    public enum fileType {Results, Marcs, Log}
-    public enum points_types {mark,master_mark,user,guest,admin,unknown}
-//    public enum marksTypes {master, normal}
-    public enum changeType {start, stop} // for race date
-//    public enum helpType {login}
-
-
-    // fields это данные к которым обращаются другие активити - данные, которыми зарегистрировался пользователь.
-    public static int SERVER_PORT = 8080;
-//    public static int SERVER_PORT = 8095;
-   public static String server =  "192.168.1.5"; // "127.0.0.1";
-//    public static String server =  "185.251.240.3";
-    //  192.168.1.5:8080
-    public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
-
     boolean PermissionGranted = false;
     final int PERMISSIONS_CODE_ACCESS_FINE_LOCATION = 1;
     final int PERMISSIONS_CODE_READ_PHONE_NUMBERS = 2;
-
-    private Context activity;
-    private static String login;
-    private static String password;
-    private static registrationLevel level;
-    private static long race_id;
-    private static long start_id;
-    private static String  mASTER_MARK ="";
-    private static String  mASTER_MARK_Flag ="_";
-    public static int TimerTimeout = 15000;
+    public static int TimerTimeout = 3000; // 3 секунды
     public static int MainLogTimeout = 60000;
     public static int BlameTimeout = 600000;
-    private static Date startDate= new Date(); // даты старта. пока только даты!!
-    private static Date stopDate = new Date();
     int minDistance = 1;
     int minTime = 1;
 
@@ -121,8 +107,22 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private static final String MAPKIT_API_KEY = "ce7f5884-77aa-4324-9bcc-dd0cf2bc3baa";
     public static final Point TARGET_LOCATION = new Point(53.2, 50.14);
     public static final float DEFAULT_ZOOM = 17.0f;
-
     public static Double Longitude = 0.00, Latitude = 0.00, Altitude = 0.00;
+
+
+    // поля переменные м
+    private Context activity;
+    private static String login = "nobody";
+    private static String password = "";
+    private static registrationLevel level=registrationLevel.Guest;
+    private static long race_id;
+    private static long start_id;
+    private static String  mASTER_MARK ="";
+    private static String  mASTER_MARK_Flag ="_";
+    private static Date startDate= new Date(); // даты старта. пока только даты!!
+    private static Date stopDate = new Date();
+
+
     private static  TextView GPSMonitor;
 
     public static void setGPSMonitor(TextView GPSMonitor1) {
@@ -193,14 +193,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         MapKitFactory.setApiKey(MAPKIT_API_KEY);
         MapKitFactory.initialize(this);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_for_start);
         setActivity(this);
-
-        MAFC = new MainActivityFaceController();
-        MAFC.start();
+//        MAFC = new MainActivityFaceController();
+//        MAFC.start();
         activateGPSSystem();
     }
 
@@ -257,7 +256,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Latitude = location.getLatitude();
             Longitude = location.getLongitude();
             Altitude = location.getAltitude();
-            setGPSString("Координаты: " + DECIMAL_FORMAT.format(Latitude) + ", " + DECIMAL_FORMAT.format(Longitude) + ", " + DECIMAL_FORMAT.format(Altitude));
+            if (GPSMonitor!=null) {
+                setGPSString("Координаты: " + DECIMAL_FORMAT.format(Latitude) + ", " + DECIMAL_FORMAT.format(Longitude) + ", " + DECIMAL_FORMAT.format(Altitude));
+            }
         }
     }
 
@@ -295,13 +296,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id){
-            case R.id.settings :
+        switch(id) {
+            case R.id.settings:
                 setContentView(R.layout.activity_settings);
+
                 new SettingsFaceController();
                 return true;
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
+
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.RegistratinHelp));
@@ -310,12 +313,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             case R.id.login:
                 setContentView(R.layout.activity_main);
+
                 MAFC = new MainActivityFaceController();
                 MAFC.start();
                 return true;
 
             case R.id.donate:
                 setContentView(R.layout.activity_help_system);
+
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.donate));
@@ -323,8 +328,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 return true;
 
 
+            case R.id.mainPanel:
+                if (level == registrationLevel.Admin) {
+                    startActivityForResult(new Intent(getActivity(), ActivityAdminManager.class), 0);
+                } else if (level == registrationLevel.User) {
+
+                    startActivityForResult(new Intent(getActivity(), ActivityUserManager.class), 0);
+                } else if (level == registrationLevel.Guest) {
+
+                    startActivityForResult(new Intent(getActivity(), ActivityGuestManager.class), 0);
+                } else {
+                    Utilites.messager(activity, "Ошибка распознавания Avtivity to show (REGLEVEL) ");
+                }
+                return true;
+
             case R.id.graph:
                 setContentView(R.layout.activity_results_img);
+
                 ImageView iV = findViewById(R.id.imageView);
                 AskResultsImgTable ARIT = new AskResultsImgTable();
                 ARIT.setImage(iV);
@@ -389,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        MAFC.start();
+//        MAFC.start();
     }
 
     @Override
@@ -400,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             MapKitFactory.getInstance().onStop();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        MAFC.stop();
+//        MAFC.stop();
     }
 
 
@@ -623,6 +643,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             enterButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     remember_registred_data();
+                    //возвратная заглушка чтоб не сбрасывать прав доступа.
+                    setContentView(R.layout.activity_for_start);
                     if ((!registerButton.isEnabled()) && (enterButton.isEnabled())) {
                         // переходим на активити согласно вычисленному при регистрации уровню доступа.
                         if (REGLEVEL == registrationLevel.Admin) {
@@ -637,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             startActivityForResult(new Intent(view.getContext(), ActivityGuestManager.class), 0);
                         }
                         else
-                            Utilites.messager(activity, "Ошибка распознавания Avtivity to show из-за ");
+                            Utilites.messager(activity, "Ошибка распознавания Avtivity to show (REGLEVEL) ");
                     }
                 }
             });
@@ -700,7 +722,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             setImgButton(exitButton, true);
             setButton(registerButton, false);
             setButton(enterButton, true);
-//            setRadioSystem(LoginType_radio_group, false);
             setTextFields(password, false);
             setTextFields(phone, false);
         }
@@ -717,10 +738,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }, TimerDelay, MainActivity.getTimerTimeout());
         }
         public void start() {
-            startTimeSync();
-            setGPSMonitor(gpsPosition);
-            isStarted = true;
-            dropRegistration();
+            if (!isStarted) {
+                startTimeSync();
+                setGPSMonitor(gpsPosition);
+                isStarted = true;
+                dropRegistration();
+            }
         }
         public void stop() {
             ServerTimer.cancel();

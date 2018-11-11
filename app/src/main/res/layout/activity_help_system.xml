@@ -17,14 +17,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/ekran"
+        <ScrollView
+            android:id="@+id/myview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/RegistratinInctruction"
-            android:textAlignment="viewStart"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:scrollbarStyle="insideOverlay">
+
+            <TextView
+                android:id="@+id/ekran"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/RegistratinInctruction"
+                android:textAlignment="viewStart"
+                android:textSize="14sp" />
+
+        </ScrollView>
+
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

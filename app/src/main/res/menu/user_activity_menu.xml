@@ -27,9 +27,12 @@
         android:orderInCategory="6"
         android:title="@string/map" />
 
+
+
     <item
-        android:id="@+id/grRes"
+        android:id="@+id/graph"
+        android:icon="@android:drawable/ic_delete"
         android:orderInCategory="5"
-        android:title="@string/grRes" />
+        android:title="@string/graph" />
 
 </menu>

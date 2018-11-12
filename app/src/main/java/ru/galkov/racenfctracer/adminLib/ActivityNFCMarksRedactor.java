@@ -320,7 +320,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
     public class  ActivityNFCMarksRedactorFaceController extends ActivityFaceController {
         public TextView ServerTime;
-        private CheckBox masterMarkSw;
         private TextView gpsPosition;
         private Timer ServerTimer;
         private TextView CurrentNFC_Label;
@@ -330,11 +329,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         public TextView NFC_ConfigurationLog;
         private TextView NfS_Mark_Editor;
         private boolean isStarted = false;
-        private RadioButton RadioButton1;
-        private RadioButton RadioButton2;
-        private RadioButton RadioButton3;
-        private EditText Longtitude;
-        private EditText Latitude;
 
 
         @Override
@@ -347,7 +341,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             NFC_ConfigurationLog = findViewById(R.id.NFC_ConfigurationLog);
             gpsPosition =                       findViewById(R.id.gpsPosition);
             loginInfo =             findViewById(R.id.loginInfo);
-            //masterMarkSw =          findViewById(R.id.masterMarkSw);
 
         }
 

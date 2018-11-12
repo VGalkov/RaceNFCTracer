@@ -15,13 +15,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
@@ -138,7 +135,6 @@ public class ActivityResultsTable  extends AppCompatActivity {
         public TextView ServerTime;
         private TextView loginInfo;
         private Timer ServerTimer;
-  //      private Timer MainLogAskTimer;
         private boolean isStarted = false;
 
         ActivityResultsTableController() {
@@ -160,7 +156,6 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
         public void stop() {
             ServerTimer.cancel();
-//            MainLogAskTimer.cancel();
             isStarted = false;
         }
         @Override
@@ -170,7 +165,6 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
         public void start() {
             startTimeSync();
-//            startMainLogSync();
             isStarted = true;
         }
 
@@ -184,19 +178,6 @@ public class ActivityResultsTable  extends AppCompatActivity {
             }, TimerDelay, MainActivity.getTimerTimeout());
 
         }
-
-
-     /*   private void startMainLogSync() {
-            MainLogAskTimer = new Timer(); // Создаем таймер
-            MainLogAskTimer.schedule(new TimerTask() { // Определяем задачу
-                @Override
-                public void run() {
-                    new AskForMainLog(userLogger, this.toString()).execute();
-                }
-            }, TimerDelay, MainActivity.getMainLogTimeout());
-
-        }*/
-
 
 
         @Override

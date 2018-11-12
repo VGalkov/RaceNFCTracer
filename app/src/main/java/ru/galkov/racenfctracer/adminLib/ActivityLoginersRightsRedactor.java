@@ -50,7 +50,6 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private Tag myTag;
     private String masterMark = "";
-//    private boolean writeMode;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
 

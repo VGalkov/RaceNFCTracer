@@ -20,10 +20,6 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     private TextView showStop;
     private TextView showStart;
 
-
-
-    // fields
-
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
     public AskCurrentRaceStart(TextView ekran1, TextView showStop2, TextView showStart3) {
@@ -31,7 +27,6 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
         this.showStart = showStart3;
         this.showStop = showStop2;
     }
-
 
     public void setMethod(MainActivity.writeMethod method) {
         this.method = method;

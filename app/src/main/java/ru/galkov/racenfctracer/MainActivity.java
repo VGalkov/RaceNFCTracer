@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     // Client settings =================================================================
     //
-    //public static int SERVER_PORT = 8080;
-        public static int SERVER_PORT = 8095;
-    //public static String server =  "192.168.1.5"; // "127.0.0.1";
-    public static String server =  "185.251.240.3";
+    public static int SERVER_PORT = 8080;
+    //    public static int SERVER_PORT = 8095;
+    public static String server =  "192.168.1.5"; // "127.0.0.1";
+    //public static String server =  "185.251.240.3";
     //  192.168.1.5:8080
     // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента
     // клиент не работает.

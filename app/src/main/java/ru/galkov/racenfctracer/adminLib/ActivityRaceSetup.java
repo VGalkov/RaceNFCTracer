@@ -163,8 +163,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         private Button setRaceConfig_button;
         public Spinner spinnerRace;
         public Spinner spinnerStart;
-        private long race_id = 0L;
-        private long start_id = 0L;
         private TextView loginInfo;
         private TextView gpsPosition;
         private boolean isStarted = false;

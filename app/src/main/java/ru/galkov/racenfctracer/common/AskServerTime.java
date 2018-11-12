@@ -13,11 +13,10 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskServerTime extends AsyncTask<String, Void, String> {
 
-    private ActivityResultsTable.ActivityResultsTableController ARTC;
+//    private ActivityResultsTable.ActivityResultsTableController ARTC;
     private TextView TimeLabel;
     private final String ASKER = "AskServerTime";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
 
@@ -43,8 +42,8 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            if (Utilites.chkKey((String) JOAnswer.get(f.key.toString()))) {
-                   String regRecord = JOAnswer.get(f.date.toString()).toString();
+            if (Utilites.chkKey((String) JOAnswer.get(MainActivity.fieldsJSON.key.toString()))) {
+                   String regRecord = JOAnswer.get(MainActivity.fieldsJSON.date.toString()).toString();
                    TimeLabel.setText(regRecord);
             }
         }
@@ -57,14 +56,13 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
 //        {"asker":"AskServerTime", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
-            outBoundJSON.put(f.latitude.toString(),MainActivity.getLatitude());
-            outBoundJSON.put(f.altitude.toString(),MainActivity.getAltitude());
-            outBoundJSON.put(f.longitude.toString(),MainActivity.getLongitude());
-
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.latitude.toString(),MainActivity.getLatitude());
+            outBoundJSON.put(MainActivity.fieldsJSON.altitude.toString(),MainActivity.getAltitude());
+            outBoundJSON.put(MainActivity.fieldsJSON.longitude.toString(),MainActivity.getLongitude());
         } catch (JSONException e) {
             e.printStackTrace();
         }

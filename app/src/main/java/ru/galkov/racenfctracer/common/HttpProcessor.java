@@ -15,15 +15,10 @@ import ru.galkov.racenfctracer.MainActivity;
 public class HttpProcessor {
 
     public final String SERVER_URL = MainActivity.SERVER_URL;
-
     private String json;
-    private String url;
     private String ASKER;
 
-    HttpProcessor() {
-
-    }
-
+    HttpProcessor() {    }
 
     public String execute() {
         StringBuffer response = new StringBuffer();
@@ -52,8 +47,6 @@ public class HttpProcessor {
         return response.toString();
     }
 
-
-
     public void setASKER(String ASKER) {
         this.ASKER = ASKER;
     }
@@ -61,6 +54,4 @@ public class HttpProcessor {
     public void setJson(JSONObject json) {
         this.json = json.toString();
     }
-
-
 }

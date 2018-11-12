@@ -4,14 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
-
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskRaceStructure extends AsyncTask<String, Void, String> {
@@ -19,9 +16,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "AskRaceStructure";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
-    private MainActivity.trigger trigger;
-    private MainActivity.writeMethod method;
     private ActivityRaceSetup.ActivityRaceSetupController ARSController;
     private Context activityContext;
     public Spinner raceSpiner;
@@ -40,9 +34,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
         this.raceSpiner =raceSpiner1;
     }
 
-    public void setMethod(MainActivity.writeMethod method) {
-        this.method = method;
-    }
 
     @Override
     protected void onPreExecute(){
@@ -99,14 +90,13 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
     try {
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(f.key.toString());
-            JSONArray races = JOAnswer.getJSONArray(f.racesConfig.toString());
+//            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
+            JSONArray races = JOAnswer.getJSONArray(MainActivity.fieldsJSON.racesConfig.toString());
             String[] racesList = new String[races.length()];
 
             for (int i = 0; i<races.length(); i++) {
                 JSONObject r = races.getJSONObject(i);
-                racesList[i] = r.getString(f.race_id.toString());
-//                raceStarts[i] = r.getJSONArray(f.startsConfig.toString());
+                racesList[i] = r.getString(MainActivity.fieldsJSON.race_id.toString());
             }
 
             ArrayAdapter adapterStarts = new ArrayAdapter(activityContext,  android.R.layout.simple_spinner_item, racesList);
@@ -121,10 +111,10 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
             outBoundJSON = Utilites.ErrorJSON();

@@ -14,8 +14,6 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "SendNewNFCMark";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
-    private MainActivity.trigger t;
     private String mark;
     private String type;
     private long race = 0;
@@ -58,7 +56,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             this.latitude = MainActivity.getLatitude();
             this.longitude = MainActivity.getLongitude();
             this.altitude = MainActivity.getAltitude();
-        } // MainActivity.setGPSMonitor(gpsPosition);
+        }
         else if (PositionMethod== 3) {
             // нет координат.
             this.latitude = 0.0;
@@ -101,11 +99,11 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         try {
                 JSONObject JOAnswer = new JSONObject(result);
                 if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                    if(JOAnswer.get(f.status.toString()).equals(t.TRUE.toString())) {  // TRUE|FALSE
+                    if(JOAnswer.get(MainActivity.fieldsJSON.status.toString()).equals(MainActivity.trigger.TRUE.toString())) {  // TRUE|FALSE
                         wrire("Зарегистрирована метка: " + JOAnswer.get("mark") +"\n");
                     }
                     else
-                        wrire(JOAnswer.get(f.error.toString()).toString());
+                        wrire(JOAnswer.get(MainActivity.fieldsJSON.error.toString()).toString());
                 }
 
             }
@@ -131,15 +129,14 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.mark.toString(),this.mark);
-            outBoundJSON.put(f.key.toString(),KEY);
-//            outBoundJSON.put(f.mark_type.toString(),type);
-            outBoundJSON.put(f.longitude.toString(), this.longitude);
-            outBoundJSON.put(f.altitude.toString(), this.altitude);
-            outBoundJSON.put(f.latitude.toString(), this.latitude);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.mark.toString(),this.mark);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.longitude.toString(), this.longitude);
+            outBoundJSON.put(MainActivity.fieldsJSON.altitude.toString(), this.altitude);
+            outBoundJSON.put(MainActivity.fieldsJSON.latitude.toString(), this.latitude);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
             outBoundJSON.put("race", race);
 
         } catch (JSONException e) {

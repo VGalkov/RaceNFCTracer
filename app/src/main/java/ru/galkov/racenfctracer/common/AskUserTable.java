@@ -19,7 +19,6 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
     public Spinner spinnerUsers;
     private final String ASKER = "AskUserTable";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
     public void setActivityContext(Context activityContext1){
@@ -51,14 +50,14 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                String serverKEY = JOAnswer.getString(f.key.toString());
-                JSONArray arr = JOAnswer.getJSONArray(f.usersArr.toString());
+                String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
+                JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.usersArr.toString());
                 String[] userList = new String[arr.length()];
 
                 for(int i = 0 ; i< arr.length() ; i++) {
                     JSONObject obj1 = arr.getJSONObject(i);
 //                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString() +")");
-                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString()) +")";
+                    userList[i] = obj1.get(MainActivity.fieldsJSON.login.toString()) + "("+ obj1.get(MainActivity.fieldsJSON.level.toString()) +")";
                 }
 
 
@@ -76,10 +75,10 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
 //         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

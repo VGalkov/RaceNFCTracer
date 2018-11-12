@@ -19,14 +19,10 @@ public class AskStartSructure extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "AskStartSructure";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
-    private MainActivity.trigger trigger;
-    private MainActivity.writeMethod method;
     private ActivityRaceSetup.ActivityRaceSetupController ARSController;
     private Context activityContext;
     private long race_id;
     public Spinner startSpiner;
-
 
 
     public AskStartSructure(ActivityRaceSetup.ActivityRaceSetupController ARSController1) {
@@ -64,14 +60,14 @@ public class AskStartSructure extends AsyncTask<String, Void, String> {
 
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                String serverKEY = JOAnswer.getString(f.key.toString());
-                String raceIdJSON = JOAnswer.getString(f.race_id.toString());
-                JSONArray starts = JOAnswer.getJSONArray(f.startsConfig.toString());
+//                String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
+//                String raceIdJSON = JOAnswer.getString(MainActivity.fieldsJSON.race_id.toString());
+                JSONArray starts = JOAnswer.getJSONArray(MainActivity.fieldsJSON.startsConfig.toString());
                 String[] startsList = new String[starts.length()];
 
             for (int i = 0; i<starts.length(); i++) {
                 JSONObject s = starts.getJSONObject(i);
-                startsList[i] = s.getString(f.start_id.toString());
+                startsList[i] = s.getString(MainActivity.fieldsJSON.start_id.toString());
             }
 
             ArrayAdapter adapterStarts = new ArrayAdapter(activityContext,  android.R.layout.simple_spinner_item, startsList);
@@ -99,11 +95,11 @@ public class AskStartSructure extends AsyncTask<String, Void, String> {
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.race_id.toString(),race_id);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.race_id.toString(),race_id);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
             outBoundJSON = Utilites.ErrorJSON();

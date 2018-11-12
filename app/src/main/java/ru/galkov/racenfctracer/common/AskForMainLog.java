@@ -17,7 +17,7 @@ import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskForMainLog extends AsyncTask<String, Void, String> {
 
-    private String URL_Extention;
+//    private String URL_Extention;
     private TextView ResultEkran;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     // private SimpleDateFormat formatForDate = MainActivity.formatForDate;
@@ -26,7 +26,6 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskForMainLog";
     private String caller = "Unknown";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
     public DecimalFormat df = DECIMAL_FORMAT;
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
@@ -34,7 +33,6 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
 
     public AskForMainLog(TextView ResultEkran1) {
         this.ResultEkran = ResultEkran1;
-
     }
 
     public AskForMainLog(TextView ResultEkran1, String caller1) {
@@ -55,11 +53,11 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         // {"asker":"AskForMainLog","key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.caller.toString(),caller);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.caller.toString(),caller);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();

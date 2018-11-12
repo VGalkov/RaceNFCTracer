@@ -15,7 +15,6 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "SendUserLevel";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
     private String level;
     private String login;
     private TextView userLogger;
@@ -74,16 +73,16 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
 
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.level.toString(),level);
-            outBoundJSON.put(f.login.toString(),login);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.master_mark_label.toString(),masterMark);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
-            outBoundJSON.put(f.longitude.toString(), MainActivity.getLongitude());
-            outBoundJSON.put(f.altitude.toString(), MainActivity.getAltitude());
-            outBoundJSON.put(f.latitude.toString(), MainActivity.getLatitude());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.level.toString(),level);
+            outBoundJSON.put(MainActivity.fieldsJSON.login.toString(),login);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.master_mark_label.toString(),masterMark);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.longitude.toString(), MainActivity.getLongitude());
+            outBoundJSON.put(MainActivity.fieldsJSON.altitude.toString(), MainActivity.getAltitude());
+            outBoundJSON.put(MainActivity.fieldsJSON.latitude.toString(), MainActivity.getLatitude());
 
         } catch (JSONException e) {
             e.printStackTrace();

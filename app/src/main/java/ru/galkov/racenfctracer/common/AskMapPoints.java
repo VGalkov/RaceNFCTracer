@@ -2,24 +2,19 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
-import com.yandex.runtime.image.ImageProvider;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import ru.galkov.racenfctracer.MainActivity;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskMapPoints extends AsyncTask<String, Void, String> {
-// https://tech.yandex.ru/maps/?lang=ru-RU
+
     private Context activityContext;
     private final String ASKER = "AskMapPoints";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private MapView mapView;
 
@@ -65,13 +60,13 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(f.key.toString());
-            JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
+//            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
+            JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.rows.toString());
 
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                Double latitude = obj.getDouble(f.latitude.toString());
-                Double longitude = obj.getDouble(f.longitude.toString());
+                Double latitude = obj.getDouble(MainActivity.fieldsJSON.latitude.toString());
+                Double longitude = obj.getDouble(MainActivity.fieldsJSON.longitude.toString());
                 Point point = new Point(latitude,longitude);
                 mapView.getMap().getMapObjects().addPlacemark(point);
             }
@@ -86,10 +81,10 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
 //         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

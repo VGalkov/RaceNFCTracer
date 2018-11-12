@@ -16,8 +16,6 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "AskCurrentRaceStart";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
-    private MainActivity.trigger trigger;
     private TextView ekran;
     private TextView showStop;
     private TextView showStart;
@@ -61,27 +59,27 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(f.key.toString());
+            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
             // true, если определён админом.
-            String status = JOAnswer.getString(f.status.toString());
+            String status = JOAnswer.getString(MainActivity.fieldsJSON.status.toString());
 
             if (serverKEY.equals(KEY)) {
-                if (status.equals(trigger.TRUE.toString())) {
-                    MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
-                    MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
+                if (status.equals(MainActivity.trigger.TRUE.toString())) {
+                    MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
+                    MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
 // TODO !!
-                    MainActivity.setStartDate(MainActivity.formatForDate.parse(JOAnswer.getString(f.start_time.toString())));
-                    MainActivity.setStopDate(MainActivity.formatForDate.parse(JOAnswer.getString(f.stop_time.toString())));
+                    MainActivity.setStartDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString())));
+                    MainActivity.setStopDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString())));
                     str = "Соревнование: " + MainActivity.getRace_id() +
                             "\n Заезд: " + MainActivity.getStart_id();
-                    showStop.setText(JOAnswer.getString(f.start_time.toString()));
-                    showStart.setText(JOAnswer.getString(f.stop_time.toString()));
+                    showStop.setText(JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString()));
+                    showStart.setText(JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString()));
                 }
                 else {
                     str = "заезд не создан админом!";
                     // сброс соревнования!!!
-                    MainActivity.setRace_id(JOAnswer.getLong(f.race_id.toString()));
-                    MainActivity.setStart_id(JOAnswer.getLong(f.start_id.toString()));
+                    MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
+                    MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
                 }
 
                 if (method == MainActivity.writeMethod.Append)     ekran.append(str);
@@ -89,17 +87,16 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
             }
 
         } catch (JSONException | ParseException e) {	e.printStackTrace();}
-        // } catch (JSONException  e) {	e.printStackTrace();}
     }
 
 
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

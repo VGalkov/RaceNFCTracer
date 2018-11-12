@@ -21,7 +21,6 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private TextView userLogger;
     private final String ASKER = "AskResultsTable";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private MainActivity.fileType fileType;
     private Context context;
@@ -47,26 +46,9 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-/*
-        // если в JSON преобразуется - в ответе не файл :)
-        try {
-                JSONObject JOAnswer = new JSONObject(result);
-                String res;
-                String serverKEY = JOAnswer.getString(f.key.toString());
-                if (Utilites.chkKey(serverKEY)) {
-                    res = "Файл не выслан!" + JOAnswer.getString(f.resultsFileLink.toString()) + "/" + JOAnswer.getString(f.resultsFileDir.toString());
-                }
-                else        { res = "Ошибка ключа или версии клиента!"; }
 
-                if (method == MainActivity.writeMethod.Append) userLogger.append(res);
-                else userLogger.setText(res);
-
-            } catch (JSONException e) {*/
             try {
                     String filePath = context.getExternalCacheDir().toString() + "/"+fileType+".csv"; // папка приложения на SD
-                    // String filePath =  Environment.getExternalStorageDirectory().toString() + "/"+fileType+".csv"; //корень SD
-                    //String filePath = context.getCacheDir().toString() + "/"+fileType+".csv";
-                    //String filePath = context.getFilesDir().getPath().toString() + "/"+fileType+".csv"; // туда не попасть
                     File file = new File(filePath);
                     if(file.exists()) file.delete();
                     file.createNewFile();
@@ -75,7 +57,10 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
                     out.println(result);
                     out.close();
                     if (method == MainActivity.writeMethod.Append)    userLogger.append("Файл  сохранён в:" + filePath);
-                    else        userLogger.setText("Файл  сохранён в:" + filePath);
+                    else        {
+                        String str = "Файл  сохранён в:" + filePath;
+                        userLogger.setText(str);
+                    }
 
             }catch (IOException ee) {
                 ee.printStackTrace();
@@ -98,11 +83,11 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private  void makeOutBoundJSON(){
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.fileType.toString(),fileType);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.fileType.toString(),fileType);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,13 +2,9 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import ru.galkov.racenfctracer.MainActivity;
-
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskForLogin extends AsyncTask<String, Void, String> {
@@ -17,20 +13,15 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskForLogin";
     private String login;
     private String password;
-    private Context context;
-    private TextView RegAsLabel;
+    Context context;
     private MainActivity.registrationLevel level;
     private MainActivity.registrationLevel REGLEVEL;
     private MainActivity.MainActivityFaceController MAFC;
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
 
-//    https://ru.stackoverflow.com/questions/552262/android-%D0%BA%D0%B0%D0%BA-%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C-get-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81
     public AskForLogin(MainActivity.MainActivityFaceController MAFC1) {
         MAFC = MAFC1;
     }
-
-
 
     @Override
     protected void onPreExecute(){
@@ -46,11 +37,11 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private  void makeOutBoundJSON(){
         try {
                 outBoundJSON = new JSONObject();
-                outBoundJSON.put(f.asker.toString(),ASKER);
-                outBoundJSON.put(f.login.toString(),login);
-                outBoundJSON.put(f.password.toString(),password);
-                outBoundJSON.put(f.level.toString(),level);
-                outBoundJSON.put(f.key.toString(),KEY);
+                outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+                outBoundJSON.put(MainActivity.fieldsJSON.login.toString(),login);
+                outBoundJSON.put(MainActivity.fieldsJSON.password.toString(),password);
+                outBoundJSON.put(MainActivity.fieldsJSON.level.toString(),level);
+                outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,17 +1,12 @@
 package ru.galkov.racenfctracer.common;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.DecimalFormat;
-
 import ru.galkov.racenfctracer.MainActivity;
-
 import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
@@ -20,26 +15,18 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
     private TextView Ekran;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
-    private Context activity;
-
     private final String ASKER = "AskMarksList";
     private JSONObject outBoundJSON;
-    private MainActivity.fieldsJSON f;
-    public DecimalFormat df = DECIMAL_FORMAT;
-
-
+    private DecimalFormat df = DECIMAL_FORMAT;
 
     public AskMarksList(TextView Ekran1) {
         this.Ekran = Ekran1;
     }
 
-
     @Override
     protected void onPreExecute(){
         makeOutBoundJSON();
     }
-
-
 
     @Override
     protected String doInBackground(String... strings) {
@@ -55,16 +42,16 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(f.key.toString());
+            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
             if (Utilites.chkKey(serverKEY)) {
-                JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
+                JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.rows.toString());
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    response.append("Метка(сервер):" + obj.getString(f.label.toString())
-                            + "(" + df.format(obj.getDouble(f.altitude.toString()))
-                            + ";" + df.format(obj.getDouble(f.latitude.toString()))
-                            + ";" + df.format(obj.getDouble(f.longitude.toString())) + ")" + "\n");
+                    response.append("Метка(сервер):" + obj.getString(MainActivity.fieldsJSON.label.toString())
+                            + "(" + df.format(obj.getDouble(MainActivity.fieldsJSON.altitude.toString()))
+                            + ";" + df.format(obj.getDouble(MainActivity.fieldsJSON.latitude.toString()))
+                            + ";" + df.format(obj.getDouble(MainActivity.fieldsJSON.longitude.toString())) + ")" + "\n");
                 }
             } else {
                 response = new StringBuffer("Ошибка ключа или версии клиента!");
@@ -85,20 +72,15 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(f.asker.toString(),ASKER);
-            outBoundJSON.put(f.key.toString(),KEY);
-            outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         System.out.println(outBoundJSON);
-    }
-
-    public  void setContext(Context c1) {
-        activity = c1;
-
     }
 
     public void setMethod(MainActivity.writeMethod method1) {

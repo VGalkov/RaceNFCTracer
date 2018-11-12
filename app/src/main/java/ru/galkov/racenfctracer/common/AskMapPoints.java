@@ -15,7 +15,7 @@ import ru.galkov.racenfctracer.MainActivity;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskMapPoints extends AsyncTask<String, Void, String> {
-
+// https://tech.yandex.ru/maps/?lang=ru-RU
     private Context activityContext;
     private final String ASKER = "AskMapPoints";
     private JSONObject outBoundJSON;
@@ -50,7 +50,7 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
     /*
     type = mark,user,admin,guest
     {
-        "points":[
+        "rows":[
         {"longitude":0.0,"altitude":0.0,"latitude":0.0,"type":"","label":"1"},
         {"longitude":0.0,"altitude":0.0,"latitude":0.0,"type":"","label":"1"},
         "asker":"AskStartSructure",
@@ -66,7 +66,15 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
         try {
             JSONObject JOAnswer = new JSONObject(result);
             String serverKEY = JOAnswer.getString(f.key.toString());
+            JSONArray arr = JOAnswer.getJSONArray(f.rows.toString());
 
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                Double latitude = obj.getDouble(f.latitude.toString());
+                Double longitude = obj.getDouble(f.longitude.toString());
+                Point point = new Point(latitude,longitude);
+                mapView.getMap().getMapObjects().addPlacemark(point);
+            }
         } catch (JSONException e) {	e.printStackTrace();}
     }
 

@@ -10,29 +10,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.yandex.mapkit.MapKitFactory;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskForMainLog;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityResultsTable  extends AppCompatActivity {
     private ActivityResultsTableController ARTC;
-    private HelpFaceController HFC;
+    HelpFaceController HFC;
     private Context context;
 
     @Override
@@ -118,22 +113,9 @@ public class ActivityResultsTable  extends AppCompatActivity {
                 HFC.start();
                 return true;
 
-            case R.id.map:
-                setContentView(R.layout.activity_map);
-                mapview = findViewById(R.id.mapview);
-                mapview.onStart();
-                MapKitFactory.getInstance().onStart();
-                // активные элементы view надо ли?
-                MV = new MapViewController(mapview);
-                MV.start();
-                // управляет размещением объектов на карте
-                // асинхронно запросить все поинты и разместить их на карте.
-                AskMapPoints AMP = new AskMapPoints();
-                AMP.setMapView(mapview);
-                AMP.execute();
-                return true;
+
+
             case R.id.exit:
-                /// TODO переписать на выход в геста после переделки фейсконтроллера.
                 setResult(RESULT_OK, new Intent());
                 finish();
                 return true;
@@ -156,7 +138,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
         public TextView ServerTime;
         private TextView loginInfo;
         private Timer ServerTimer;
-        private Timer MainLogAskTimer;
+  //      private Timer MainLogAskTimer;
         private boolean isStarted = false;
 
         ActivityResultsTableController() {
@@ -178,7 +160,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
         public void stop() {
             ServerTimer.cancel();
-            MainLogAskTimer.cancel();
+//            MainLogAskTimer.cancel();
             isStarted = false;
         }
         @Override
@@ -188,7 +170,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
         public void start() {
             startTimeSync();
-            startMainLogSync();
+//            startMainLogSync();
             isStarted = true;
         }
 
@@ -204,7 +186,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
         }
 
 
-        private void startMainLogSync() {
+     /*   private void startMainLogSync() {
             MainLogAskTimer = new Timer(); // Создаем таймер
             MainLogAskTimer.schedule(new TimerTask() { // Определяем задачу
                 @Override
@@ -213,7 +195,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
                 }
             }, TimerDelay, MainActivity.getMainLogTimeout());
 
-        }
+        }*/
 
 
 

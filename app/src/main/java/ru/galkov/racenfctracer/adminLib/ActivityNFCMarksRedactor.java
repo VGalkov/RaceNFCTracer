@@ -262,7 +262,8 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             Utilites.messager(this,"UnsupportedEncoding " + e.toString());
         }
 
-        NFCRedactorController.setCurrentNFC_Label("NFC Content: " + markContent);
+        NFCRedactorController.setCurrentNFC_Label("Считана метка NFC : " + markContent);
+        NFCRedactorController.setNfS_Mark_Editor(markContent);
     }
 
 
@@ -358,6 +359,10 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
         public void setCurrentNFC_Label(String str) {
             CurrentNFC_Label.setText(str);
+        }
+
+        public void setNfS_Mark_Editor(String str1) {
+            NfS_Mark_Editor.setText(str1);
         }
 
         public String getNfS_Mark_Editor() {

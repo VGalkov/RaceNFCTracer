@@ -103,11 +103,13 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:scrollbarStyle="insideOverlay">
-        <TextView
-            android:id="@+id/userLogger"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TextView" />
+
+            <TextView
+                android:id="@+id/userLogger"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/resultsInfo"
+                android:textStyle="italic" />
         </ScrollView>
         </LinearLayout>
 

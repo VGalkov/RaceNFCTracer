@@ -43,6 +43,7 @@ import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityUserManager extends AppCompatActivity {
@@ -135,6 +136,7 @@ public class ActivityUserManager extends AppCompatActivity {
                 setActivity(this);
                 ImageView iV = findViewById(R.id.imageView);
                 AskResultsImgTable ARIT = new AskResultsImgTable();
+                ARIT.setIMGType(MainActivity.img_types.LOGIN.toString());
                 ARIT.setImage(iV);
                 ARIT.execute();
 

@@ -31,7 +31,16 @@ public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
     private MainActivity.fieldsJSON f;
     private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private ImageView image;
+    private String IMGType = MainActivity.img_types.ALL.toString();
 
+
+    public void setIMGType(String IMGType1) {
+        this.IMGType = IMGType1;
+    }
+
+    public String getIMGType() {
+        return IMGType;
+    }
 
     public void setImage(ImageView image1) {
         this.image = image1;
@@ -94,6 +103,8 @@ public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
             outBoundJSON.put(f.key.toString(),KEY);
             outBoundJSON.put(f.exec_login.toString(),MainActivity.getLogin());
             outBoundJSON.put(f.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(f.IMGType.toString(),getIMGType());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

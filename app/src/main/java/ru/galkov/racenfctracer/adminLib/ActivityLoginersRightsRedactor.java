@@ -19,16 +19,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.yandex.mapkit.MapKitFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
@@ -39,7 +37,6 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskUserTable;
 import ru.galkov.racenfctracer.common.SendUserLevel;
 import ru.galkov.racenfctracer.common.Utilites;
-
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
@@ -53,7 +50,7 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private Tag myTag;
     private String masterMark = "";
-    private boolean writeMode;
+//    private boolean writeMode;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
 
@@ -102,18 +99,6 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         ALRRC.stop();
         WriteModeOff();
     }
-/*
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }*/
 
 
     @Override
@@ -259,14 +244,14 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     //     **********************************Enable Write********************************
 
     private void WriteModeOn(){
-        writeMode = true;
+//        writeMode = true;
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
     }
 
     // **********************************Disable Write*******************************
 
     private void WriteModeOff(){
-        writeMode = false;
+//        writeMode = false;
         nfcAdapter.disableForegroundDispatch(this);
     }
 
@@ -276,7 +261,7 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
 // ==========================================================
 
     public class ActivityLoginersRightsRedactorController extends ActivityFaceController {
-        private Button back_button;
+        private ImageButton back_button;
         private Button setButton;
         private ArrayAdapter<String> adapterLevels;
         private TextView LoginLevel;

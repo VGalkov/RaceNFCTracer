@@ -171,6 +171,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         private TextView showStart;
         private TextView showStop;
         private Calendar dateAndTime=Calendar.getInstance();
+        String dt = "";
 
         ActivityRaceSetupController() {
             super();
@@ -208,9 +209,13 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
         private void setInitialDateTime(TextView ekran1) {
 
-            ekran1.setText(formatForDate.format(dateAndTime));
+//            ekran1.setText(formatForDate.format(dateAndTime));
+            ekran1.setText(dt);
             try {
-                MainActivity.setStartDate(formatForDate.parse(ekran1.getText().toString()));
+                    if (ekran1.equals(showStart)) {
+                        MainActivity.setStartDate(formatForDate.parse(ekran1.getText().toString())); }
+                    else {
+                        MainActivity.setStopDate(formatForDate.parse(ekran1.getText().toString())); }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -221,18 +226,14 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
             DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    dateAndTime.set(Calendar.YEAR, year);
-                    dateAndTime.set(Calendar.MONTH, monthOfYear);
-                    dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    setInitialDateTime(ekran1);
+                    dt = year + "-" + monthOfYear + "-" + dayOfMonth;
 
-                    TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                            dateAndTime.set(Calendar.MINUTE, minute);
+                            dt = dt + " " + hourOfDay + ":" + minute + ":00";
                             setInitialDateTime(ekran1);
-                        }
-                    };
+                    }
+            };
 
                     new TimePickerDialog(ActivityRaceSetup.this, t,
                             dateAndTime.get(Calendar.HOUR_OF_DAY),

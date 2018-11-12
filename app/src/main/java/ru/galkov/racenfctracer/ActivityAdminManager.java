@@ -317,15 +317,6 @@ public class ActivityAdminManagerController extends ActivityFaceController {
                 TimerDelay, MainActivity.getTimerTimeout());
     }
 
-   /* private void startMainLogTimeSync() {
-        MainLogTimer = new Timer(); // Создаем таймер
-        MainLogTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() { new AskForMainLog(AAMC.UserLogger, this.toString()).execute();}
-            },
-                TimerDelay, MainActivity.getMainLogTimeout());
-
-    }*/
 
 
     private void constructStatusString() {

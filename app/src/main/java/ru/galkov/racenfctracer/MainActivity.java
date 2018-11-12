@@ -67,20 +67,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // возможно нужно вынести это в отдельный класс.
     public static final SimpleDateFormat formatForDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
-    public enum fieldsJSON {start_time, stop_time,mark_master_latitude,mark_master_altitude,mark_master_longitude,master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
+    public enum fieldsJSON {point_type,IMGType, start_time, stop_time,mark_master_latitude,mark_master_altitude,mark_master_longitude,master_mark_delta, master_mark_label, mark_type, mark_label, resultsFileDir,caller,resultsFileLink,fileType,exec_login,exec_level,racesConfig, startsConfig,start_id,race_id,race_name,start_label,start,race,latitude, altitude,longitude, label, asker, password, rows, date, key, mark, marks, error, usersArr, login, level, status}
     public enum trigger {TRUE, FALSE}
     public enum registrationLevel {Guest,User,Admin, Error, Delete} // = access in server
     public enum writeMethod {Set, Append}
+    public enum img_types {ALL, LOGIN}
     public enum fileType {Results, Marcs, Log}
     public enum points_types {mark,master_mark,user,guest,admin,unknown}
 
 
     // Client settings =================================================================
     //
-    public static int SERVER_PORT = 8080;
-    //    public static int SERVER_PORT = 8095;
-    public static String server =  "192.168.1.5"; // "127.0.0.1";
-    //    public static String server =  "185.251.240.3";
+    //public static int SERVER_PORT = 8080;
+        public static int SERVER_PORT = 8095;
+    //public static String server =  "192.168.1.5"; // "127.0.0.1";
+    public static String server =  "185.251.240.3";
     //  192.168.1.5:8080
     // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента
     // клиент не работает.
@@ -271,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void setGPSString(String str1) {
-//        MAFC.gpsPosition.setText(str1);
         GPSMonitor.setText(str1);
     }
 
@@ -297,12 +297,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         switch(id) {
             case R.id.settings:
                 setContentView(R.layout.activity_settings);
-
                 new SettingsFaceController();
                 return true;
+
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.RegistratinHelp));
@@ -311,14 +310,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             case R.id.login:
                 setContentView(R.layout.activity_main);
-
                 MAFC = new MainActivityFaceController();
                 MAFC.start();
                 return true;
 
             case R.id.donate:
                 setContentView(R.layout.activity_help_system);
-
                 HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.donate));
@@ -342,7 +339,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             case R.id.graph:
                 setContentView(R.layout.activity_results_img);
-
                 ImageView iV = findViewById(R.id.imageView);
                 AskResultsImgTable ARIT = new AskResultsImgTable();
                 ARIT.setImage(iV);
@@ -360,10 +356,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 // активные элементы view надо ли?
                 MV = new MapViewController(mapview);
                 MV.start();
-
-                // управляет размещением объектов на карте
-                // асинхронно запросить все поинты и разместить их на карте.
-                // это какого-то хера не запрашивает вообще
                 AskMapPoints AMP = new AskMapPoints();
                 AMP.setMapView(mapview);
                 AMP.execute();

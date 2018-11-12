@@ -25,20 +25,16 @@ public class MapViewController extends ActivityFaceController {
                 new CameraPosition(MainActivity.TARGET_LOCATION, MainActivity.DEFAULT_ZOOM, 0.0f, 0.0f),
                 new Animation(Animation.Type.SMOOTH, 0),
                 null);
-
-    }
-
-
-    void placeMarks() {
+        initViewObjects();
 
     }
 
 
     @Override
     protected void initViewObjects() {
-        placeMarks();
-//        placeUsers();
-    }
+/*        AskMapPoints AMP = new AskMapPoints();
+        AMP.setMapView(mapview);
+        AMP.execute();    */}
 
     @Override
     protected void addListeners() {

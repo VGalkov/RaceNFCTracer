@@ -3,6 +3,10 @@
 
     <!-- Main Activity -->
     <string name="GPSnowhere">GPS координат нет!</string>
+    <string name="Port">Порт</string>
+    <string name="ServerPort">Порт сервера:</string>
+
+
     <string name="gps_label">GPS координаты: </string>
     <string name="Actions">События: </string>
     <string name="GPS_enabled">GPS активировано: </string>

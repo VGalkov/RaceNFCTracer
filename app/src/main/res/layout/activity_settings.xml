@@ -12,6 +12,35 @@
         android:id="@+id/l1"
         android:layout_width="0dp"
         android:layout_height="112dp"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="8dp">
+
+
+        <TextView
+            android:id="@+id/serverIP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ServerPort" />
+
+        <EditText
+            android:id="@+id/port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/Port" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/l1"
+        android:layout_width="0dp"
+        android:layout_height="112dp"
         android:orientation="vertical"
         app:layout_constraintDimensionRatio="w,1:1"
         tools:layout_editor_absoluteX="8dp"

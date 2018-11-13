@@ -81,12 +81,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static int SERVER_PORT = 8080;
     //    public static int SERVER_PORT = 8095;
     public static String server =  "192.168.1.5"; // "127.0.0.1";
+    public static String serverPort = Integer.toString(SERVER_PORT);
     //public static String server =  "185.251.240.3";
     //  192.168.1.5:8080
     // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента
     // клиент не работает.
     public static final String KEY = "galkovvladimirandreevich";
-    public static String SERVER_URL = "http://"+server+":"+SERVER_PORT;
+    public static String SERVER_URL = "http://"+server+":"+serverPort;
     public static final int MarkChekDelayTimerTimeout = 5000;
     public static final int MarkChekTimerDelay = 5000;
     public static final int TimerDelay = 1000;
@@ -424,9 +425,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return activity;
     }
 
-    public static void setServerUrl(String serverUrl) {
-        SERVER_URL = "http://" + serverUrl + ":"+SERVER_PORT;
-        server = serverUrl;
+    public static void setServerUrl(String serverUrl1,String serverPort2) {
+        SERVER_URL = "http://" + serverUrl1 + ":"+ serverPort2;
+        server = serverUrl1;
+        serverPort = serverPort2;
+    }
+
+    public  static String  getServerPort() {
+        return serverPort;
     }
 
     public static String getServerIP() {
@@ -484,6 +490,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         private Button saveServerIP;
         private Button saveTimers;
         private TextView TimeTimer;
+        private TextView port;
         private TextView MainLogTimer;
         private boolean isStarted = false;
 
@@ -498,6 +505,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             saveTimers =           findViewById(R.id.saveTimers);
             TimeTimer =           findViewById(R.id.TimeTimer);
             MainLogTimer =        findViewById(R.id.MainLogTimer);
+            port =         findViewById(R.id.port);
 
         }
 
@@ -511,7 +519,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         protected void addListeners() {
             saveServerIP.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    MainActivity.setServerUrl(ipaddress.getText().toString());
+                    MainActivity.setServerUrl(ipaddress.getText().toString(), port.getText().toString());
+
                 }
             });
 
@@ -531,6 +540,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         protected void setDefaultFace() {
             ipaddress.setText(getServerIP());
             String timer = Integer.toString(MainActivity.getMainLogTimeout()/1000);
+            port.setText(getServerPort());
             MainLogTimer.setText(timer);
             timer = Integer.toString(MainActivity.getTimerTimeout()/1000);
             TimeTimer.setText(timer);

@@ -23,11 +23,13 @@ import ru.galkov.racenfctracer.FaceControllers.MainLogController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
 import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
+import ru.galkov.racenfctracer.adminLib.ActivityRaceConfig;
 import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
 import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
@@ -223,12 +225,14 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         private Button register_editor_button;
         private Button nfc_marks_editor_button;
         private Button raceSetup_button;
+        private Button startConfiguration;
         public TextView UserLogger;
         public TextView ServerTime;
         private TextView loginInfo;
         private Timer ServerTimer;
         private TextView gpsPosition;
         private boolean isStarted = false;
+
 
         ActivityAdminManagerController() {
             super();
@@ -245,6 +249,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         ServerTime =                        findViewById(R.id.ServerTime);
         loginInfo =                         findViewById(R.id.loginInfo);
         gpsPosition =                       findViewById(R.id.gpsPosition);
+        startConfiguration =                findViewById(R.id.startConfiguration);
     }
     @Override
     public boolean isStarted() {
@@ -253,6 +258,13 @@ public class ActivityAdminManagerController extends ActivityFaceController {
 
     @Override
     protected void addListeners() {
+
+
+        startConfiguration.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                 startActivityForResult(new Intent(view.getContext(), ActivityRaceConfig.class), 0);
+            }
+        });
 
         back_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -264,7 +276,6 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         raceSetup_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivityForResult(new Intent(view.getContext(), ActivityRaceSetup.class), 0);
-//                setContentView(R.layout.ActivityRaceSetup);
             }
         });
 
@@ -316,7 +327,6 @@ public class ActivityAdminManagerController extends ActivityFaceController {
             },
                 TimerDelay, MainActivity.getTimerTimeout());
     }
-
 
 
     private void constructStatusString() {

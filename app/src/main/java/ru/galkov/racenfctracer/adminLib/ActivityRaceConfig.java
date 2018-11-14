@@ -7,16 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.yandex.mapkit.MapKitFactory;
 
-import ru.galkov.racenfctracer.ActivityAdminManager;
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskRaceConfig;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
@@ -27,6 +29,7 @@ public class ActivityRaceConfig extends AppCompatActivity {
     public Context activity;
     private HelpFaceController HFC;
     private MainLogController MLC;
+    private ShowRaceConfigFaceController showRaceConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class ActivityRaceConfig extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.race_config_activity);
         setActivity(this);
+
+        showRaceConfig = new ShowRaceConfigFaceController();
 
     }
 
@@ -110,6 +115,45 @@ public class ActivityRaceConfig extends AppCompatActivity {
 
     public Context  getActivity() {
         return activity;
+    }
+
+    public class ShowRaceConfigFaceController extends ActivityFaceController {
+
+        private TableLayout tableLayout;
+//  не падайте в обморок часть методов вызывает конструктор родительсткого класса.
+
+
+        @Override
+        protected void initViewObjects() {
+            tableLayout = (TableLayout) findViewById(R.id.configTable);
+            AskRaceConfig ARC  = new AskRaceConfig(tableLayout, getActivity());
+            ARC.execute();
+        }
+
+        @Override
+        protected void addListeners() {
+
+        }
+
+        @Override
+        protected void setDefaultFace() {
+
+        }
+
+        @Override
+        public void start() {
+
+        }
+
+        @Override
+        public void stop() {
+
+        }
+
+        @Override
+        public boolean isStarted() {
+            return false;
+        }
     }
 
 }

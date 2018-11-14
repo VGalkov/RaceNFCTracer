@@ -7,6 +7,16 @@
     tools:context=".ActivityAdminManager">
 
 
+    <TableLayout
+        android:id="@+id/configTable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout_editor_absoluteX="194dp"
+        tools:layout_editor_absoluteY="4dp">
+
+    </TableLayout>
+
     <LinearLayout
         android:id="@+id/l1"
         android:layout_width="match_parent"

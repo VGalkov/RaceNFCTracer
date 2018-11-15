@@ -120,13 +120,15 @@ public class ActivityRaceConfig extends AppCompatActivity {
     public class ShowRaceConfigFaceController extends ActivityFaceController {
 
         private TableLayout tableLayout;
+        private TextView start_config;
 //  не падайте в обморок часть методов вызывает конструктор родительсткого класса.
 
 
         @Override
         protected void initViewObjects() {
-            tableLayout = (TableLayout) findViewById(R.id.configTable);
-            AskRaceConfig ARC  = new AskRaceConfig(tableLayout, getActivity());
+            tableLayout = findViewById(R.id.configTable);
+            start_config = findViewById(R.id.start_config);
+            AskRaceConfig ARC  = new AskRaceConfig(tableLayout, getActivity(), start_config);
             ARC.execute();
         }
 

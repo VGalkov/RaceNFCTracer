@@ -6,34 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ActivityAdminManager">
 
-
-    <TableLayout
-        android:id="@+id/configTable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:layout_editor_absoluteX="194dp"
-        tools:layout_editor_absoluteY="4dp">
-
-    </TableLayout>
-
     <LinearLayout
-        android:id="@+id/l1"
+        android:id="@+id/l3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ScrollView
-            android:id="@+id/myview"
+        <LinearLayout
+            android:id="@+id/l1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:orientation="vertical"
-            android:scrollbarStyle="insideOverlay">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/ekran"
@@ -44,8 +35,35 @@
                 android:textAlignment="viewStart"
                 android:textSize="14sp" />
 
-        </ScrollView>
+            <TextView
+                android:id="@+id/start_config"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/viewStartTxt"
+                android:textSize="14sp" />
 
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableLayout
+                android:id="@+id/configTable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            </TableLayout>
+        </LinearLayout>
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

@@ -10,7 +10,10 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity;
+
+import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 
 public class AskRaceConfig  extends AsyncTask<String, Void, String> {
@@ -41,6 +44,33 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
         return HP.execute();
     }
 
+    /*
+     {
+"start_time":"2018-10-14 03:00:00.0",
+"usersArr":
+		[
+	{	"altitude":84,
+		"registred_race_id":0,
+		"level":"User",
+		"latitude":53.20004181470722,
+		"Id":97,
+		"master_mark_label":"8487",
+		"login":"+22222222222",
+		"registred_start_id":0,
+		"longitude":50.144251165911555
+	}
+		],
+"stop_time":"2018-10-14 11:00:00.0",
+"start_id":36,
+"race_id":2,
+"asker":"AskRaceConfig",
+"counter":3,
+"key":"galkovvladimirandreevich"
+}
+
+     */
+
+
     @Override
     protected void onPostExecute(String result) {
         try {
@@ -54,63 +84,35 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
                                 "; \n Диапазон времени старта(начало/конец) -  \n"+
                                 JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString()) + " - " +
                                 JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString())  +
-                                "\n \nНа старт зарегистрировалось " +
+                                "\n \n На старт зарегистрировалось " +
                                 JOAnswer.getString(MainActivity.fieldsJSON.counter.toString()) +
                                 "участников. Ниже следует их полный список и состояние их регистрации.\n\n";
 
                 ekran.setText(str);
 
                 TableRow tableRow = new TableRow(context);
-
-                TextView cell0 = new TextView(context);
-                cell0.setText("Логин");
-                tableRow.setBackgroundColor(Color.GRAY);
-                tableRow.addView(cell0,0);
-
-
-                TextView cell1 = new TextView(context);
-                cell1.setText("Координаты");
-                tableRow.setBackgroundColor(Color.GRAY);
-                tableRow.addView(cell1,1);
-
-                TextView cell2 = new TextView(context);
-                cell2.setText("Мастерметка");
-                tableRow.setBackgroundColor(Color.GRAY);
-                tableRow.addView(cell2,2);
-
-                TextView cell3 = new TextView(context);
-                cell3.setText("Заезд");
-                tableRow.setBackgroundColor(Color.GRAY);
-                tableRow.addView(cell3,3);
+                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                drawSell(tableRow, "Логин", 0, Color.GRAY);
+                drawSell(tableRow, "Координаты", 1, Color.GRAY);
+                drawSell(tableRow, "Мастерметка", 2, Color.GRAY);
+                drawSell(tableRow, "Заезд", 3, Color.GRAY);
 
                 tableLayout.addView(tableRow, 0);
 
                 JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.usersArr.toString());
-                for(int i = 1 ; i< arr.length()-1 ; i++) {
+                for(int i = 0 ; i< arr.length() ; i++) {
                     JSONObject obj1 = arr.getJSONObject(i);
                     TempUser usr = new TempUser(obj1);  // может и не надо это, а просто из jsonа сразу фигарить.
+
                     tableRow = new TableRow(context);
                     tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-                    cell0 = new TextView(context);
-                    cell0.setText(usr.getLogin());
-                    tableRow.addView(cell0,0);
+                    drawSell(tableRow, usr.getLogin(), 0,Color.WHITE);
+                    drawSell(tableRow, "(" + DECIMAL_FORMAT.format(usr.getLatitude()) + ", " + DECIMAL_FORMAT.format(usr.getLongitude())+", " + DECIMAL_FORMAT.format(usr.getAltitude()) + "); ", 1,Color.WHITE);
+                    drawSell(tableRow, usr.getMaster_mark_label(), 2,Color.WHITE);
+                    drawSell(tableRow, usr.getRegistred_race_id()+" / "+usr.getRegistred_start_id(), 3,Color.WHITE);
 
-                    cell1 = new TextView(context);
-                    str = "(" + usr.getLatitude()+", "+usr.getLongitude()+", "+usr.getAltitude() + "); ";
-                    cell1.setText(str);
-                    tableRow.addView(cell1,1);
-
-                    cell2 = new TextView(context);
-                    cell2.setText(usr.getMaster_mark_label());
-                    tableRow.addView(cell2,2);
-
-                    cell3 = new TextView(context);
-                    str = usr.getRegistred_race_id()+" / "+usr.getRegistred_start_id();
-                    cell3.setText(str);
-                    tableRow.addView(cell3,3);
-
-                    tableLayout.addView(tableRow, i);
+                    tableLayout.addView(tableRow, i+1);
                 }
 
 
@@ -120,6 +122,15 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
             // http://developer.alexanderklimov.ru/android/layout/tablelayout.php
 
         } catch (JSONException e) {	e.printStackTrace();}
+    }
+
+
+    void drawSell(TableRow tableRow1, String str2, int id3, int color4) {
+
+        TextView cell0 = new TextView(context);
+        cell0.setText(str2);
+        tableRow1.setBackgroundColor(color4);
+        tableRow1.addView(cell0,id3);
     }
 
 class TempUser {

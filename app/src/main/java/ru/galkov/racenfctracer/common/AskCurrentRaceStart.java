@@ -62,7 +62,7 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
                 if (status.equals(MainActivity.trigger.TRUE.toString())) {
                     MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
-// TODO !!
+// TODO прописать registred_start_id  registred_race_id в users
                     MainActivity.setStartDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString())));
                     MainActivity.setStopDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString())));
                     str = "Соревнование: " + MainActivity.getRace_id() +

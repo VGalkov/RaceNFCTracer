@@ -68,7 +68,7 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
 
                 MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
                 MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
-
+                //TODO прописать тут registred_race_id registred_start_id для пользователя.
                 String str = "Соревнование: " + JOAnswer.getString(MainActivity.fieldsJSON.race_id.toString()) +
                     "\n Заезд: " + JOAnswer.getString(MainActivity.fieldsJSON.start_id.toString());
                 ekran.setText(str);

@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,22 +22,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
-import com.yandex.mapkit.map.CameraPosition;
 import com.yandex.mapkit.mapview.MapView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // Client settings =================================================================
     //
 
-    //public static int SERVER_PORT = 8080;
-        public static int SERVER_PORT = 8095;
-//    public static String server =  "192.168.1.5"; // "127.0.0.1";
+    public static int SERVER_PORT = 8080;
+        //public static int SERVER_PORT = 8095;
+    public static String server =  "192.168.1.5"; // "127.0.0.1";
     public static String serverPort = Integer.toString(SERVER_PORT);
-    public static String server =  "185.251.240.3";
+    //public static String server =  "185.251.240.3";
 
     //  192.168.1.5:8080
     // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента

@@ -5,6 +5,7 @@
     <string name="GPSnowhere">GPS координат нет!</string>
     <string name="Port">Порт</string>
     <string name="ServerPort">Порт сервера:</string>
+    <string name="viewStartTxt">Этот текст должен быть заменён конфигурацией текущего старта.</string>
 
 
     <string name="gps_label">GPS координаты: </string>

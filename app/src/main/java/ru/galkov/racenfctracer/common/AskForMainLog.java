@@ -26,15 +26,16 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskForMainLog";
     private String caller = "Unknown";
     private JSONObject outBoundJSON;
-    public DecimalFormat df = DECIMAL_FORMAT;
+    private DecimalFormat df = DECIMAL_FORMAT;
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
     }
 
+    /*
     public AskForMainLog(TextView ResultEkran1) {
         this.ResultEkran = ResultEkran1;
     }
-
+*/
     public AskForMainLog(TextView ResultEkran1, String caller1) {
         this.ResultEkran = ResultEkran1;
         setCaller(caller1);
@@ -45,7 +46,7 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         activity = context1;
     }
 
-    public void setCaller(String caller) {
+    private void setCaller(String caller) {
         this.caller = caller;
     }
 
@@ -90,6 +91,7 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
                 String serverKEY = JOAnswer.getString("key");
                 if (Utilites.chkKey(serverKEY)) {
                     JSONArray arr = JOAnswer.getJSONArray("rows");
+                    //TODO переписать в StringBuffer
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject obj = arr.getJSONObject(i);
                         str = str + obj.getString("login") + " прошёл метку -> \n"

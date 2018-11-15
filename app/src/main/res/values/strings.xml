@@ -6,6 +6,8 @@
     <string name="Port">Порт</string>
     <string name="ServerPort">Порт сервера:</string>
     <string name="viewStartTxt">Этот текст должен быть заменён конфигурацией текущего старта.</string>
+    <string name="nullTime">0000-00-00 00:00:00</string>
+    <string name="currentRaceConfig">Текущее соревнование и заезд:</string>
 
 
     <string name="gps_label">GPS координаты: </string>

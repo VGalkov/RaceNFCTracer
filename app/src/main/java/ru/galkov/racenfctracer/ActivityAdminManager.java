@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import com.yandex.mapkit.MapKitFactory;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
@@ -29,7 +29,6 @@ import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
@@ -272,7 +271,6 @@ public class ActivityAdminManagerController extends ActivityFaceController {
                 finish();
             }
         });
-// TODO перепсать вызов в то же активити.
         raceSetup_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 startActivityForResult(new Intent(view.getContext(), ActivityRaceSetup.class), 0);

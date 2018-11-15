@@ -50,19 +50,19 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 // получаем номер заезда и должны его прописать в сеттеры майн активити и инфу в этот активти.
 // {race_id, race_label, start_id, start_label}
-        String str = "\n";
 
         try {
+
             JSONObject JOAnswer = new JSONObject(result);
             String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
             // true, если определён админом.
             String status = JOAnswer.getString(MainActivity.fieldsJSON.status.toString());
 
             if (serverKEY.equals(KEY)) {
+                String str;
                 if (status.equals(MainActivity.trigger.TRUE.toString())) {
                     MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
                     MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
-// TODO прописать registred_start_id  registred_race_id в users
                     MainActivity.setStartDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString())));
                     MainActivity.setStopDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString())));
                     str = "Соревнование: " + MainActivity.getRace_id() +

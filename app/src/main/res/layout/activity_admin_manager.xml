@@ -84,6 +84,7 @@
                 android:id="@+id/back_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/back"
                 app:srcCompat="@android:drawable/ic_delete" />
         </LinearLayout>
 
@@ -120,7 +121,7 @@
             <TextView
                 android:id="@+id/UserLogger"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/adminManagerTxt"
                 android:visibility="visible" />
         </ScrollView>
@@ -128,7 +129,7 @@
         <TextView
             android:id="@+id/ServerTimeLabel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/ServerTimeLabel" />
     </LinearLayout>

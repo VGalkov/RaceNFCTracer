@@ -43,7 +43,6 @@ import ru.galkov.racenfctracer.common.Utilites;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
-import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityUserManager extends AppCompatActivity {
@@ -305,7 +304,6 @@ public class ActivityUserManager extends AppCompatActivity {
 
                     SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC.getUser_Monitor());
                     NFC.setMasterMark(MainActivity.getmASTER_MARK());
-                    // TODO вытащить число милисекунд между метками.
                     NFC.setMarkDelta((dt2.getTime() - dt1.getTime())/1000);
                     NFC.setGPS_System();
                     NFC.setMark(text);
@@ -368,29 +366,6 @@ public class ActivityUserManager extends AppCompatActivity {
             writeMode = false;
             nfcAdapter.disableForegroundDispatch(this);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public class ActivityUserManagereController extends ActivityFaceController {
 

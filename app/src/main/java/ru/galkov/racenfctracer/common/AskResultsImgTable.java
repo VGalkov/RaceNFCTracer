@@ -1,22 +1,26 @@
 package ru.galkov.racenfctracer.common;
 
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.os.AsyncTask;
-        import android.util.Base64;
-        import android.widget.ImageView;
-        import android.widget.TextView;
-        import org.json.JSONException;
-        import org.json.JSONObject;
-        import java.io.ByteArrayOutputStream;
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.net.MalformedURLException;
-        import java.net.ProtocolException;
-        import java.net.URL;
-        import ru.galkov.racenfctracer.MainActivity;
-        import static ru.galkov.racenfctracer.MainActivity.KEY;
-        import static ru.galkov.racenfctracer.MainActivity.SERVER_URL;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Base64;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+
+import ru.galkov.racenfctracer.MainActivity;
+
+import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.SERVER_URL;
 
 public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
 
@@ -50,12 +54,12 @@ public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
     // сейчас для передачи Bitmap делаем конверт в String
     @Override
     protected String doInBackground(String... strings) {
-        Bitmap bM;
+
         String temp ="";
         try {
             URL link = new URL(SERVER_URL + "/"+ ASKER + "/" + outBoundJSON);
             InputStream st = link.openConnection().getInputStream();
-            bM = BitmapFactory.decodeStream(st);
+            Bitmap bM = BitmapFactory.decodeStream(st);
             ByteArrayOutputStream baos=new  ByteArrayOutputStream();
             bM.compress(Bitmap.CompressFormat.PNG,100, baos);
             byte [] b=baos.toByteArray();

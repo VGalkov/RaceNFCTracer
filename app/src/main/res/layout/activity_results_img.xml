@@ -13,18 +13,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/underConstruction"
-            tools:layout_editor_absoluteX="131dp"
-            tools:layout_editor_absoluteY="145dp" />
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/underConstruction"
             app:srcCompat="@android:color/background_light" />
 
     </LinearLayout>

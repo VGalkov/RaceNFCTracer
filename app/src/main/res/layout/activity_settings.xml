@@ -20,7 +20,7 @@
 
 
         <TextView
-            android:id="@+id/serverIP"
+            android:id="@+id/serverPort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/l1"
+        android:id="@+id/l2"
         android:layout_width="0dp"
         android:layout_height="112dp"
         android:orientation="vertical"
@@ -73,12 +73,12 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/l2"
+        android:id="@+id/l3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="148dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,8 +109,7 @@
             android:ems="10"
             android:hint="@string/secondsMainLog"
             android:inputType="number"
-            android:singleLine="true"
-            android:text="" />
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/saveTimers"
@@ -122,7 +121,7 @@
 
         <TextView
             android:id="@+id/serverTimersInfo"
-            android:layout_width="322dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/serverTimersInfo" />

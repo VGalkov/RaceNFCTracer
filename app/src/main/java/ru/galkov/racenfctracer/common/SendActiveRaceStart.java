@@ -2,20 +2,21 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
-
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.formatForDate;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getStartDate;
+import static ru.galkov.racenfctracer.MainActivity.getStopDate;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 
 public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
-    // прописывает активный рейс и старт.
 
     private final String ASKER = "SendActiveRaceStart";
     private JSONObject outBoundJSON;
-    private MainActivity.writeMethod method;
     private TextView ekran;
 
     // fields
@@ -35,10 +36,6 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
         this.ekran = ekran1;
     }
 
-
-    public void setMethod(MainActivity.writeMethod method) {
-        this.method = method;
-    }
 
     @Override
     protected void onPreExecute(){
@@ -64,14 +61,15 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-//                String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
+                if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
 
-                MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
-                MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
-                //TODO прописать тут registred_race_id registred_start_id для пользователя.
-                String str = "Соревнование: " + JOAnswer.getString(MainActivity.fieldsJSON.race_id.toString()) +
-                    "\n Заезд: " + JOAnswer.getString(MainActivity.fieldsJSON.start_id.toString());
-                ekran.setText(str);
+                   setRace_id(JOAnswer.getLong(fieldsJSON.race_id.toString()));
+                   setStart_id(JOAnswer.getLong(fieldsJSON.start_id.toString()));
+                   //TODO прописать тут registred_race_id registred_start_id для пользователя.
+                   String str = "Соревнование: " + JOAnswer.getString(fieldsJSON.race_id.toString()) +
+                        "\n Заезд: " + JOAnswer.getString(fieldsJSON.start_id.toString());
+                   ekran.setText(str);
+                }
         }
         catch (JSONException e) {	e.printStackTrace();}
     }
@@ -80,14 +78,14 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.race_id.toString(),race_id);
-            outBoundJSON.put(MainActivity.fieldsJSON.start_id.toString(),start_id);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
-            outBoundJSON.put(MainActivity.fieldsJSON.start_time.toString(),MainActivity.formatForDate.format(MainActivity.getStartDate()));
-            outBoundJSON.put(MainActivity.fieldsJSON.stop_time.toString(),MainActivity.formatForDate.format(MainActivity.getStopDate()));
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.race_id.toString(),race_id);
+            outBoundJSON.put(fieldsJSON.start_id.toString(),start_id);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
+            outBoundJSON.put(fieldsJSON.start_time.toString(),formatForDate.format(getStartDate()));
+            outBoundJSON.put(fieldsJSON.stop_time.toString(),formatForDate.format(getStopDate()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

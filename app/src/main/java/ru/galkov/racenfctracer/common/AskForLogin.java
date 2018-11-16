@@ -2,17 +2,20 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+import static ru.galkov.racenfctracer.common.Utilites.messager;
+
+import ru.galkov.racenfctracer.MainActivity.trigger;
+import ru.galkov.racenfctracer.MainActivity.registrationLevel;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskForLogin extends AsyncTask<String, Void, String> {
 
-
     private final String ASKER = "AskForLogin";
-    private String login;
-    private String password;
+    private String login, password;
     private Context context;
     private MainActivity.registrationLevel level;
     private MainActivity.registrationLevel REGLEVEL;
@@ -31,17 +34,17 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
 // BACKDORE без сервера.
             if (tr)       makeOutBoundJSON();
-            else Utilites.messager(context, "Не смог подготовить запрос на сервер");
+            else messager(context, "Не смог подготовить запрос на сервер");
         }
 
     private  void makeOutBoundJSON(){
         try {
                 outBoundJSON = new JSONObject();
-                outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-                outBoundJSON.put(MainActivity.fieldsJSON.login.toString(),login);
-                outBoundJSON.put(MainActivity.fieldsJSON.password.toString(),password);
-                outBoundJSON.put(MainActivity.fieldsJSON.level.toString(),level);
-                outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
+                outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+                outBoundJSON.put(fieldsJSON.login.toString(),login);
+                outBoundJSON.put(fieldsJSON.password.toString(),password);
+                outBoundJSON.put(fieldsJSON.level.toString(),level);
+                outBoundJSON.put(fieldsJSON.key.toString(),KEY);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,7 +63,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         this.password = password1;
     }
 
-    public void setLevel(MainActivity.registrationLevel level1) {
+    public void setLevel(registrationLevel level1) {
         this.level = level1;
     }
 
@@ -77,27 +80,25 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
 
 
-
-
     @Override
     protected void onPostExecute(String result) {
         // {"level":"Guest","asker":"AskForLogin","login":"TRUE|FALSE","key":"galkovvladimirandreevich"}
-        REGLEVEL = MainActivity.registrationLevel.Guest;
+        REGLEVEL = registrationLevel.Guest;
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                String LoginRes = (String) JOAnswer.get("login");
-                if (LoginRes.equals("TRUE")) { // состояние проверки логина-пароля
-                    if ((JOAnswer.get("level")).equals((MainActivity.registrationLevel.Admin).toString())) {
-                        REGLEVEL = MainActivity.registrationLevel.Admin;
+            if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
+                String LoginRes = JOAnswer.getString(fieldsJSON.login.toString());
+                if (LoginRes.equals(trigger.TRUE.toString())) {
+                    if ((JOAnswer.getString(fieldsJSON.level.toString())).equals((registrationLevel.Admin).toString())) {
+                        REGLEVEL = registrationLevel.Admin;
                     }
-                    else if ((JOAnswer.get("level")).equals((MainActivity.registrationLevel.User).toString())) {
-                        REGLEVEL = MainActivity.registrationLevel.User;
+                    else if ((JOAnswer.get(fieldsJSON.level.toString())).equals((registrationLevel.User).toString())) {
+                        REGLEVEL = registrationLevel.User;
                     }
                 }// сменить на Utility
-                else { Utilites.messager(context,"авторизация пройдена на уровне Guest"); }
+                else { messager(context,"авторизация пройдена на уровне Guest"); }
             }
-            else { Utilites.messager(context,"сбой протокола шифрования или всего запроса!"); }
+            else { messager(context,"сбой протокола шифрования или всего запроса!"); }
         }
         catch (JSONException e) {	e.printStackTrace();}
 
@@ -105,7 +106,4 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         MAFC.RegAsLabel.setText(REGLEVEL.toString());
         MAFC.setRegistredFace();
     }
-
-
-
 }

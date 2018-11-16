@@ -1,30 +1,22 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import com.yandex.mapkit.MapKitFactory;
-import java.util.Timer;
-import java.util.TimerTask;
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import java.util.*;
+import ru.galkov.racenfctracer.FaceControllers.*;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskResultsTable;
-import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.*;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityResultsTable  extends AppCompatActivity {
     private ActivityResultsTableController ARTC;
-    HelpFaceController HFC;
+    private HelpFaceController HFC;
     private Context context;
 
     @Override

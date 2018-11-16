@@ -4,25 +4,21 @@ import android.content.Context;
 import android.os.AsyncTask;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import ru.galkov.racenfctracer.MainActivity;
+import org.json.*;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskMapPoints extends AsyncTask<String, Void, String> {
 
     private Context activityContext;
+    private MapView mapView;
     private final String ASKER = "AskMapPoints";
     private JSONObject outBoundJSON;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
-    private MapView mapView;
 
-/*
-    public AskMapPoints() {
-
-    }
-*/
     public void setMapView(MapView mapview1) {
         mapView = mapview1;
     }
@@ -60,31 +56,27 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject JOAnswer = new JSONObject(result);
-//            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
-            JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.rows.toString());
 
+            JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.rows.toString());
+            if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                Double latitude = obj.getDouble(MainActivity.fieldsJSON.latitude.toString());
-                Double longitude = obj.getDouble(MainActivity.fieldsJSON.longitude.toString());
+                Double latitude = obj.getDouble(fieldsJSON.latitude.toString());
+                Double longitude = obj.getDouble(fieldsJSON.longitude.toString());
                 Point point = new Point(latitude,longitude);
                 mapView.getMap().getMapObjects().addPlacemark(point);
-            }
+            }}
         } catch (JSONException e) {	e.printStackTrace();}
-    }
-
-    public void setMethod(MainActivity.writeMethod method1) {
-        method = method1;
     }
 
     private  void makeOutBoundJSON(){
 //         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

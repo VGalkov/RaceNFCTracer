@@ -2,16 +2,13 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ru.galkov.racenfctracer.MainActivity;
-
+import android.widget.*;
+import org.json.*;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 
 public class AskUserTable extends AsyncTask<String, Void, String> {
 
@@ -19,7 +16,6 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
     public Spinner spinnerUsers;
     private final String ASKER = "AskUserTable";
     private JSONObject outBoundJSON;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
     public void setActivityContext(Context activityContext1){
         activityContext = activityContext1;
@@ -44,41 +40,35 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
     }
 
 
-
     @Override
     protected void onPostExecute(String result) {
 
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
-                JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.usersArr.toString());
-                String[] userList = new String[arr.length()];
+                if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
+                    JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.usersArr.toString());
+                    String[] userList = new String[arr.length()];
 
-                for(int i = 0 ; i< arr.length() ; i++) {
-                    JSONObject obj1 = arr.getJSONObject(i);
-//                    userList[i] = obj1.get(f.login.toString()) + "("+ obj1.get(f.level.toString() +")");
-                    userList[i] = obj1.get(MainActivity.fieldsJSON.login.toString()) + "("+ obj1.get(MainActivity.fieldsJSON.level.toString()) +")";
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj1 = arr.getJSONObject(i);
+                        userList[i] = obj1.get(fieldsJSON.login.toString()) + "(" + obj1.get(fieldsJSON.level.toString()) + ")";
+                    }
+
+
+                    ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext, android.R.layout.simple_spinner_item, userList);
+                    spinnerUsers.setAdapter(adapterUsers);
                 }
-
-
-                ArrayAdapter<String> adapterUsers = new ArrayAdapter<String>(activityContext,  android.R.layout.simple_spinner_item, userList);
-                spinnerUsers.setAdapter(adapterUsers);
-
         } catch (JSONException e) {	e.printStackTrace();}
-    }
-
-    public void setMethod(MainActivity.writeMethod method1) {
-        method = method1;
     }
 
     private  void makeOutBoundJSON(){
 //         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

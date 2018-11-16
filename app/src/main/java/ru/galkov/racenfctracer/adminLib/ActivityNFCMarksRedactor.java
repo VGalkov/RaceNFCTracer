@@ -1,45 +1,20 @@
 package ru.galkov.racenfctracer.adminLib;
 
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.nfc.FormatException;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
-import android.nfc.Tag;
+import android.content.*;
+import android.nfc.*;
 import android.nfc.tech.Ndef;
-import android.os.Bundle;
-import android.os.Parcelable;
+import android.os.*;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.yandex.mapkit.MapKitFactory;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Timer;
-import java.util.TimerTask;
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.FaceControllers.MapViewController;
+import java.io.*;
+import java.util.*;
+import ru.galkov.racenfctracer.FaceControllers.*;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskMapPoints;
-import ru.galkov.racenfctracer.common.AskMarksList;
-import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.SendNewNFCMark;
-import ru.galkov.racenfctracer.common.Utilites;
-
+import ru.galkov.racenfctracer.common.*;
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
@@ -48,18 +23,17 @@ import static ru.galkov.racenfctracer.MainActivity.mapview;
 public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
     private NfcAdapter nfcAdapter;
-
     private Tag myTag;
     private boolean writeMode;
-    PendingIntent pendingIntent;
-    IntentFilter writeTagFilters[];
+    private PendingIntent pendingIntent;
+    private IntentFilter writeTagFilters[];
     private Context activity;
     public String markContent;
     private ActivityNFCMarksRedactorFaceController NFCRedactorController;
     private HelpFaceController HFC;
     private final MainActivity.writeMethod METHOD = MainActivity.writeMethod.Append;
-    public static final String ERROR_DETECTED = "No NFC tag detected!";
-    public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
+//    public static final String ERROR_DETECTED = "No NFC tag detected!";
+//    public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
     public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
 
 

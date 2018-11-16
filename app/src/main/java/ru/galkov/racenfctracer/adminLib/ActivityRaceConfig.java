@@ -1,26 +1,14 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.yandex.mapkit.MapKitFactory;
-
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.FaceControllers.MainLogController;
-import ru.galkov.racenfctracer.FaceControllers.MapViewController;
+import ru.galkov.racenfctracer.FaceControllers.*;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskMapPoints;
-import ru.galkov.racenfctracer.common.AskRaceConfig;
-import ru.galkov.racenfctracer.common.AskResultsImgTable;
-
+import ru.galkov.racenfctracer.common.*;
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
@@ -37,7 +25,6 @@ public class ActivityRaceConfig extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.race_config_activity);
         setActivity(this);
-
         showRaceConfig = new ShowRaceConfigFaceController();
 
     }

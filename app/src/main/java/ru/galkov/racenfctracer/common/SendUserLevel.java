@@ -2,24 +2,23 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
-
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getAltitude;
+import static ru.galkov.racenfctracer.MainActivity.getLatitude;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getLongitude;
 
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class SendUserLevel extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "SendUserLevel";
     private JSONObject outBoundJSON;
-    private String level;
-    private String login;
+    private String level, login, masterMark;
     private TextView userLogger;
-    private String masterMark;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
 
     public SendUserLevel(TextView userLogger1) {
@@ -63,26 +62,22 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
         this.masterMark = masterMark1;
     }
 
-    public void setMethod(MainActivity.writeMethod method1) {
-        method = method1;
-
-    }
 
     private  void makeOutBoundJSON(){
         // {"asker":"SendNewLoginLevel","level" ="User","key":"galkovvladimirandreevich","login":"+79000000111"}
 
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.level.toString(),level);
-            outBoundJSON.put(MainActivity.fieldsJSON.login.toString(),login);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.master_mark_label.toString(),masterMark);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
-            outBoundJSON.put(MainActivity.fieldsJSON.longitude.toString(), MainActivity.getLongitude());
-            outBoundJSON.put(MainActivity.fieldsJSON.altitude.toString(), MainActivity.getAltitude());
-            outBoundJSON.put(MainActivity.fieldsJSON.latitude.toString(), MainActivity.getLatitude());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.level.toString(),level);
+            outBoundJSON.put(fieldsJSON.login.toString(),login);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.master_mark_label.toString(),masterMark);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
+            outBoundJSON.put(fieldsJSON.longitude.toString(), getLongitude());
+            outBoundJSON.put(fieldsJSON.altitude.toString(), getAltitude());
+            outBoundJSON.put(fieldsJSON.latitude.toString(), getLatitude());
 
         } catch (JSONException e) {
             e.printStackTrace();

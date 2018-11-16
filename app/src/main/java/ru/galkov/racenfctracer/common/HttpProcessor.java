@@ -2,21 +2,14 @@ package ru.galkov.racenfctracer.common;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-
+import java.io.*;
+import java.net.*;
 import ru.galkov.racenfctracer.MainActivity;
 
 public class HttpProcessor {
 
     public final String SERVER_URL = MainActivity.SERVER_URL;
-    private String json;
-    private String ASKER;
+    private String json, ASKER;
 
     HttpProcessor() {    }
 

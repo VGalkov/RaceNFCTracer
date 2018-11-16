@@ -2,23 +2,21 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ru.galkov.racenfctracer.MainActivity;
-import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
-
+import org.json.*;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getAltitude;
+import static ru.galkov.racenfctracer.MainActivity.getLatitude;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getLongitude;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 
 public class AskServerTime extends AsyncTask<String, Void, String> {
 
-//    private ActivityResultsTable.ActivityResultsTableController ARTC;
     private TextView TimeLabel;
     private final String ASKER = "AskServerTime";
     private JSONObject outBoundJSON;
-//    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
-
 
     public AskServerTime(TextView TimeLabel1) {
         TimeLabel = TimeLabel1;
@@ -42,9 +40,8 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            if (Utilites.chkKey((String) JOAnswer.get(MainActivity.fieldsJSON.key.toString()))) {
-                   String regRecord = JOAnswer.get(MainActivity.fieldsJSON.date.toString()).toString();
-                   TimeLabel.setText(regRecord);
+            if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
+                   TimeLabel.setText(JOAnswer.getString(fieldsJSON.date.toString()));
             }
         }
         catch (JSONException e) {	e.printStackTrace();}
@@ -56,21 +53,15 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
 //        {"asker":"AskServerTime", "key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
-            outBoundJSON.put(MainActivity.fieldsJSON.latitude.toString(),MainActivity.getLatitude());
-            outBoundJSON.put(MainActivity.fieldsJSON.altitude.toString(),MainActivity.getAltitude());
-            outBoundJSON.put(MainActivity.fieldsJSON.longitude.toString(),MainActivity.getLongitude());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
+            outBoundJSON.put(fieldsJSON.latitude.toString(), getLatitude());
+            outBoundJSON.put(fieldsJSON.altitude.toString(), getAltitude());
+            outBoundJSON.put(fieldsJSON.longitude.toString(), getLongitude());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-/*
-    public void setMethod(MainActivity.writeMethod method1) {
-        method = method1;
-
-    }*/
-
 }

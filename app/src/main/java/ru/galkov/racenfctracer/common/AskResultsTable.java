@@ -3,29 +3,28 @@ package ru.galkov.racenfctracer.common;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.json.*;
+import java.io.*;
 
 import ru.galkov.racenfctracer.MainActivity;
-
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import ru.galkov.racenfctracer.MainActivity.writeMethod;
+import ru.galkov.racenfctracer.MainActivity.fileType;
 
 public class AskResultsTable extends AsyncTask<String, Void, String> {
 
 
     private TextView userLogger;
+    private Context context;
     private final String ASKER = "AskResultsTable";
     private JSONObject outBoundJSON;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
-    private MainActivity.fileType fileType;
-    private Context context;
+    private writeMethod method = writeMethod.Set;
+    private fileType fileType;
 
-    public AskResultsTable(TextView userLogger1,MainActivity.fileType fileType2, Context context3) {
+    public AskResultsTable(TextView userLogger1, fileType fileType2, Context context3) {
         this.userLogger = userLogger1;
         this.fileType = fileType2;
         this.context = context3;
@@ -56,7 +55,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
                     result = result.replace("||", "\r\n");
                     out.println(result);
                     out.close();
-                    if (method == MainActivity.writeMethod.Append)    userLogger.append("Файл  сохранён в:" + filePath);
+                    if (method == writeMethod.Append)    userLogger.append("Файл  сохранён в:" + filePath);
                     else        {
                         String str = "Файл  сохранён в:" + filePath;
                         userLogger.setText(str);
@@ -73,9 +72,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
 
 
-
-
-    public void setMethod(MainActivity.writeMethod method1) {
+    public void setMethod(writeMethod method1) {
         method = method1;
 
     }
@@ -83,11 +80,11 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private  void makeOutBoundJSON(){
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.fileType.toString(),fileType);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.fileType.toString(),fileType);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

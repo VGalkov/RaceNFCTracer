@@ -1,45 +1,18 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
+import android.app.*;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
+import android.view.*;
+import android.widget.*;
 import com.yandex.mapkit.MapKitFactory;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.FaceControllers.MapViewController;
+import java.text.*;
+import java.util.*;
+import ru.galkov.racenfctracer.FaceControllers.*;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
-import ru.galkov.racenfctracer.common.AskMapPoints;
-import ru.galkov.racenfctracer.common.AskRaceStructure;
-import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.AskStartSructure;
-import ru.galkov.racenfctracer.common.SendActiveRaceStart;
-import ru.galkov.racenfctracer.common.Utilites;
-
+import ru.galkov.racenfctracer.common.*;
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
@@ -296,7 +269,8 @@ public class ActivityRaceSetup  extends AppCompatActivity {
           spinnerRace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
               @Override
               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                  AskStartSructure AStartStr = new AskStartSructure(ARSController);
+                  // AskStartSructure AStartStr = new AskStartSructure(ARSController);
+                  AskStartSructure AStartStr = new AskStartSructure();
                   AStartStr.setRaceID(Long.parseLong(spinnerRace.getSelectedItem().toString())); // значение из выбранного спинером.
                   AStartStr.setActivityContext(getActivity());
                   AStartStr.setStartSpiner(spinnerStart);
@@ -322,7 +296,8 @@ public class ActivityRaceSetup  extends AppCompatActivity {
             ACRS.execute();
 
             // спинеры собираются тут ...
-            AskRaceStructure ARaceS = new AskRaceStructure(ARSController);
+            //AskRaceStructure ARaceS = new AskRaceStructure(ARSController);
+            AskRaceStructure ARaceS = new AskRaceStructure();
             ARaceS.setActivityContext(getActivity());
             ARaceS.setRaceSpiner(spinnerRace);
             ARaceS.execute();

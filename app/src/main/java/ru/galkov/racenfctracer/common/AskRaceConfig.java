@@ -7,6 +7,12 @@ import android.widget.*;
 import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.common.Utilites.ErrorJSON;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskRaceConfig  extends AsyncTask<String, Void, String> {
 
@@ -67,24 +73,23 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
-            if (Utilites.chkKey(serverKEY)) {
+            if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
                 String str = " Суммарно, конфигурация соревнования: \n Номер соревнования: " +
-                        JOAnswer.getString(MainActivity.fieldsJSON.race_id.toString()) +
+                        JOAnswer.getString(fieldsJSON.race_id.toString()) +
                         "; номер старта в рамках соревнования " +
-                        JOAnswer.getString(MainActivity.fieldsJSON.start_id.toString()) +
+                        JOAnswer.getString(fieldsJSON.start_id.toString()) +
                         "; \n Диапазон времени старта(начало/конец) -  \n" +
-                        JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString()) + " - " +
-                        JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString()) +
+                        JOAnswer.getString(fieldsJSON.start_time.toString()) + " - " +
+                        JOAnswer.getString(fieldsJSON.stop_time.toString()) +
                         "\n \n На старт зарегистрировалось " +
-                        JOAnswer.getString(MainActivity.fieldsJSON.counter.toString()) +
+                        JOAnswer.getString(fieldsJSON.counter.toString()) +
                         " участников. Ниже следует их полный список и состояние их регистрации.\n\n";
 
                 ekran.setText(str);
 
                 tableLayout.addView(drawHeader(Color.GRAY), 0);
 
-                JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.usersArr.toString());
+                JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.usersArr.toString());
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj1 = arr.getJSONObject(i);
                     TempUser usr = new TempUser(obj1);
@@ -157,13 +162,13 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
     private void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
-            outBoundJSON = Utilites.ErrorJSON();
+            outBoundJSON = ErrorJSON();
         }
     }
 

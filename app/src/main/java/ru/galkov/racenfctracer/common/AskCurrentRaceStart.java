@@ -2,25 +2,30 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import org.json.*;
 import java.text.ParseException;
-
 import ru.galkov.racenfctracer.MainActivity;
-
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.formatForDate;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.writeMethod;
+import static ru.galkov.racenfctracer.MainActivity.setRace_id;
+import static ru.galkov.racenfctracer.MainActivity.setStartDate;
+import static ru.galkov.racenfctracer.MainActivity.setStart_id;
+import static ru.galkov.racenfctracer.MainActivity.setStopDate;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.trigger;
 
 public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "AskCurrentRaceStart";
     private JSONObject outBoundJSON;
-    private TextView ekran;
-    private TextView showStop;
-    private TextView showStart;
+    private TextView ekran, showStop, showStart;
 
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private writeMethod method = writeMethod.Set;
 
     public AskCurrentRaceStart(TextView ekran1, TextView showStop2, TextView showStart3) {
         this.ekran = ekran1;
@@ -28,7 +33,7 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
         this.showStop = showStop2;
     }
 
-    public void setMethod(MainActivity.writeMethod method) {
+    public void setMethod(writeMethod method) {
         this.method = method;
     }
 
@@ -49,35 +54,29 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 // получаем номер заезда и должны его прописать в сеттеры майн активити и инфу в этот активти.
-// {race_id, race_label, start_id, start_label}
-
         try {
 
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
-            // true, если определён админом.
-            String status = JOAnswer.getString(MainActivity.fieldsJSON.status.toString());
+            String status = JOAnswer.getString(fieldsJSON.status.toString());
 
-            if (serverKEY.equals(KEY)) {
+            if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
                 String str;
-                if (status.equals(MainActivity.trigger.TRUE.toString())) {
-                    MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
-                    MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
-                    MainActivity.setStartDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString())));
-                    MainActivity.setStopDate(MainActivity.formatForDate.parse(JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString())));
-                    str = "Соревнование: " + MainActivity.getRace_id() +
-                            "\n Заезд: " + MainActivity.getStart_id();
-                    showStop.setText(JOAnswer.getString(MainActivity.fieldsJSON.start_time.toString()));
-                    showStart.setText(JOAnswer.getString(MainActivity.fieldsJSON.stop_time.toString()));
+                if (status.equals(trigger.TRUE.toString())) {
+                    setRace_id(JOAnswer.getLong(fieldsJSON.race_id.toString()));
+                    setStart_id(JOAnswer.getLong(fieldsJSON.start_id.toString()));
+                    setStartDate(formatForDate.parse(JOAnswer.getString(fieldsJSON.start_time.toString())));
+                    setStopDate(formatForDate.parse(JOAnswer.getString(fieldsJSON.stop_time.toString())));
+                    str = "Соревнование: " + MainActivity.getRace_id() + "\n Заезд: " + MainActivity.getStart_id();
+                    showStop.setText(JOAnswer.getString(fieldsJSON.start_time.toString()));
+                    showStart.setText(JOAnswer.getString(fieldsJSON.stop_time.toString()));
                 }
                 else {
                     str = "заезд не создан админом!";
-                    // сброс соревнования!!!
-                    MainActivity.setRace_id(JOAnswer.getLong(MainActivity.fieldsJSON.race_id.toString()));
-                    MainActivity.setStart_id(JOAnswer.getLong(MainActivity.fieldsJSON.start_id.toString()));
+                    setRace_id(JOAnswer.getLong(fieldsJSON.race_id.toString()));
+                    setStart_id(JOAnswer.getLong(fieldsJSON.start_id.toString()));
                 }
 
-                if (method == MainActivity.writeMethod.Append)     ekran.append(str);
+                if (method == writeMethod.Append)     ekran.append(str);
                 else    ekran.setText(str);
             }
 
@@ -88,10 +87,10 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

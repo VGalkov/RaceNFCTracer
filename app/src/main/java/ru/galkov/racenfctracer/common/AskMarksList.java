@@ -2,22 +2,22 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.text.DecimalFormat;
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
+import ru.galkov.racenfctracer.MainActivity.writeMethod;
 import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskMarksList extends AsyncTask<String, Void, String> {
 
 
     private TextView Ekran;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private writeMethod method = writeMethod.Set;
     private final String ASKER = "AskMarksList";
     private JSONObject outBoundJSON;
-    private DecimalFormat df = DECIMAL_FORMAT;
 
     public AskMarksList(TextView Ekran1) {
         this.Ekran = Ekran1;
@@ -42,24 +42,23 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
-            if (Utilites.chkKey(serverKEY)) {
-                JSONArray arr = JOAnswer.getJSONArray(MainActivity.fieldsJSON.rows.toString());
+            String serverKEY = JOAnswer.getString(fieldsJSON.key.toString());
+            if (chkKey(serverKEY)) {
+                JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.rows.toString());
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    response.append("Метка(сервер):" + obj.getString(MainActivity.fieldsJSON.label.toString())
-                            + "(" + df.format(obj.getDouble(MainActivity.fieldsJSON.altitude.toString()))
-                            + ";" + df.format(obj.getDouble(MainActivity.fieldsJSON.latitude.toString()))
-                            + ";" + df.format(obj.getDouble(MainActivity.fieldsJSON.longitude.toString())) + ")" + "\n");
+                    response.append("Метка(сервер):" + obj.getString(fieldsJSON.label.toString())
+                            + "(" + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.altitude.toString()))
+                            + ";" + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.latitude.toString()))
+                            + ";" + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.longitude.toString())) + ")" + "\n");
                 }
             } else {
                 response = new StringBuffer("Ошибка ключа или версии клиента!");
-                // Utilites.messager(context,"сбой протокола шифрования или всего запроса!");
             }
             } catch(JSONException e){       e.printStackTrace();      }
 
-        if (method == MainActivity.writeMethod.Append) Ekran.append(response.toString());
+        if (method == writeMethod.Append) Ekran.append(response.toString());
            else Ekran.setText(response.toString());
 
     }
@@ -72,19 +71,16 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),MainActivity.getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        System.out.println(outBoundJSON);
     }
 
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
-
     }
 }

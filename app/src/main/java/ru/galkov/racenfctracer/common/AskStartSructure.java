@@ -2,33 +2,24 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ru.galkov.racenfctracer.MainActivity;
-import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
-
+import android.widget.*;
+import org.json.*;
+import static ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.common.Utilites.ErrorJSON;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 
 public class AskStartSructure extends AsyncTask<String, Void, String> {
-// запрос структуры рейсов и стартов.
 
+    public Spinner startSpiner;
+    private Context activityContext;
     private final String ASKER = "AskStartSructure";
     private JSONObject outBoundJSON;
-    private ActivityRaceSetup.ActivityRaceSetupController ARSController;
-    private Context activityContext;
     private long race_id;
-    public Spinner startSpiner;
 
 
-    public AskStartSructure(ActivityRaceSetup.ActivityRaceSetupController ARSController1) {
-        // вызывается ActivityRaceSetup
-        ARSController = ARSController1;
-    }
 
     public void setActivityContext(Context activityContext) {
         this.activityContext = activityContext;
@@ -60,18 +51,18 @@ public class AskStartSructure extends AsyncTask<String, Void, String> {
 
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-//                String serverKEY = JOAnswer.getString(MainActivity.fieldsJSON.key.toString());
-//                String raceIdJSON = JOAnswer.getString(MainActivity.fieldsJSON.race_id.toString());
-                JSONArray starts = JOAnswer.getJSONArray(MainActivity.fieldsJSON.startsConfig.toString());
-                String[] startsList = new String[starts.length()];
+                if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
+                    JSONArray starts = JOAnswer.getJSONArray(fieldsJSON.startsConfig.toString());
+                    String[] startsList = new String[starts.length()];
 
-            for (int i = 0; i<starts.length(); i++) {
-                JSONObject s = starts.getJSONObject(i);
-                startsList[i] = s.getString(MainActivity.fieldsJSON.start_id.toString());
+                    for (int i = 0; i<starts.length(); i++) {
+                        JSONObject s = starts.getJSONObject(i);
+                        startsList[i] = s.getString(fieldsJSON.start_id.toString());
+                    }
+
+                ArrayAdapter adapterStarts = new ArrayAdapter(activityContext,  android.R.layout.simple_spinner_item, startsList);
+                startSpiner.setAdapter(adapterStarts);
             }
-
-            ArrayAdapter adapterStarts = new ArrayAdapter(activityContext,  android.R.layout.simple_spinner_item, startsList);
-            startSpiner.setAdapter(adapterStarts);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -95,17 +86,15 @@ public class AskStartSructure extends AsyncTask<String, Void, String> {
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.race_id.toString(),race_id);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.race_id.toString(),race_id);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
-            outBoundJSON = Utilites.ErrorJSON();
+            outBoundJSON = ErrorJSON();
         }
     }
-
-
 
 }

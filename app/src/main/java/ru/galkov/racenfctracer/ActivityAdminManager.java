@@ -1,35 +1,15 @@
 package ru.galkov.racenfctracer;
 
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.yandex.mapkit.MapKitFactory;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.FaceControllers.MainLogController;
-import ru.galkov.racenfctracer.FaceControllers.MapViewController;
-import ru.galkov.racenfctracer.adminLib.ActivityLoginersRightsRedactor;
-import ru.galkov.racenfctracer.adminLib.ActivityNFCMarksRedactor;
-import ru.galkov.racenfctracer.adminLib.ActivityRaceConfig;
-import ru.galkov.racenfctracer.adminLib.ActivityRaceSetup;
-import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
-import ru.galkov.racenfctracer.common.AskMapPoints;
-import ru.galkov.racenfctracer.common.AskResultsImgTable;
-import ru.galkov.racenfctracer.common.AskServerTime;
-
+import java.util.*;
+import ru.galkov.racenfctracer.FaceControllers.*;
+import ru.galkov.racenfctracer.adminLib.*;
+import ru.galkov.racenfctracer.common.*;
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
@@ -175,7 +155,7 @@ public class ActivityAdminManager  extends AppCompatActivity {
     }
 
 // ==============================================================
-
+/*
     public class  WebBrowserController extends ActivityFaceController {
 // Вся система обмена метками для карты на основе javascript и yandex map
 
@@ -217,6 +197,7 @@ public class ActivityAdminManager  extends AppCompatActivity {
             return false;
         }
     }
+*/
 
 public class ActivityAdminManagerController extends ActivityFaceController {
         private ImageButton back_button;

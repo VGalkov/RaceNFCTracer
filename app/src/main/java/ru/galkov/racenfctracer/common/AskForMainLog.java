@@ -3,44 +3,33 @@ package ru.galkov.racenfctracer.common;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DecimalFormat;
-
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
-
+import ru.galkov.racenfctracer.MainActivity.writeMethod;
 import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskForMainLog extends AsyncTask<String, Void, String> {
 
-//    private String URL_Extention;
     private TextView ResultEkran;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
-    // private SimpleDateFormat formatForDate = MainActivity.formatForDate;
     private Context activity;
-
+    private writeMethod method = writeMethod.Set;
     private final String ASKER = "AskForMainLog";
     private String caller = "Unknown";
     private JSONObject outBoundJSON;
-    private DecimalFormat df = DECIMAL_FORMAT;
-    public void setMethod(MainActivity.writeMethod method1) {
+
+    public void setMethod(writeMethod method1) {
         method = method1;
     }
 
-    /*
-    public AskForMainLog(TextView ResultEkran1) {
-        this.ResultEkran = ResultEkran1;
-    }
-*/
     public AskForMainLog(TextView ResultEkran1, String caller1) {
         this.ResultEkran = ResultEkran1;
         setCaller(caller1);
     }
-
 
     public void setActivity(Context context1) {
         activity = context1;
@@ -54,11 +43,11 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         // {"asker":"AskForMainLog","key":"galkovvladimirandreevich"}
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.caller.toString(),caller);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.caller.toString(),caller);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -82,28 +71,25 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-// =====================================================================
 
-        String str = "\n";
-        System.out.print(result);
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                String serverKEY = JOAnswer.getString("key");
-                if (Utilites.chkKey(serverKEY)) {
-                    JSONArray arr = JOAnswer.getJSONArray("rows");
+                String str = "\n";
+                if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
+                    JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.rows.toString());
                     //TODO переписать в StringBuffer
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject obj = arr.getJSONObject(i);
-                        str = str + obj.getString("login") + " прошёл метку -> \n"
-                                + obj.getString("mark_label") + "\n"
-                                + "время: " + obj.getString("date") + "\n"
-                                + "на точке: " + df.format(obj.getDouble("latitude"))
-                                + ", " + df.format(obj.getDouble("longitude"))
-                                + ", " + df.format(obj.getDouble("altitude")) + " \n\n";
+                        str = str + obj.getString(fieldsJSON.login.toString()) + " прошёл метку -> \n"
+                                + obj.getString(fieldsJSON.mark_label.toString()) + "\n"
+                                + "время: " + obj.getString(fieldsJSON.date.toString()) + "\n"
+                                + "на точке: " + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.latitude.toString()))
+                                + ", " + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.longitude.toString()))
+                                + ", " + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.altitude.toString())) + " \n\n";
                     }
                 } else str = "Ошибка ключа или версии клиента!";
 
-            if (method == MainActivity.writeMethod.Append)  ResultEkran.append(str);
+            if (method == writeMethod.Append)  ResultEkran.append(str);
             else                                            ResultEkran.setText(str);
         } catch (JSONException e) {	e.printStackTrace();}
     }

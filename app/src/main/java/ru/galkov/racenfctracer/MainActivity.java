@@ -2,46 +2,24 @@
 package ru.galkov.racenfctracer;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.location.*;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import android.text.*;
+import android.view.*;
+import android.widget.*;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
-
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
-import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.FaceControllers.MapViewController;
-import ru.galkov.racenfctracer.common.AskForLogin;
-import ru.galkov.racenfctracer.common.AskMapPoints;
-import ru.galkov.racenfctracer.common.AskResultsImgTable;
-import ru.galkov.racenfctracer.common.AskServerTime;
-import ru.galkov.racenfctracer.common.Utilites;
+import java.text.*;
+import java.util.*;
+import ru.galkov.racenfctracer.FaceControllers.*;
+import ru.galkov.racenfctracer.common.*;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -61,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public enum writeMethod {Set, Append}
     public enum img_types {ALL, LOGIN}
     public enum fileType {Results, Marcs, Log}
-    public enum points_types {mark,master_mark,user,guest,admin,unknown}
+//    public enum points_types {mark,master_mark,user,guest,admin,unknown}
 
 
     // Client settings =================================================================

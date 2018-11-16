@@ -2,24 +2,26 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+import static ru.galkov.racenfctracer.MainActivity.writeMethod;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.trigger;
 
 public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "SendNewNFCMark";
     private JSONObject outBoundJSON;
-    private String mark;
-    private String type;
+    private String mark, type;
     private long race = 0;
     private Double longitude = 0.00, latitude =0.00, altitude =0.00;
     private TextView NFC_ConfigurationLog;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+    private writeMethod method = writeMethod.Set;
     private int PositionMethod = 1;
 
     public SendNewNFCMark(TextView NFC_ConfigurationLog1) {
@@ -98,12 +100,12 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 */
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                if (Utilites.chkKey((String) JOAnswer.get("key"))) {
-                    if(JOAnswer.get(MainActivity.fieldsJSON.status.toString()).equals(MainActivity.trigger.TRUE.toString())) {  // TRUE|FALSE
-                        wrire("Зарегистрирована метка: " + JOAnswer.get("mark") +"\n");
+                if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
+                    if(JOAnswer.getString(fieldsJSON.status.toString()).equals(trigger.TRUE.toString())) {
+                        write("Зарегистрирована метка: " + JOAnswer.get("mark") +"\n");
                     }
                     else
-                        wrire(JOAnswer.get(MainActivity.fieldsJSON.error.toString()).toString());
+                        write(JOAnswer.get(fieldsJSON.error.toString()).toString());
                 }
 
             }
@@ -111,12 +113,12 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     }
 
 
-    private void wrire(String str) {
+    private void write(String str) {
         if (method == method.Set)  NFC_ConfigurationLog.setText(str);
         else NFC_ConfigurationLog.append(str);
     }
 
-    public void setMethod(MainActivity.writeMethod method1) {
+    public void setMethod(writeMethod method1) {
         method = method1;
 
     }
@@ -129,14 +131,14 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(MainActivity.fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(MainActivity.fieldsJSON.mark.toString(),this.mark);
-            outBoundJSON.put(MainActivity.fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(MainActivity.fieldsJSON.longitude.toString(), this.longitude);
-            outBoundJSON.put(MainActivity.fieldsJSON.altitude.toString(), this.altitude);
-            outBoundJSON.put(MainActivity.fieldsJSON.latitude.toString(), this.latitude);
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(MainActivity.fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
+            outBoundJSON.put(fieldsJSON.mark.toString(),this.mark);
+            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+            outBoundJSON.put(fieldsJSON.longitude.toString(), this.longitude);
+            outBoundJSON.put(fieldsJSON.altitude.toString(), this.altitude);
+            outBoundJSON.put(fieldsJSON.latitude.toString(), this.latitude);
+            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
+            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
             outBoundJSON.put("race", race);
 
         } catch (JSONException e) {

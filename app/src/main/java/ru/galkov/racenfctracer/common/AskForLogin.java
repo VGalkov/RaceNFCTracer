@@ -13,7 +13,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskForLogin";
     private String login;
     private String password;
-    Context context;
+    private Context context;
     private MainActivity.registrationLevel level;
     private MainActivity.registrationLevel REGLEVEL;
     private MainActivity.MainActivityFaceController MAFC;

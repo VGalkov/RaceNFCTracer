@@ -10,122 +10,128 @@
 
     <LinearLayout
         android:id="@+id/l1"
-        android:layout_width="0dp"
-        android:layout_height="112dp"
-        android:layout_marginEnd="32dp"
-        android:orientation="vertical"
-        app:layout_constraintDimensionRatio="w,1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/serverPort"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/ServerPort" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/port"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/serverIP"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ServerIP" />
+
+                <EditText
+                    android:id="@+id/ipaddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="@string/ipaddress" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/serverPort"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ServerPort" />
+
+                <EditText
+                    android:id="@+id/port"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="@string/Port"
+                    android:autofillHints="" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/saveServerIP"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/save"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/Port" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/serverTimers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/serverTimers" />
+
+            <EditText
+                android:id="@+id/TimeTimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/secondsTimer"
+                android:inputType="number"
+                android:text=""
+                android:importantForAutofill="no" />
+
+            <EditText
+                android:id="@+id/MainLogTimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/secondsMainLog"
+                android:inputType="number"
+                android:singleLine="true"
+                android:importantForAutofill="no" />
+
+            <Button
+                android:id="@+id/saveTimers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/serverTimersInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/serverTimersInfo" />
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/l2"
-        android:layout_width="0dp"
-        android:layout_height="112dp"
-        android:orientation="vertical"
-        app:layout_constraintDimensionRatio="w,1:1"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
-
-
-        <TextView
-            android:id="@+id/serverIP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/ServerIP" />
-
-        <EditText
-            android:id="@+id/ipaddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/ipaddress" />
-
-        <Button
-            android:id="@+id/saveServerIP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/l3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/serverTimers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/serverTimers" />
-
-        <EditText
-            android:id="@+id/TimeTimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/secondsTimer"
-            android:inputType="number"
-            android:text="" />
-
-        <EditText
-            android:id="@+id/MainLogTimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/secondsMainLog"
-            android:inputType="number"
-            android:singleLine="true" />
-
-        <Button
-            android:id="@+id/saveTimers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/serverTimersInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/serverTimersInfo" />
-
-
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

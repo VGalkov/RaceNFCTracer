@@ -17,7 +17,7 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
     private TextView TimeLabel;
     private final String ASKER = "AskServerTime";
     private JSONObject outBoundJSON;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
+//    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
 
 
     public AskServerTime(TextView TimeLabel1) {
@@ -67,10 +67,10 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
     }
-
+/*
     public void setMethod(MainActivity.writeMethod method1) {
         method = method1;
 
-    }
+    }*/
 
 }

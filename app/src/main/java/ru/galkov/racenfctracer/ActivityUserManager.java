@@ -432,10 +432,11 @@ public class ActivityUserManager extends AppCompatActivity {
         }
 
 
-
         public  void setCurrentFace() {
-            raceStart.setText("Соревнование: " + MainActivity.getRace_id() + "\n Заезд: " + MainActivity.getStart_id());
-            master_mark.setText("Эталонная метка загружена: : " + MainActivity.getmASTER_MARK());
+            String str = "Соревнование: " + MainActivity.getRace_id() + "\n Заезд: " + MainActivity.getStart_id();
+            raceStart.setText(str);
+            str = "Эталонная метка загружена: : " + MainActivity.getmASTER_MARK();
+            master_mark.setText(str);
         }
 
 
@@ -470,8 +471,9 @@ public class ActivityUserManager extends AppCompatActivity {
         }
 
 
-        public void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+        private void constructStatusString() {
+            String str = MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/";
+            loginInfo.setText(str) ;
         }
 
     }

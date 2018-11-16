@@ -1,3 +1,4 @@
+
 package ru.galkov.racenfctracer;
 
 import android.Manifest;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
@@ -65,11 +67,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // Client settings =================================================================
     //
 
-    public static int SERVER_PORT = 8080;
-        //public static int SERVER_PORT = 8095;
-    public static String server =  "192.168.1.5"; // "127.0.0.1";
-    public static String serverPort = Integer.toString(SERVER_PORT);
-    //public static String server =  "185.251.240.3";
+
+    //public static String server =  "192.168.1.5";
+    public static String server =  "185.251.240.3";
+    //public static String serverPort = "8080";
+    public static String serverPort = "8095";
+
 
     //  192.168.1.5:8080
     // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента
@@ -180,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return MainLogTimeout;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MapKitFactory.setApiKey(MAPKIT_API_KEY);
@@ -217,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE};
             ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_CODE_READ_PHONE_NUMBERS);
         } else {    PermissionGranted = true;     }
-        if (PermissionGranted) { res = mTelephonyMgr.getLine1Number(); }
+        if (PermissionGranted) {   res = mTelephonyMgr.getLine1Number();  }
         else { Utilites.messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами."); }
         PermissionGranted = false;
         return res;
@@ -230,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         PermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_CODE_ACCESS_FINE_LOCATION:
-                    PermissionGranted = (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                PermissionGranted = (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 return;
             case PERMISSIONS_CODE_READ_PHONE_NUMBERS:
                 PermissionGranted = (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
@@ -332,8 +334,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 AskResultsImgTable ARIT = new AskResultsImgTable();
                 ARIT.setImage(iV);
                 ARIT.execute();
-
-//TODO создать контроллер активити
+                //TODO создать контроллер активити для управления выводом.
                 return true;
 
 
@@ -342,12 +343,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 mapview = findViewById(R.id.mapview);
                 mapview.onStart();
                 MapKitFactory.getInstance().onStart();
-// активные элементы view надо ли?
                 MV = new MapViewController(mapview);
                 MV.start();
                 AskMapPoints AMP = new AskMapPoints();
                 AMP.setMapView(mapview);
                 AMP.execute();
+                //TODO создать контроллер активити для управления выводом.
                 return true;
 
             case R.id.exit:
@@ -806,7 +807,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     Post.execute();
                     break;
             }
-       }
+        }
 
         // ==============================================================================
 

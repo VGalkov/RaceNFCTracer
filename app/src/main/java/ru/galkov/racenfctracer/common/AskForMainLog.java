@@ -1,22 +1,24 @@
 package ru.galkov.racenfctracer.common;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
-import ru.galkov.racenfctracer.MainActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import ru.galkov.racenfctracer.MainActivity.writeMethod;
+
 import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskForMainLog extends AsyncTask<String, Void, String> {
 
     private TextView ResultEkran;
-    private Context activity;
     private writeMethod method = writeMethod.Set;
     private final String ASKER = "AskForMainLog";
     private String caller = "Unknown";
@@ -31,9 +33,6 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         setCaller(caller1);
     }
 
-    public void setActivity(Context context1) {
-        activity = context1;
-    }
 
     private void setCaller(String caller) {
         this.caller = caller;
@@ -48,7 +47,6 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
             outBoundJSON.put(fieldsJSON.caller.toString(),caller);
             outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
             outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -71,26 +69,25 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-
         try {
                 JSONObject JOAnswer = new JSONObject(result);
-                String str = "\n";
+                StringBuffer sb = new StringBuffer("\n");
                 if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
                     JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.rows.toString());
-                    //TODO переписать в StringBuffer
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject obj = arr.getJSONObject(i);
-                        str = str + obj.getString(fieldsJSON.login.toString()) + " прошёл метку -> \n"
-                                + obj.getString(fieldsJSON.mark_label.toString()) + "\n"
-                                + "время: " + obj.getString(fieldsJSON.date.toString()) + "\n"
-                                + "на точке: " + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.latitude.toString()))
-                                + ", " + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.longitude.toString()))
-                                + ", " + DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.altitude.toString())) + " \n\n";
+                        sb.append(obj.getString(fieldsJSON.login.toString())).append(" прошёл метку -> \n").
+                                append(obj.getString(fieldsJSON.mark_label.toString())).
+                                append("\n время: ").append(obj.getString(fieldsJSON.date.toString())).
+                                append("\n на точке: ").append(DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.latitude.toString()))).
+                                append(", ").append(DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.longitude.toString()))).
+                                append(", ").append(DECIMAL_FORMAT.format(obj.getDouble(fieldsJSON.altitude.toString()))).
+                                append(" \n\n");
                     }
-                } else str = "Ошибка ключа или версии клиента!";
+                } else sb = new StringBuffer("Ошибка ключа или версии клиента!");
 
-            if (method == writeMethod.Append)  ResultEkran.append(str);
-            else                                            ResultEkran.setText(str);
+            if (method == writeMethod.Append)  ResultEkran.append(sb.toString());
+            else                               ResultEkran.setText(sb.toString());
         } catch (JSONException e) {	e.printStackTrace();}
     }
 }

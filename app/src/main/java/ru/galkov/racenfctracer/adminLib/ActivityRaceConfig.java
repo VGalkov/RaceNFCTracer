@@ -1,23 +1,32 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
-import ru.galkov.racenfctracer.FaceControllers.*;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MainLogController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.*;
+import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskRaceConfig;
+import ru.galkov.racenfctracer.common.AskResultsImgTable;
+
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityRaceConfig extends AppCompatActivity {
 
     public Context activity;
-    private HelpFaceController HFC;
-    private MainLogController MLC;
-    private ShowRaceConfigFaceController showRaceConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +34,7 @@ public class ActivityRaceConfig extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.race_config_activity);
         setActivity(this);
-        showRaceConfig = new ShowRaceConfigFaceController();
-
+        new ShowRaceConfigFaceController();
     }
 
     @Override
@@ -43,7 +51,7 @@ public class ActivityRaceConfig extends AppCompatActivity {
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
+                HelpFaceController HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.AdminAccessHelp));
                 HFC.start();
@@ -52,7 +60,7 @@ public class ActivityRaceConfig extends AppCompatActivity {
 
             case  R.id.EventLog:
                 setContentView(R.layout.activity_race_events);
-                MLC = new MainLogController();
+                MainLogController MLC = new MainLogController();
                 MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
                 MLC.setCaller(this.toString());
                 MLC.start();
@@ -63,10 +71,8 @@ public class ActivityRaceConfig extends AppCompatActivity {
                 mapview = findViewById(R.id.mapview);
                 mapview.onStart();
                 MapKitFactory.getInstance().onStart();
-
                 MV = new MapViewController(mapview);
                 MV.start();
-
                 // управляет размещением объектов на карте
                 // асинхронно запросить все поинты и разместить их на карте.
                 AskMapPoints AMP = new AskMapPoints();
@@ -90,7 +96,6 @@ public class ActivityRaceConfig extends AppCompatActivity {
                 setResult(RESULT_OK, new Intent());
                 finish();
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -108,8 +113,6 @@ public class ActivityRaceConfig extends AppCompatActivity {
 
         private TableLayout tableLayout;
         private TextView start_config;
-//  не падайте в обморок часть методов вызывает конструктор родительсткого класса.
-
 
         @Override
         protected void initViewObjects() {
@@ -144,5 +147,4 @@ public class ActivityRaceConfig extends AppCompatActivity {
             return false;
         }
     }
-
 }

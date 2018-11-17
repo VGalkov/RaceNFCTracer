@@ -2,15 +2,20 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.*;
-import org.json.*;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.common.Utilites.ErrorJSON;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
@@ -18,7 +23,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     private JSONObject outBoundJSON;
     private Context activityContext;
     public Spinner raceSpiner;
-
 
     public AskRaceStructure() {
         super();
@@ -32,7 +36,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
         this.raceSpiner =raceSpiner1;
     }
 
-
     @Override
     protected void onPreExecute(){
         makeOutBoundJSON();
@@ -45,7 +48,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
         HP.setJson(outBoundJSON);
         return HP.execute();
     }
-
 
     @Override
     protected void onPostExecute(String result) {
@@ -103,7 +105,6 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     } catch (JSONException e) {
         e.printStackTrace();
     }
-
     }
 
 

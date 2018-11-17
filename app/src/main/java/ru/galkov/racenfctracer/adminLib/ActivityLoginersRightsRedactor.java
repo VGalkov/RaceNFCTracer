@@ -1,30 +1,58 @@
 package ru.galkov.racenfctracer.adminLib;
 
 import android.app.PendingIntent;
-import android.content.*;
-import android.nfc.*;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.*;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
-import java.io.*;
-import java.util.*;
-import ru.galkov.racenfctracer.FaceControllers.*;
-import ru.galkov.racenfctracer.MainActivity;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.*;
+import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.AskUserTable;
+import ru.galkov.racenfctracer.common.SendUserLevel;
+
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
+import static ru.galkov.racenfctracer.MainActivity.registrationLevel;
+import static ru.galkov.racenfctracer.common.Utilites.messager;
 
 
 public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
 
     private ActivityLoginersRightsRedactorController ALRRC;
     private Context activity;
-    private HelpFaceController HFC;
     private NfcAdapter nfcAdapter;
     private Tag myTag;
     private String masterMark = "";
@@ -101,7 +129,7 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
+                HelpFaceController HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.loginSetupHelp));
                 HFC.start();
@@ -136,7 +164,7 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            Utilites.messager(this, "This device doesn't support NFC.");
+            messager(this, "This device doesn't support NFC.");
             finish();
         }
 
@@ -177,9 +205,9 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         try {
             text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
-            Utilites.messager( this, "UnsupportedEncoding "+ e.toString());
+            messager( this, "UnsupportedEncoding "+ e.toString());
         }
-            Utilites.messager(this, "О, эталонная метка! ("+text+") для абонента выбранного!");
+            messager(this, "О, эталонная метка! ("+text+") для абонента выбранного!");
             masterMark = text;
 
     }
@@ -200,7 +228,8 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
         String lang       = "en";
         byte[] textBytes  = text.getBytes();
-        byte[] langBytes  = lang.getBytes("US-ASCII");
+//        byte[] langBytes  = lang.getBytes("US-ASCII");
+        byte[] langBytes  = lang.getBytes("UTF-8");
         int    langLength = langBytes.length;
         int    textLength = textBytes.length;
         byte[] payload    = new byte[1 + langLength + textLength];
@@ -212,28 +241,19 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         System.arraycopy(langBytes, 0, payload, 1,              langLength);
         System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
 
-        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
-
-        return recordNFC;
+        return new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
     }
 
-
     //     **********************************Enable Write********************************
-
     private void WriteModeOn(){
-//        writeMode = true;
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
     }
 
     // **********************************Disable Write*******************************
 
     private void WriteModeOff(){
-//        writeMode = false;
         nfcAdapter.disableForegroundDispatch(this);
     }
-
-
-
 
 // ==========================================================
 
@@ -241,17 +261,10 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         private ImageButton back_button;
         private Button setButton;
         private ArrayAdapter<String> adapterLevels;
-        private TextView LoginLevel;
-        private TextView LoginToChng;
+        public TextView ServerTime, LoginLevelLabel, userLogger, loginInfo, LoginLevel, LoginToChng;
         private Timer ServerTimer;
-        public TextView ServerTime;
-        public TextView LoginLevelLabel;
-        public Spinner spinnerUsers;
-        public Spinner spinnerLevel;
-        public TextView userLogger;
-        private TextView loginInfo;
+        public Spinner spinnerUsers, spinnerLevel;
         private boolean isStarted = false;
-
 
         ActivityLoginersRightsRedactorController() {
             super();
@@ -264,14 +277,13 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ALRRC.ServerTime).execute();
                 }
-            }, TimerDelay, MainActivity.getTimerTimeout());
-
+            }, TimerDelay, getTimerTimeout());
         }
+
         @Override
         public boolean isStarted() {
             return isStarted;
         }
-
 
         @Override
         protected void initViewObjects() {
@@ -290,7 +302,8 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         }
 
         private void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+            String str = getLogin() + ":" + getLevel();
+            loginInfo.setText(str);
         }
 
         @Override
@@ -313,17 +326,17 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
                 }
             });
 
-// не работает
             spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     LoginLevel.setText(spinnerLevel.getSelectedItem().toString());
-                    userLogger.setText("Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText());
+                    String str = "Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText();
+                    userLogger.setText(str);
 
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
-                    MainActivity.registrationLevel regLevel =  MainActivity.registrationLevel.Guest;
+                    registrationLevel regLevel =  registrationLevel.Guest;
                     LoginToChng.setText(regLevel.toString());
                 }
             });
@@ -334,9 +347,9 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                     String login = spinnerUsers.getSelectedItem().toString();
-                    // отсекаем ненужное. но если в логине будет скобка реально - это косяк. но логин = номеру телефона.12  цифр и +
                     LoginToChng.setText(login.substring(0, login.indexOf('(')));
-                    userLogger.setText("Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText());
+                    String str = "Будет записано:" + LoginLevel.getText() + "для" + LoginToChng.getText();
+                    userLogger.setText(str);
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {

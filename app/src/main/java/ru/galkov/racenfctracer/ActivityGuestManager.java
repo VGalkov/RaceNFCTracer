@@ -1,25 +1,43 @@
 package ru.galkov.racenfctracer;
 
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
-import java.util.*;
-import ru.galkov.racenfctracer.FaceControllers.*;
-import ru.galkov.racenfctracer.common.*;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MainLogController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
+import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
+import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskResultsImgTable;
+import ru.galkov.racenfctracer.common.AskServerTime;
+
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
+import static ru.galkov.racenfctracer.MainActivity.setGPSMonitor;
 
 
 public class ActivityGuestManager  extends AppCompatActivity {
 
     private ActivityGuestManagereController AGMC;
-    private HelpFaceController HFC;
-    private MainLogController MLC;
-    private static Context activity;
+    private Context activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +56,12 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
+                HelpFaceController HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.GuestAccessHelp));
                 HFC.start();
@@ -52,7 +69,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
             case  R.id.EventLog:
                 setContentView(R.layout.activity_race_events);
-                MLC = new MainLogController();
+                MainLogController MLC = new MainLogController();
                 MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
                 MLC.setCaller(this.toString());
                 MLC.start();
@@ -73,8 +90,6 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 AMP.setMapView(mapview);
                 AMP.execute();
                 return true;
-
-
 
             case R.id.graph:
                 setContentView(R.layout.activity_results_img);
@@ -99,11 +114,11 @@ public class ActivityGuestManager  extends AppCompatActivity {
     }
 
 
-    public static void setActivity(Context activity1) {
+    public void setActivity(Context activity1) {
         activity = activity1;
     }
 
-    public static Context  getActivity() {
+    public Context  getActivity() {
         return activity;
     }
 
@@ -129,41 +144,13 @@ public class ActivityGuestManager  extends AppCompatActivity {
             catch (NullPointerException e) { e.printStackTrace();}
             AGMC.stop();
         }
-/*
-    @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            mapview.onStop();
-            MapKitFactory.getInstance().onStop();
-        }
-        catch (NullPointerException e) { e.printStackTrace();}
-        AGMC.start();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        try {
-            mapview.onStart();
-            MapKitFactory.getInstance().onStart();
-        }
-        catch (NullPointerException e) { e.printStackTrace();}
-        AGMC.stop();
-    }
-*/
         public class ActivityGuestManagereController extends ActivityFaceController {
-            //private ImageButton back_button;
+
             private ImageButton exitButton;
-            public TextView UserLogger;
-            public TextView ServerTime;
-            private TextView loginInfo;
-            private TextView gpsPosition;
-            private TextView showStart;
-            private TextView showStop;
-            private TextView raceStart;
+            public TextView UserLogger, ServerTime, loginInfo, gpsPosition, showStart, showStop, raceStart;
             private Timer ServerTimer;
             private boolean isStarted = false;
+
             ActivityGuestManagereController() {
                 super();
             }
@@ -202,9 +189,8 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
             @Override
             public void start() {
-  //              startMainLogSync();
                 startTimeSync();
-                MainActivity.setGPSMonitor(gpsPosition);
+                setGPSMonitor(gpsPosition);
                 isStarted = true;
             }
 
@@ -216,22 +202,19 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
 
             private void startTimeSync() {
-                ServerTimer = new Timer(); // Создаем таймер
+                ServerTimer = new Timer();
                 ServerTimer.schedule(new TimerTask() { // Определяем задачу
                     @Override
                     public void run() {new AskServerTime(ServerTime).execute();}
                 },
-                        TimerDelay, MainActivity.getTimerTimeout());
-
+                        TimerDelay, getTimerTimeout());
             }
 
             private void constructStatusString() {
-                loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+                String str = getLogin() + ":" + getLevel();
+                loginInfo.setText(str);
                 AskCurrentRaceStart ACRS = new AskCurrentRaceStart(raceStart, showStart, showStop);
                 ACRS.execute();
             }
-
         }
-
-
     }

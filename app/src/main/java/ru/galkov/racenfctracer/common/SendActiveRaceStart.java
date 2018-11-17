@@ -2,9 +2,12 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
-import ru.galkov.racenfctracer.MainActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.formatForDate;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
@@ -18,8 +21,6 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
     private final String ASKER = "SendActiveRaceStart";
     private JSONObject outBoundJSON;
     private TextView ekran;
-
-    // fields
     private long race_id =0L;
     private long start_id =0L;
 

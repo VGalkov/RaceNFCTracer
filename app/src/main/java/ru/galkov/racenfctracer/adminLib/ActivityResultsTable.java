@@ -1,22 +1,36 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
-import java.util.*;
-import ru.galkov.racenfctracer.FaceControllers.*;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.*;
+import ru.galkov.racenfctracer.common.AskResultsTable;
+import ru.galkov.racenfctracer.common.AskServerTime;
+
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.fileType;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityResultsTable  extends AppCompatActivity {
     private ActivityResultsTableController ARTC;
-    private HelpFaceController HFC;
     private Context context;
 
     @Override
@@ -90,26 +104,21 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
+                HelpFaceController HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.ResultsHelp));
                 HFC.start();
                 return true;
 
-
-
             case R.id.exit:
                 setResult(RESULT_OK, new Intent());
                 finish();
                 return true;
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -119,20 +128,16 @@ public class ActivityResultsTable  extends AppCompatActivity {
 // =======================================================
 
     public class ActivityResultsTableController extends ActivityFaceController {
+
         private ImageButton back_button;
-        private Button downLoadResultsCVS;
-        private Button downLoadLogCVS;
-        private Button downLoadMarksCVS;
-        public TextView userLogger;
-        public TextView ServerTime;
-        private TextView loginInfo;
+        private Button downLoadResultsCVS, downLoadLogCVS, downLoadMarksCVS;
+        public TextView userLogger, ServerTime, loginInfo;
         private Timer ServerTimer;
         private boolean isStarted = false;
 
         ActivityResultsTableController() {
             super();
         }
-
 
         @Override
         protected void initViewObjects() {
@@ -183,19 +188,19 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
             downLoadResultsCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    new AskResultsTable(userLogger, MainActivity.fileType.Results, getContextVar()).execute();
+                    new AskResultsTable(userLogger, fileType.Results, getContextVar()).execute();
                 }
             });
 
             downLoadLogCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    new AskResultsTable(userLogger, MainActivity.fileType.Log, getContextVar()).execute();
+                    new AskResultsTable(userLogger, fileType.Log, getContextVar()).execute();
                 }
             });
 
             downLoadMarksCVS.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    new AskResultsTable(userLogger, MainActivity.fileType.Marcs, getContextVar()).execute();
+                    new AskResultsTable(userLogger, fileType.Marcs, getContextVar()).execute();
                 }
             });
         }
@@ -206,7 +211,8 @@ public class ActivityResultsTable  extends AppCompatActivity {
         }
 
         private void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+            String str = getLogin() + ":" + getLevel();
+            loginInfo.setText(str);
         }
     }
 }

@@ -2,22 +2,25 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.trigger;
+import ru.galkov.racenfctracer.MainActivity.writeMethod;
 
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-import static ru.galkov.racenfctracer.MainActivity.writeMethod;
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
-import ru.galkov.racenfctracer.MainActivity.trigger;
 
 public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "SendNewNFCMark";
     private JSONObject outBoundJSON;
-    private String mark, type;
+    private String mark;
     private long race = 0;
     private Double longitude = 0.00, latitude =0.00, altitude =0.00;
     private TextView NFC_ConfigurationLog;
@@ -102,7 +105,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
                 JSONObject JOAnswer = new JSONObject(result);
                 if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
                     if(JOAnswer.getString(fieldsJSON.status.toString()).equals(trigger.TRUE.toString())) {
-                        write("Зарегистрирована метка: " + JOAnswer.get("mark") +"\n");
+                        write("Зарегистрирована метка: " + JOAnswer.getString(fieldsJSON.mark.toString()) +"\n");
                     }
                     else
                         write(JOAnswer.get(fieldsJSON.error.toString()).toString());
@@ -114,7 +117,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
 
     private void write(String str) {
-        if (method == method.Set)  NFC_ConfigurationLog.setText(str);
+        if (method == writeMethod.Set)  NFC_ConfigurationLog.setText(str);
         else NFC_ConfigurationLog.append(str);
     }
 
@@ -122,11 +125,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
         method = method1;
 
     }
-/*
-    public void setType(String type1) {
-        this.type = type1;
-    }
-*/
+
     private  void makeOutBoundJSON(){
 
         try {

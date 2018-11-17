@@ -2,16 +2,18 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
-import ru.galkov.racenfctracer.MainActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getAltitude;
 import static ru.galkov.racenfctracer.MainActivity.getLatitude;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.MainActivity.getLongitude;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class SendUserLevel extends AsyncTask<String, Void, String> {
 
@@ -38,7 +40,6 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
         makeOutBoundJSON();
     }
 
-
     protected String doInBackground(String... arg0) {
 
         HttpProcessor HP = new HttpProcessor();
@@ -61,7 +62,6 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     public  void setMasterMark(String masterMark1) {
         this.masterMark = masterMark1;
     }
-
 
     private  void makeOutBoundJSON(){
         // {"asker":"SendNewLoginLevel","level" ="User","key":"galkovvladimirandreevich","login":"+79000000111"}

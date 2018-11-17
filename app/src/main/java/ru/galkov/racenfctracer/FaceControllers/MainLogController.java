@@ -1,10 +1,14 @@
 package ru.galkov.racenfctracer.FaceControllers;
 
 import android.widget.TextView;
-import java.util.*;
-import ru.galkov.racenfctracer.MainActivity;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.common.AskForMainLog;
+
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getMainLogTimeout;
 
 public class MainLogController extends ActivityFaceController {
 
@@ -61,7 +65,7 @@ public class MainLogController extends ActivityFaceController {
             public void run() {
                 new AskForMainLog(User_Monitor, caller).execute();
             }
-        }, TimerDelay, MainActivity.getMainLogTimeout());
+        }, TimerDelay, getMainLogTimeout());
 
     }
 

@@ -1,23 +1,50 @@
 package ru.galkov.racenfctracer.adminLib;
 
 import android.app.PendingIntent;
-import android.content.*;
-import android.nfc.*;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.*;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
-import java.io.*;
-import java.util.*;
-import ru.galkov.racenfctracer.FaceControllers.*;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.*;
+import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskMarksList;
+import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.SendNewNFCMark;
+
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
+import static ru.galkov.racenfctracer.MainActivity.setGPSMonitor;
+import static ru.galkov.racenfctracer.common.Utilites.messager;
 
 // https://www.codexpedia.com/android/android-nfc-read-and-write-example/
 public class ActivityNFCMarksRedactor   extends AppCompatActivity {
@@ -30,10 +57,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
     private Context activity;
     public String markContent;
     private ActivityNFCMarksRedactorFaceController NFCRedactorController;
-    private HelpFaceController HFC;
     private final MainActivity.writeMethod METHOD = MainActivity.writeMethod.Append;
-//    public static final String ERROR_DETECTED = "No NFC tag detected!";
-//    public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
     public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
 
 
@@ -51,7 +75,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
+                HelpFaceController HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.redactorNFCHelp));
                 HFC.start();
@@ -72,7 +96,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                 AMP.execute();
                 return true;
             case R.id.exit:
-                /// TODO переписать на выход в геста после переделки фейсконтроллера.
                 setResult(RESULT_OK, new Intent());
                 finish();
                 return true;
@@ -108,7 +131,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
     private void configureNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            Utilites.messager(this, "This device doesn't support NFC.");
+            messager(this, "This device doesn't support NFC.");
             finish();
         }
 
@@ -133,11 +156,8 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                     } else {
                         write(NFCRedactorController.getNfS_Mark_Editor(), myTag);
                     }
-                } catch (IOException e) {
-                    Utilites.messager(getActivity(), WRITE_ERROR);
-                    e.printStackTrace();
-                } catch (FormatException e) {
-                    Utilites.messager(getActivity(), WRITE_ERROR);
+                } catch (IOException | FormatException e) {
+                    messager(getActivity(), WRITE_ERROR);
                     e.printStackTrace();
                 }
             }
@@ -177,31 +197,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         NFCRedactorController.start();
         WriteModeOn();
     }
-/*
-    @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            mapview.onStop();
-            MapKitFactory.getInstance().onStop();
-        }
-        catch (NullPointerException e) { e.printStackTrace();}
-        NFCRedactorController.stop();
-        WriteModeOff();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        try {
-            mapview.onStart();
-            MapKitFactory.getInstance().onStart();
-        }
-        catch (NullPointerException e) { e.printStackTrace();}
-        NFCRedactorController = new ActivityNFCMarksRedactorFaceController();
-        NFCRedactorController.start();
-  //      WriteModeOn();
-    }*/
 
     // **********************************Read From NFC Tag***************************
 
@@ -233,7 +228,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             // Get the Text
             markContent = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
-            Utilites.messager(this,"UnsupportedEncoding " + e.toString());
+            messager(this,"UnsupportedEncoding " + e.toString());
         }
 
         NFCRedactorController.setCurrentNFC_Label("Считана метка NFC : " + markContent);
@@ -258,7 +253,8 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
     private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
         String lang       = "en";
         byte[] textBytes  = text.getBytes();
-        byte[] langBytes  = lang.getBytes("US-ASCII");
+//        byte[] langBytes  = lang.getBytes("US-ASCII");
+        byte[] langBytes  = lang.getBytes("UTF-8");
         int    langLength = langBytes.length;
         int    textLength = textBytes.length;
         byte[] payload    = new byte[1 + langLength + textLength];
@@ -270,9 +266,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         System.arraycopy(langBytes, 0, payload, 1,              langLength);
         System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
 
-        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
-
-        return recordNFC;
+        return new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
     }
 
 
@@ -293,15 +287,10 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
 
     public class  ActivityNFCMarksRedactorFaceController extends ActivityFaceController {
-        public TextView ServerTime;
-        private TextView gpsPosition;
+        public TextView ServerTime, gpsPosition, CurrentNFC_Label, loginInfo,NFC_ConfigurationLog, NfS_Mark_Editor;
         private Timer ServerTimer;
-        private TextView CurrentNFC_Label;
         private ImageButton back_button;
         private Button CommitButton;
-        private TextView loginInfo;
-        public TextView NFC_ConfigurationLog;
-        private TextView NfS_Mark_Editor;
         private boolean isStarted = false;
 
 
@@ -324,15 +313,15 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         }
 
 
-        public void setCurrentNFC_Label(String str) {
+        private void setCurrentNFC_Label(String str) {
             CurrentNFC_Label.setText(str);
         }
 
-        public void setNfS_Mark_Editor(String str1) {
+        private void setNfS_Mark_Editor(String str1) {
             NfS_Mark_Editor.setText(str1);
         }
 
-        public String getNfS_Mark_Editor() {
+        private String getNfS_Mark_Editor() {
             return NfS_Mark_Editor.getText().toString();
         }
 
@@ -358,8 +347,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             });
         }
 
-
-
         @Override
         protected void setDefaultFace() {
             new AskMarksList(NFC_ConfigurationLog).execute();
@@ -369,7 +356,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         @Override
         public void start() {
             startTimeSync();
-            MainActivity.setGPSMonitor(gpsPosition);
+            setGPSMonitor(gpsPosition);
             isStarted = true;
         }
 
@@ -380,7 +367,8 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         }
 
         private void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+            String str = getLogin() + ":" + getLevel();
+            loginInfo.setText(str);
         }
 
         private void startTimeSync() {
@@ -391,10 +379,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, TimerDelay, MainActivity.getTimerTimeout());
-
+            }, TimerDelay, getTimerTimeout());
         }
-
     }
-
 }

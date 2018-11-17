@@ -1,27 +1,56 @@
 package ru.galkov.racenfctracer.adminLib;
 
-import android.app.*;
-import android.content.*;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
 import com.yandex.mapkit.MapKitFactory;
-import java.text.*;
-import java.util.*;
-import ru.galkov.racenfctracer.FaceControllers.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
 import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
-import ru.galkov.racenfctracer.common.*;
+import ru.galkov.racenfctracer.common.AskCurrentRaceStart;
+import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskRaceStructure;
+import ru.galkov.racenfctracer.common.AskServerTime;
+import ru.galkov.racenfctracer.common.AskStartSructure;
+import ru.galkov.racenfctracer.common.SendActiveRaceStart;
+
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
+import static ru.galkov.racenfctracer.MainActivity.setStartDate;
+import static ru.galkov.racenfctracer.MainActivity.setStopDate;
+import static ru.galkov.racenfctracer.common.Utilites.messager;
 
 public class ActivityRaceSetup  extends AppCompatActivity {
 
     public ActivityRaceSetupController ARSController;
     public Context activity;
-    private HelpFaceController HFC;
     private SimpleDateFormat formatForDate = MainActivity.formatForDate;
 
     @Override
@@ -97,7 +126,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
+                HelpFaceController HFC = new HelpFaceController();
                 HFC.setEkran((TextView) findViewById(R.id.ekran));
                 HFC.setHelpTopic(getString(R.string.raceSetupHelp));
                 HFC.start();
@@ -129,18 +158,13 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
 
     public class ActivityRaceSetupController extends ActivityFaceController {
-        private TextView ServerTime;
+
+        private TextView ServerTime, loginInfo, gpsPosition, showStart, showStop, raceConfig;
         private ImageButton back_button;
         private Timer ServerTimer;
-        private TextView raceConfig;
         private Button setRaceConfig_button;
-        public Spinner spinnerRace;
-        public Spinner spinnerStart;
-        private TextView loginInfo;
-        private TextView gpsPosition;
+        public Spinner spinnerRace, spinnerStart;
         private boolean isStarted = false;
-        private TextView showStart;
-        private TextView showStop;
         private Calendar dateAndTime=Calendar.getInstance();
         String dt = "";
 
@@ -155,7 +179,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                 @Override
                 public void run() {new AskServerTime(ServerTime).execute();}
             },
-                    TimerDelay, MainActivity.getTimerTimeout());
+                    TimerDelay, getTimerTimeout());
         }
 
 
@@ -180,13 +204,12 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
         private void setInitialDateTime(TextView ekran1) {
 
-//            ekran1.setText(formatForDate.format(dateAndTime));
             ekran1.setText(dt);
             try {
                     if (ekran1.equals(showStart)) {
-                        MainActivity.setStartDate(formatForDate.parse(ekran1.getText().toString())); }
+                        setStartDate(formatForDate.parse(ekran1.getText().toString())); }
                     else {
-                        MainActivity.setStopDate(formatForDate.parse(ekran1.getText().toString())); }
+                        setStopDate(formatForDate.parse(ekran1.getText().toString())); }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -262,7 +285,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
-                    Utilites.messager(getActivity(), "Нужно что-то выбрать!");
+                    messager(getActivity(), "Нужно что-то выбрать!");
                 }
             });
 
@@ -278,7 +301,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
               }
               @Override
               public void onNothingSelected(AdapterView<?> arg0) {
-                  Utilites.messager(getActivity(), "Нужно что-то выбрать!");
+                  messager(getActivity(), "Нужно что-то выбрать!");
               }
           });
         }
@@ -317,7 +340,8 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         }
 
         private void constructStatusString() {
-            loginInfo.setText(MainActivity.getLogin()+"/" + MainActivity.getLevel() + "/") ;
+            String str = getLogin() + ":" + getLevel();
+            loginInfo.setText(str);
         }
     }
 

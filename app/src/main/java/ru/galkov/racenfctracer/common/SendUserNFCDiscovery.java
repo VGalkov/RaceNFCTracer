@@ -3,29 +3,36 @@ package ru.galkov.racenfctracer.common;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity;
-import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
-import static ru.galkov.racenfctracer.MainActivity.KEY;
-import static ru.galkov.racenfctracer.MainActivity.getLevel;
-import static ru.galkov.racenfctracer.MainActivity.getLogin;
-import static ru.galkov.racenfctracer.MainActivity.getRace_id;
-import static ru.galkov.racenfctracer.MainActivity.getStart_id;
-import static ru.galkov.racenfctracer.MainActivity.writeMethod;
-import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-import static ru.galkov.racenfctracer.common.Utilites.messager;
 import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import ru.galkov.racenfctracer.MainActivity.trigger;
+import ru.galkov.racenfctracer.MainActivity.writeMethod;
+
+import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
+import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.getAltitude;
+import static ru.galkov.racenfctracer.MainActivity.getLatitude;
+import static ru.galkov.racenfctracer.MainActivity.getLevel;
+import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getLongitude;
+import static ru.galkov.racenfctracer.MainActivity.getRace_id;
+import static ru.galkov.racenfctracer.MainActivity.getStart_id;
+import static ru.galkov.racenfctracer.common.Utilites.chkKey;
+import static ru.galkov.racenfctracer.common.Utilites.messager;
 
 public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
     private final String ASKER = "SendUserNFCDiscovery";
     private String mark, masterMark;
     private TextView User_Monitor;
-    private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
     private Double masterLatitude = 0.00, masterLongitude = 0.00 , masterAltitude = 0.00;
-    private MainActivity.writeMethod method = MainActivity.writeMethod.Set;
     private Context activity;
+    private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
+    private writeMethod method = writeMethod.Set;
     private long race =0L;
     private long markDelta =0L;
     private JSONObject outBoundJSON;
@@ -72,7 +79,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
         try {
             JSONObject JOAnswer = new JSONObject(result);
             if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
-                if(JOAnswer.getString(fieldsJSON.status.toString()).equals(trigger.TRUE)) {  // TRUE|FALSE
+                if(JOAnswer.getString(fieldsJSON.status.toString()).equals(trigger.TRUE.toString())) {  // TRUE|FALSE
                     String regRecord ="\n Зарегистрировано: \n"
                             + "Время прохождения: " +JOAnswer.get(fieldsJSON.date.toString()) + ", \n"
                             + JOAnswer.get(fieldsJSON.login.toString()) +", метка:"+ JOAnswer.get(fieldsJSON.mark.toString()) +"\n"
@@ -132,9 +139,9 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     }
 
     public void setGPS_System() {
-        this.altitude = MainActivity.getAltitude();
-        this.longitude = MainActivity.getLongitude();
-        this.latitude = MainActivity.getLatitude();
+        this.altitude = getAltitude();
+        this.longitude = getLongitude();
+        this.latitude = getLatitude();
     }
 
     public void setMark(String mark1) {
@@ -145,7 +152,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
         this.race = race1;
     }
 
-    public void setMethod(MainActivity.writeMethod method1) {
+    public void setMethod(writeMethod method1) {
         method = method1;
 
     }

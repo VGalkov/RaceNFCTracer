@@ -2,28 +2,50 @@
 package ru.galkov.racenfctracer;
 
 import android.Manifest;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.*;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.text.*;
-import android.view.*;
-import android.widget.*;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
-import java.text.*;
-import java.util.*;
-import ru.galkov.racenfctracer.FaceControllers.*;
-import ru.galkov.racenfctracer.common.*;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
+import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
+import ru.galkov.racenfctracer.FaceControllers.MapViewController;
+import ru.galkov.racenfctracer.common.AskForLogin;
+import ru.galkov.racenfctracer.common.AskMapPoints;
+import ru.galkov.racenfctracer.common.AskResultsImgTable;
+import ru.galkov.racenfctracer.common.AskServerTime;
+
+import static ru.galkov.racenfctracer.common.Utilites.messager;
+import static ru.galkov.racenfctracer.common.Utilites.replace;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-// тут объявляем и глобальные переменные, когда разрастётся выделить в отдельный класс с геттерами
 
     public static MapViewController MV;
     HelpFaceController HFC;
@@ -39,20 +61,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public enum writeMethod {Set, Append}
     public enum img_types {ALL, LOGIN}
     public enum fileType {Results, Marcs, Log}
-//    public enum points_types {mark,master_mark,user,guest,admin,unknown}
-
 
     // Client settings =================================================================
-    //
+    public static String server =  "192.168.1.5";
+    //public static String server =  "185.251.240.3";
+    public static String serverPort = "8080";
+    //public static String serverPort = "8095";
 
-
-    //public static String server =  "192.168.1.5";
-    public static String server =  "185.251.240.3";
-    //public static String serverPort = "8080";
-    public static String serverPort = "8095";
-
-
-    //  192.168.1.5:8080
     // на самом деле это интикатор версии. иначе и не используется. в случае расхождения версий сервера и клиента
     // клиент не работает.
     public static final String KEY = "galkovvladimirandreevich";
@@ -104,12 +119,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return GPSMonitor;
     }
 
-    public static void setStartDate(Date startDate) {
-        MainActivity.startDate = startDate;
+    public static void setStartDate(Date startDate1) {
+        startDate = startDate1;
     }
 
-    public static void setStopDate(Date stopDate) {
-        MainActivity.stopDate = stopDate;
+    public static void setStopDate(Date stopDate1) {
+        stopDate = stopDate1;
     }
 
     public static Date getStartDate() {
@@ -133,8 +148,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mASTER_MARK = mASTER_MARK1;
     }
 
-    public static void setmASTER_MARK_Flag(String mASTER_MARK_Flag) {
-        MainActivity.mASTER_MARK_Flag = mASTER_MARK_Flag;
+    public static void setmASTER_MARK_Flag(String mASTER_MARK_Flag1) {
+        mASTER_MARK_Flag = mASTER_MARK_Flag1;
     }
 
     public static String getmASTER_MARK() {
@@ -184,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             try {lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this); }
             catch (NullPointerException e) { e.printStackTrace(); }
         }
-        else {  Utilites.messager(getActivity(),"Права на GPS!"); }
+        else {  messager(getActivity(),"Права на GPS!"); }
         PermissionGranted = false;
     }
 
@@ -198,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_CODE_READ_PHONE_NUMBERS);
         } else {    PermissionGranted = true;     }
         if (PermissionGranted) {   res = mTelephonyMgr.getLine1Number();  }
-        else { Utilites.messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами."); }
+        else { messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами."); }
         PermissionGranted = false;
         return res;
     }
@@ -302,15 +317,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                     startActivityForResult(new Intent(getActivity(), ActivityGuestManager.class), 0);
                 } else {
-                    Utilites.messager(activity, "Ошибка распознавания Avtivity to show (REGLEVEL) ");
+                    messager(activity, "Ошибка распознавания Avtivity to show (REGLEVEL) ");
                 }
                 return true;
 
             case R.id.graph:
                 setContentView(R.layout.activity_results_img);
-                ImageView iV = findViewById(R.id.imageView);
                 AskResultsImgTable ARIT = new AskResultsImgTable();
-                ARIT.setImage(iV);
+                ARIT.setImage((ImageView) findViewById(R.id.imageView));
                 ARIT.execute();
                 //TODO создать контроллер активити для управления выводом.
                 return true;
@@ -336,8 +350,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     protected void onStop() {
@@ -367,7 +379,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-//        MAFC.start();
     }
 
     @Override
@@ -378,11 +389,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             MapKitFactory.getInstance().onStop();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-//        MAFC.stop();
     }
-
-
-// =======================================================
 
     public void setActivity(Context activity1) {
         activity = activity1;
@@ -486,33 +493,30 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         protected void addListeners() {
             saveServerIP.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    MainActivity.setServerUrl(ipaddress.getText().toString(), port.getText().toString());
-
+                    setServerUrl(ipaddress.getText().toString(), port.getText().toString());
                 }
             });
 
             saveTimers.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     if (Integer.parseInt(MainLogTimer.getText().toString())==0)
-                        MainActivity.setMainLogTimeout(MainActivity.BlameTimeout);
-                    else MainActivity.setMainLogTimeout(Integer.parseInt(MainLogTimer.getText().toString())*1000);
+                        setMainLogTimeout(BlameTimeout);
+                    else setMainLogTimeout(Integer.parseInt(MainLogTimer.getText().toString())*1000);
 
                     if (Integer.parseInt(TimeTimer.getText().toString())==0)
-                        MainActivity.setTimerTimeout(BlameTimeout);
-                    else  MainActivity.setTimerTimeout(Integer.parseInt(TimeTimer.getText().toString())*1000);
+                        setTimerTimeout(BlameTimeout);
+                    else  setTimerTimeout(Integer.parseInt(TimeTimer.getText().toString())*1000);
                 }
             });
         }
         @Override
         protected void setDefaultFace() {
             ipaddress.setText(getServerIP());
-            String timer = Integer.toString(MainActivity.getMainLogTimeout()/1000);
             port.setText(getServerPort());
+            String timer = Integer.toString(getMainLogTimeout()/1000);
             MainLogTimer.setText(timer);
-            timer = Integer.toString(MainActivity.getTimerTimeout()/1000);
+            timer = Integer.toString(getTimerTimeout()/1000);
             TimeTimer.setText(timer);
-
-            //@string/noStr
         }
 
         @Override
@@ -550,7 +554,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // ======================================================================================
         @Override
         protected void setDefaultFace() {
-            setImgButton(exitButton, true);
+//            setImgButton(exitButton, true);
             setButton(registerButton, true);
             setButton(enterButton, false);
             setTextFields(password, true);
@@ -602,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         setRegistredFace();
                     }
                     else {
-                        Utilites.messager(activity, ERROR_MSG);
+                        messager(activity, ERROR_MSG);
                     }
                 }
             });
@@ -626,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             startActivityForResult(new Intent(view.getContext(), ActivityGuestManager.class), 0);
                         }
                         else
-                            Utilites.messager(activity, "Ошибка распознавания Avtivity to show (REGLEVEL) ");
+                            messager(activity, "Ошибка распознавания Avtivity to show (REGLEVEL) ");
                     }
                 }
             });
@@ -634,9 +638,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             phone.addTextChangedListener(new TextWatcher() {
 
                 @Override
-                public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-
-                }
+                public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {   }
 
                 @Override
                 public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
@@ -647,7 +649,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         phone.setTextColor(ContextCompat.getColor(activity, R.color.Green));
                     else if (phone.getText().length()>getLoginLength()) {
                         String str = phone.getText().toString();
-                        str = Utilites.replace(str, 0, '+');
+                        str = replace(str, 0, '+');
                         phone.setText(str.substring(0, getLoginLength()));
                         password.requestFocus();
                     }
@@ -686,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         public void setRegistredFace() {
-            setImgButton(exitButton, true);
+//            setImgButton(exitButton, true);
             setButton(registerButton, false);
             setButton(enterButton, true);
             setTextFields(password, false);
@@ -702,7 +704,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
                 @Override
                 public void run() {new AskServerTime(ServerTime).execute();}
-            }, TimerDelay, MainActivity.getTimerTimeout());
+            }, TimerDelay, getTimerTimeout());
         }
         public void start() {
             if (!isStarted) {
@@ -717,18 +719,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             isStarted = false;
         }
 
-
         private void setTextFields(TextView tv1, boolean trigger2) {
             tv1.setEnabled(trigger2);
             tv1.setClickable(trigger2);
         }
-
-
-        private void setImgButton(ImageButton btn1, boolean trigger2) {
-            btn1.setEnabled(trigger2);
-            btn1.setClickable(trigger2);
-        }
-
 
         private void setButton(Button btn1, boolean trigger2) {
             btn1.setEnabled(trigger2);
@@ -747,8 +741,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             setStart_id(0L);
         }
 
-        // ===================================================================================
-
         private boolean CheckLoginDataIntegrity() {
             // проверка данных для логина в систему.
             boolean trigger = true;
@@ -759,7 +751,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             if (!trigger) { ERROR_MSG = str; }
             return trigger;
-
         }
 
         private void RegisterThisUser(){
@@ -767,12 +758,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 // Backdore Admin
             switch (phone.getText().toString()) {
                 case backDoreAdmin:
-                    REGLEVEL = MainActivity.registrationLevel.Admin;
+                    REGLEVEL = registrationLevel.Admin;
                     RegAsLabel.setText(REGLEVEL.toString());
                     setRegistredFace();
                     break;
                 case backDoreUser:
-                    REGLEVEL = MainActivity.registrationLevel.User;
+                    REGLEVEL = registrationLevel.User;
                     RegAsLabel.setText(REGLEVEL.toString());
                     setRegistredFace();
                     break;
@@ -787,14 +778,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
 
-        // ==============================================================================
-
         private void remember_registred_data(){
             setLevel(REGLEVEL);
             setPassword(password.getText().toString());
             setLogin(phone.getText().toString());
         }
-
     }
 
 }

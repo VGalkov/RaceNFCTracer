@@ -31,7 +31,6 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private TextView User_Monitor;
     private Double masterLatitude = 0.00, masterLongitude = 0.00 , masterAltitude = 0.00;
     private Context activity;
-    private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
     private writeMethod method = writeMethod.Set;
     private long race =0L;
     private long markDelta =0L;
@@ -106,7 +105,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
 
     private  void makeOutBoundJSON(){
-
+//TODO сейчас данные мастермарки и точки сейчас СОВПАДАЮТ!!!!
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
@@ -114,12 +113,12 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
             outBoundJSON.put(fieldsJSON.master_mark_label.toString(), masterMark);
             outBoundJSON.put(fieldsJSON.master_mark_delta.toString(), markDelta);
             outBoundJSON.put(fieldsJSON.login.toString(), getLogin());
-            outBoundJSON.put(fieldsJSON.mark_master_longitude.toString(),longitude);
-            outBoundJSON.put(fieldsJSON.mark_master_altitude.toString(),altitude);
-            outBoundJSON.put(fieldsJSON.mark_master_latitude.toString(),latitude);
-            outBoundJSON.put(fieldsJSON.longitude.toString(),longitude);
-            outBoundJSON.put(fieldsJSON.altitude.toString(),altitude);
-            outBoundJSON.put(fieldsJSON.latitude.toString(),latitude);
+            outBoundJSON.put(fieldsJSON.mark_master_longitude.toString(),masterLongitude);
+            outBoundJSON.put(fieldsJSON.mark_master_altitude.toString(),masterAltitude);
+            outBoundJSON.put(fieldsJSON.mark_master_latitude.toString(),masterLatitude);
+            outBoundJSON.put(fieldsJSON.longitude.toString(),getLongitude());
+            outBoundJSON.put(fieldsJSON.altitude.toString(),getAltitude());
+            outBoundJSON.put(fieldsJSON.latitude.toString(),getLatitude());
             outBoundJSON.put(fieldsJSON.key.toString(),KEY);
             outBoundJSON.put(fieldsJSON.race.toString(),getRace_id());
             outBoundJSON.put(fieldsJSON.start.toString(),getStart_id());
@@ -136,12 +135,6 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 // SETTERS - GETTERS ===========================
     public  void setContext(Context c1) {
         activity = c1;
-    }
-
-    public void setGPS_System() {
-        this.altitude = getAltitude();
-        this.longitude = getLongitude();
-        this.latitude = getLatitude();
     }
 
     public void setMark(String mark1) {

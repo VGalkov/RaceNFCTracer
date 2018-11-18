@@ -269,8 +269,6 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
         return new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
     }
 
-
-
     //     **********************************Enable Write********************************
 
     private void WriteModeOn(){

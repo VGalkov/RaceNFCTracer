@@ -2,10 +2,15 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.*;
-import org.json.*;
-import static ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.common.Utilites.ErrorJSON;
@@ -69,6 +74,8 @@ public class AskStartSructure extends AsyncTask<String, Void, String> {
         }
 
     }
+
+
 
     @Override
     protected void onPreExecute(){

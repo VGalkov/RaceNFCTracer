@@ -2,8 +2,12 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
-import ru.galkov.racenfctracer.MainActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
@@ -11,8 +15,6 @@ import static ru.galkov.racenfctracer.MainActivity.getmASTER_MARK;
 import static ru.galkov.racenfctracer.MainActivity.setmASTER_MARK;
 import static ru.galkov.racenfctracer.common.Utilites.ErrorJSON;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskMasterMark extends AsyncTask<String, Void, String> {
 

@@ -279,7 +279,6 @@ public class ActivityUserManager extends AppCompatActivity {
                     SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC.getUser_Monitor());
                     NFC.setMasterMark(getmASTER_MARK());
                     NFC.setMarkDelta((dt2.getTime() - dt1.getTime())/1000);
-                    NFC.setGPS_System();
                     NFC.setMark(text);
                     NFC.setMasterAltitude(markMasterAltitude);
                     NFC.setMasterLatitude(markMasterLatitude);

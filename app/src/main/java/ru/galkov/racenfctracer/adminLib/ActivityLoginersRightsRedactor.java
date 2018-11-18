@@ -209,7 +209,6 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         }
             messager(this, "О, эталонная метка! ("+text+") для абонента выбранного!");
             masterMark = text;
-
     }
 
     //   **********************************Write to NFC Tag****************************

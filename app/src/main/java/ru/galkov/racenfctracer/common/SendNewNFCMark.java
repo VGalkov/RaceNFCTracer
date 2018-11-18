@@ -138,7 +138,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
             outBoundJSON.put(fieldsJSON.latitude.toString(), this.latitude);
             outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
             outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
-            outBoundJSON.put("race", race);
+            outBoundJSON.put(fieldsJSON.race.toString(), race);
 
         } catch (JSONException e) {
             e.printStackTrace();

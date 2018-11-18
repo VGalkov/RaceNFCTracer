@@ -120,7 +120,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // getWindow().getDecorView().findViewById(android.R.id.content)
         int id = item.getItemId();
         switch(id){
 
@@ -172,7 +171,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
             super();
         }
 
-
         private void startTimeSync() {
             ServerTimer = new Timer();
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
@@ -181,7 +179,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
             },
                     TimerDelay, getTimerTimeout());
         }
-
 
 
         @Override
@@ -252,14 +249,11 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                 }
             });
 
-
             showStop.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     setUpDateTime(showStop);
                 }
             });
-
-
 
             back_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -267,7 +261,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                     finish();
                 }
             });
-
 
             setRaceConfig_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -292,7 +285,6 @@ public class ActivityRaceSetup  extends AppCompatActivity {
           spinnerRace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
               @Override
               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                  // AskStartSructure AStartStr = new AskStartSructure(ARSController);
                   AskStartSructure AStartStr = new AskStartSructure();
                   AStartStr.setRaceID(Long.parseLong(spinnerRace.getSelectedItem().toString())); // значение из выбранного спинером.
                   AStartStr.setActivityContext(getActivity());

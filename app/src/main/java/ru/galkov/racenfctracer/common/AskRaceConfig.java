@@ -3,16 +3,22 @@ package ru.galkov.racenfctracer.common;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.widget.*;
-import org.json.*;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.common.Utilites.ErrorJSON;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskRaceConfig  extends AsyncTask<String, Void, String> {
 
@@ -76,9 +82,9 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
             if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
                 String str = " Суммарно, конфигурация соревнования: \n Номер соревнования: " +
                         JOAnswer.getString(fieldsJSON.race_id.toString()) +
-                        "; номер старта в рамках соревнования " +
+                        " номер старта в рамках соревнования " +
                         JOAnswer.getString(fieldsJSON.start_id.toString()) +
-                        "; \n Диапазон времени старта(начало/конец) -  \n" +
+                        " \n Диапазон времени старта(начало/конец) -  \n" +
                         JOAnswer.getString(fieldsJSON.start_time.toString()) + " - " +
                         JOAnswer.getString(fieldsJSON.stop_time.toString()) +
                         "\n \n На старт зарегистрировалось " +
@@ -86,8 +92,7 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
                         " участников. Ниже следует их полный список и состояние их регистрации.\n\n";
 
                 ekran.setText(str);
-
-                tableLayout.addView(drawHeader(Color.GRAY), 0);
+                tableLayout.addView(drawHeader(), 0);
 
                 JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.usersArr.toString());
                 for (int i = 0; i < arr.length(); i++) {
@@ -137,13 +142,13 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
         return tableRow;
     }
 
-    private TableRow drawHeader (int color1) {
+    private TableRow drawHeader () {
         TableRow tableRow = new TableRow(context);
         tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-        drawCell(tableRow, "Логин", 0, color1);
-        drawCell(tableRow, "Заезд", 1, color1);
-        drawCell(tableRow, "Мастерметка", 2, color1);
-        drawCell(tableRow, "Координаты", 3, color1);
+        drawCell(tableRow, "Логин", 0, Color.LTGRAY);
+        drawCell(tableRow, "Заезд", 1, Color.LTGRAY);
+        drawCell(tableRow, "Мастерметка", 2, Color.LTGRAY);
+        drawCell(tableRow, "Координаты", 3, Color.LTGRAY);
 
         return tableRow;
     }

@@ -115,9 +115,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         GPSMonitor = GPSMonitor1;
     }
 
-    public static  TextView getGPSMonitor() {
+/*    public static  TextView getGPSMonitor() {
         return GPSMonitor;
-    }
+    }*/
 
     public static void setStartDate(Date startDate1) {
         startDate = startDate1;
@@ -185,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setActivity(this);
         activateGPSSystem();
     }
+
+
 
     private void activateGPSSystem() {
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -417,6 +419,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return SERVER_URL;
     }*/
 
+    public static int getTimerDelay() {
+        return TimerDelay;
+    }
+
     public static String getLogin() {
         return login;
     }
@@ -585,8 +591,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         @Override
         protected void addListeners() {
 
-// если абонент был зарегистрирован => отключаемся, если незареганы - выходим из приложения.
-
             exitButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     if (registerButton.isEnabled()) {
@@ -598,7 +602,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             });
 
-// 1. проверяем целостность данных, 2. логинимся по результату =>  setRegistredFace();     setDefaultFace();
             registerButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     if (CheckLoginDataIntegrity()) {
@@ -688,7 +691,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         public void setRegistredFace() {
-//            setImgButton(exitButton, true);
             setButton(registerButton, false);
             setButton(enterButton, true);
             setTextFields(password, false);
@@ -704,8 +706,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
                 @Override
                 public void run() {new AskServerTime(ServerTime).execute();}
-            }, TimerDelay, getTimerTimeout());
+            }, getTimerDelay(), getTimerTimeout());
         }
+
         public void start() {
             if (!isStarted) {
                 startTimeSync();

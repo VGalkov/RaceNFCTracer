@@ -105,7 +105,6 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
 
 
     private  void makeOutBoundJSON(){
-//TODO сейчас данные мастермарки и точки сейчас СОВПАДАЮТ!!!!
         try {
             outBoundJSON = new JSONObject();
             outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);

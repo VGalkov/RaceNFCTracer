@@ -24,6 +24,8 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     private Context activityContext;
     public Spinner raceSpiner;
 
+
+
     public AskRaceStructure() {
         super();
     }
@@ -110,11 +112,11 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
 
     void makeOutBoundJSON() {
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(), getLogin())
+                    .put(fieldsJSON.exec_level.toString(), getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
             outBoundJSON = ErrorJSON();

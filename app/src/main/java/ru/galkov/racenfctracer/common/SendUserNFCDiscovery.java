@@ -29,13 +29,20 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private final String ASKER = "SendUserNFCDiscovery";
     private String mark, masterMark;
     private TextView User_Monitor;
-    private Double masterLatitude = 0.00, masterLongitude = 0.00 , masterAltitude = 0.00;
     private Context activity;
+    private Double masterLatitude = 0.00, masterLongitude = 0.00 , masterAltitude = 0.00;
     private Double latitude = 0.00, longitude = 0.00 , altitude = 0.00;
     private writeMethod method = writeMethod.Set;
     private long race =0L;
     private long markDelta =0L;
     private JSONObject outBoundJSON;
+
+
+    private void Close() {
+        // защита от утечки памяти.
+        User_Monitor = null;
+        activity = null;
+    }
 
     public void setMasterAltitude(Double masterAltitude) {
         this.masterAltitude = masterAltitude;
@@ -108,23 +115,23 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
     private  void makeOutBoundJSON(){
 
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.mark.toString(),mark);
-            outBoundJSON.put(fieldsJSON.master_mark_label.toString(), masterMark);
-            outBoundJSON.put(fieldsJSON.master_mark_delta.toString(), markDelta);
-            outBoundJSON.put(fieldsJSON.login.toString(), getLogin());
-            outBoundJSON.put(fieldsJSON.mark_master_longitude.toString(),longitude);
-            outBoundJSON.put(fieldsJSON.mark_master_altitude.toString(),altitude);
-            outBoundJSON.put(fieldsJSON.mark_master_latitude.toString(),latitude);
-            outBoundJSON.put(fieldsJSON.longitude.toString(),longitude);
-            outBoundJSON.put(fieldsJSON.altitude.toString(),altitude);
-            outBoundJSON.put(fieldsJSON.latitude.toString(),latitude);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.race.toString(),getRace_id());
-            outBoundJSON.put(fieldsJSON.start.toString(),getStart_id());
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
+            outBoundJSON = new JSONObject()
+                .put(fieldsJSON.asker.toString(),ASKER)
+                .put(fieldsJSON.mark.toString(),mark)
+                .put(fieldsJSON.master_mark_label.toString(), masterMark)
+                .put(fieldsJSON.master_mark_delta.toString(), markDelta)
+                .put(fieldsJSON.login.toString(), getLogin())
+                .put(fieldsJSON.mark_master_longitude.toString(),masterLongitude)
+                .put(fieldsJSON.mark_master_altitude.toString(),masterAltitude)
+                .put(fieldsJSON.mark_master_latitude.toString(),masterLatitude)
+                .put(fieldsJSON.longitude.toString(),longitude)
+                .put(fieldsJSON.altitude.toString(),altitude)
+                .put(fieldsJSON.latitude.toString(),latitude)
+                .put(fieldsJSON.key.toString(),KEY)
+                .put(fieldsJSON.race.toString(),getRace_id())
+                .put(fieldsJSON.start.toString(),getStart_id())
+                .put(fieldsJSON.exec_login.toString(),getLogin())
+                .put(fieldsJSON.exec_level.toString(),getLevel());
 
         } catch (JSONException e) {
             e.printStackTrace();

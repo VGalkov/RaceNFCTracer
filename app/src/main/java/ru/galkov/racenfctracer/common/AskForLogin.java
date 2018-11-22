@@ -5,9 +5,10 @@ import android.os.AsyncTask;
 import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
+import static ru.galkov.racenfctracer.MainActivity.LoginLength;
+import static ru.galkov.racenfctracer.MainActivity.PasswordLength;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 import static ru.galkov.racenfctracer.common.Utilites.messager;
-
 import ru.galkov.racenfctracer.MainActivity.trigger;
 import ru.galkov.racenfctracer.MainActivity.registrationLevel;
 import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
@@ -22,6 +23,14 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private MainActivity.MainActivityFaceController MAFC;
     private JSONObject outBoundJSON;
 
+
+    private void Close() {
+        // защита от утечки памяти.
+        context = null;
+
+    }
+
+
     public AskForLogin(MainActivity.MainActivityFaceController MAFC1) {
         MAFC = MAFC1;
     }
@@ -29,8 +38,8 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute(){
         boolean tr = true;
-        if (login.length()!=MainActivity.LoginLength)  tr = false;
-        if (password.length()<MainActivity.PasswordLength) tr = false;
+        if (login.length()!=LoginLength)  tr = false;
+        if (password.length()<PasswordLength) tr = false;
 
 // BACKDORE без сервера.
             if (tr)       makeOutBoundJSON();
@@ -39,12 +48,12 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
 
     private  void makeOutBoundJSON(){
         try {
-                outBoundJSON = new JSONObject();
-                outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-                outBoundJSON.put(fieldsJSON.login.toString(),login);
-                outBoundJSON.put(fieldsJSON.password.toString(),password);
-                outBoundJSON.put(fieldsJSON.level.toString(),level);
-                outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+                outBoundJSON = new JSONObject()
+                        .put(fieldsJSON.asker.toString(),ASKER)
+                        .put(fieldsJSON.login.toString(),login)
+                        .put(fieldsJSON.password.toString(),password)
+                        .put(fieldsJSON.level.toString(),level)
+                        .put(fieldsJSON.key.toString(),KEY);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,7 +104,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
                     else if ((JOAnswer.get(fieldsJSON.level.toString())).equals((registrationLevel.User).toString())) {
                         REGLEVEL = registrationLevel.User;
                     }
-                }// сменить на Utility
+                }
                 else { messager(context,"авторизация пройдена на уровне Guest"); }
             }
             else { messager(context,"сбой протокола шифрования или всего запроса!"); }
@@ -105,5 +114,6 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         MAFC.REGLEVEL = REGLEVEL;
         MAFC.RegAsLabel.setText(REGLEVEL.toString());
         MAFC.setRegistredFace();
+        Close();
     }
 }

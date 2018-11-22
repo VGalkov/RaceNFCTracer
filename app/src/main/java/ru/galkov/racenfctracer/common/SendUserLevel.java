@@ -67,17 +67,17 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
         // {"asker":"SendNewLoginLevel","level" ="User","key":"galkovvladimirandreevich","login":"+79000000111"}
 
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.level.toString(),level);
-            outBoundJSON.put(fieldsJSON.login.toString(),login);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.master_mark_label.toString(),masterMark);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
-            outBoundJSON.put(fieldsJSON.longitude.toString(), getLongitude());
-            outBoundJSON.put(fieldsJSON.altitude.toString(), getAltitude());
-            outBoundJSON.put(fieldsJSON.latitude.toString(), getLatitude());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.level.toString(),level)
+                    .put(fieldsJSON.login.toString(),login)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.master_mark_label.toString(),masterMark)
+                    .put(fieldsJSON.exec_login.toString(),getLogin())
+                    .put(fieldsJSON.exec_level.toString(), getLevel())
+                    .put(fieldsJSON.longitude.toString(), getLongitude())
+                    .put(fieldsJSON.altitude.toString(), getAltitude())
+                    .put(fieldsJSON.latitude.toString(), getLatitude());
 
         } catch (JSONException e) {
             e.printStackTrace();

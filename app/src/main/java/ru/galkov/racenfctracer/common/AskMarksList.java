@@ -70,11 +70,11 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
         // {"asker":"AskMarksList", "key":"galkovvladimirandreevich"}
 
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),MainActivity.getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),MainActivity.getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(),MainActivity.getLogin())
+                    .put(fieldsJSON.exec_level.toString(),MainActivity.getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

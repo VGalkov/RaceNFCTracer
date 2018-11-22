@@ -4,11 +4,11 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.*;
-import ru.galkov.racenfctracer.MainActivity;
+import static ru.galkov.racenfctracer.MainActivity.SERVER_URL;
+
 
 public class HttpProcessor {
 
-    public final String SERVER_URL = MainActivity.SERVER_URL;
     private String json, ASKER;
 
     HttpProcessor() {    }
@@ -30,11 +30,9 @@ public class HttpProcessor {
             while ((inputLine = bufferedReader.readLine()) != null)  response.append(inputLine);
             bufferedReader.close();
 
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | ProtocolException e) {
             e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
         return response.toString();

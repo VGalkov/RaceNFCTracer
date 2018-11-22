@@ -22,6 +22,12 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
         TimeLabel = TimeLabel1;
     }
 
+    private void Close() {
+        // защита от утечки памяти.
+        TimeLabel = null;
+    }
+
+
 
     @Override
     protected void onPreExecute(){
@@ -45,21 +51,21 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
             }
         }
         catch (JSONException e) {	e.printStackTrace();}
-
+        Close();
     }
 
 // ========================================================
     private  void makeOutBoundJSON(){
 //        {"asker":"AskServerTime", "key":"galkovvladimirandreevich"}
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
-            outBoundJSON.put(fieldsJSON.latitude.toString(), getLatitude());
-            outBoundJSON.put(fieldsJSON.altitude.toString(), getAltitude());
-            outBoundJSON.put(fieldsJSON.longitude.toString(), getLongitude());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(), getLogin())
+                    .put(fieldsJSON.exec_level.toString(), getLevel())
+                    .put(fieldsJSON.latitude.toString(), getLatitude())
+                    .put(fieldsJSON.altitude.toString(), getAltitude())
+                    .put(fieldsJSON.longitude.toString(), getLongitude());
         } catch (JSONException e) {
             e.printStackTrace();
         }

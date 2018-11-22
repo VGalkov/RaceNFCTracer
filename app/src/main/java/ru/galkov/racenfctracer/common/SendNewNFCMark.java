@@ -129,19 +129,19 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private  void makeOutBoundJSON(){
 
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.mark.toString(),this.mark);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.longitude.toString(), this.longitude);
-            outBoundJSON.put(fieldsJSON.altitude.toString(), this.altitude);
-            outBoundJSON.put(fieldsJSON.latitude.toString(), this.latitude);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
-            outBoundJSON.put("race", race);
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.mark.toString(),this.mark)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.longitude.toString(), this.longitude)
+                    .put(fieldsJSON.altitude.toString(), this.altitude)
+                    .put(fieldsJSON.latitude.toString(), this.latitude)
+                    .put(fieldsJSON.exec_login.toString(),getLogin())
+                    .put(fieldsJSON.exec_level.toString(),getLevel())
+                    .put("race", race);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-}
+             }
+             }

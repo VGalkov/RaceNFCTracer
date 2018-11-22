@@ -79,14 +79,14 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
     void makeOutBoundJSON() {
         try {
             outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.race_id.toString(),race_id);
-            outBoundJSON.put(fieldsJSON.start_id.toString(),start_id);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
-            outBoundJSON.put(fieldsJSON.start_time.toString(),formatForDate.format(getStartDate()));
-            outBoundJSON.put(fieldsJSON.stop_time.toString(),formatForDate.format(getStopDate()));
+            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.race_id.toString(),race_id)
+                    .put(fieldsJSON.start_id.toString(),start_id)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(), getLogin())
+                    .put(fieldsJSON.exec_level.toString(), getLevel())
+                    .put(fieldsJSON.start_time.toString(),formatForDate.format(getStartDate()))
+                    .put(fieldsJSON.stop_time.toString(),formatForDate.format(getStopDate()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

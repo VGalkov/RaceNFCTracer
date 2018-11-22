@@ -27,11 +27,21 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 
     private writeMethod method = writeMethod.Set;
 
+    private void Close() {
+        // защита от утечки памяти.
+        ekran = null;
+        showStop = null;
+        showStart = null;
+    }
+
     public AskCurrentRaceStart(TextView ekran1, TextView showStop2, TextView showStart3) {
         this.ekran = ekran1;
         this.showStart = showStart3;
         this.showStop = showStop2;
     }
+
+
+
 
     public void setMethod(writeMethod method) {
         this.method = method;
@@ -81,16 +91,17 @@ public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
             }
 
         } catch (JSONException | ParseException e) {	e.printStackTrace();}
+        Close();
     }
 
 
     void makeOutBoundJSON() {
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(),getLogin())
+                    .put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -41,12 +41,12 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
     private  void makeOutBoundJSON(){
         // {"asker":"AskForMainLog","key":"galkovvladimirandreevich"}
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.caller.toString(),caller);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.caller.toString(),caller)
+                    .put(fieldsJSON.exec_login.toString(),getLogin())
+                    .put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

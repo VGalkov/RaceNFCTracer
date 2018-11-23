@@ -44,9 +44,11 @@ public class MainLogController extends ActivityFaceController {
 
     @Override
     public void stop() {
-        ServerMainLogTimer.cancel();
+        if (ServerMainLogTimer!=null) { ServerMainLogTimer.cancel(); }
         isStarted = false;
     }
+
+
 
     @Override
     public boolean isStarted() {

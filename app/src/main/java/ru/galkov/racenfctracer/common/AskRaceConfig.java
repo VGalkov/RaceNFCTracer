@@ -34,6 +34,14 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
         this.ekran = start_config3;
     }
 
+    private void Close() {
+        // защита от утечки памяти.
+        ekran = null;
+        context = null;
+        tableLayout = null;
+
+    }
+
     @Override
     protected void onPreExecute() {
         makeOutBoundJSON();
@@ -105,6 +113,7 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Close();
     }
 
     private TableRow drawRow(TempUser usr1, JSONObject JOAnswer2) {
@@ -166,11 +175,11 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
 
     private void makeOutBoundJSON() {
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(),getLogin())
+                    .put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
             outBoundJSON = ErrorJSON();

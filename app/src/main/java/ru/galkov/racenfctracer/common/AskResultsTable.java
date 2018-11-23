@@ -24,6 +24,12 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private writeMethod method = writeMethod.Set;
     private fileType fileType;
 
+    private void Close() {
+        // защита от утечки памяти.
+        context = null;
+        userLogger = null;
+    }
+
     public AskResultsTable(TextView userLogger1, fileType fileType2, Context context3) {
         this.userLogger = userLogger1;
         this.fileType = fileType2;
@@ -64,10 +70,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
             }catch (IOException ee) {
                 ee.printStackTrace();
             }
-
-
-        //}
-
+            Close();
     }
 
 
@@ -79,12 +82,12 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
 
     private  void makeOutBoundJSON(){
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.fileType.toString(),fileType);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(), getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(), getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.fileType.toString(),fileType)
+                    .put(fieldsJSON.exec_login.toString(), getLogin())
+                    .put(fieldsJSON.exec_level.toString(), getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

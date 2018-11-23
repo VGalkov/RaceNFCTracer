@@ -2,20 +2,16 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import org.json.*;
 import ru.galkov.racenfctracer.MainActivity;
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
-import ru.galkov.racenfctracer.MainActivity.registrationLevel;
-import ru.galkov.racenfctracer.MainActivity.trigger;
-
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.LoginLength;
 import static ru.galkov.racenfctracer.MainActivity.PasswordLength;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 import static ru.galkov.racenfctracer.common.Utilites.messager;
+import ru.galkov.racenfctracer.MainActivity.trigger;
+import ru.galkov.racenfctracer.MainActivity.registrationLevel;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskForLogin extends AsyncTask<String, Void, String> {
 
@@ -23,9 +19,17 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
     private String login, password;
     private Context context;
     private MainActivity.registrationLevel level;
-    private registrationLevel REGLEVEL;
+    private MainActivity.registrationLevel REGLEVEL;
     private MainActivity.MainActivityFaceController MAFC;
     private JSONObject outBoundJSON;
+
+
+    private void Close() {
+        // защита от утечки памяти.
+        context = null;
+
+    }
+
 
     public AskForLogin(MainActivity.MainActivityFaceController MAFC1) {
         MAFC = MAFC1;
@@ -37,18 +41,19 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         if (login.length()!=LoginLength)  tr = false;
         if (password.length()<PasswordLength) tr = false;
 
+// BACKDORE без сервера.
             if (tr)       makeOutBoundJSON();
             else messager(context, "Не смог подготовить запрос на сервер");
         }
 
     private  void makeOutBoundJSON(){
         try {
-                outBoundJSON = new JSONObject();
-                outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-                outBoundJSON.put(fieldsJSON.login.toString(),login);
-                outBoundJSON.put(fieldsJSON.password.toString(),password);
-                outBoundJSON.put(fieldsJSON.level.toString(),level);
-                outBoundJSON.put(fieldsJSON.key.toString(),KEY);
+                outBoundJSON = new JSONObject()
+                        .put(fieldsJSON.asker.toString(),ASKER)
+                        .put(fieldsJSON.login.toString(),login)
+                        .put(fieldsJSON.password.toString(),password)
+                        .put(fieldsJSON.level.toString(),level)
+                        .put(fieldsJSON.key.toString(),KEY);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -71,6 +76,8 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         this.level = level1;
     }
 
+
+
     @Override
     protected String doInBackground(String... arg0) {
 
@@ -79,6 +86,8 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         HP.setJson(outBoundJSON);
         return HP.execute();
     }
+
+
 
     @Override
     protected void onPostExecute(String result) {
@@ -95,7 +104,7 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
                     else if ((JOAnswer.get(fieldsJSON.level.toString())).equals((registrationLevel.User).toString())) {
                         REGLEVEL = registrationLevel.User;
                     }
-                }// сменить на Utility
+                }
                 else { messager(context,"авторизация пройдена на уровне Guest"); }
             }
             else { messager(context,"сбой протокола шифрования или всего запроса!"); }
@@ -105,19 +114,6 @@ public class AskForLogin extends AsyncTask<String, Void, String> {
         MAFC.REGLEVEL = REGLEVEL;
         MAFC.RegAsLabel.setText(REGLEVEL.toString());
         MAFC.setRegistredFace();
+        Close();
     }
-
-
-    @Override
-    protected void onCancelled(String s) {
-        super.onCancelled(s);
-        onCancelled();
-    }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
-        messager(context,"сбой при передаче данных");
-    }
-
 }

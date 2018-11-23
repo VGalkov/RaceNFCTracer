@@ -18,15 +18,14 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.fileType;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityResultsTable  extends AppCompatActivity {
@@ -39,8 +38,11 @@ public class ActivityResultsTable  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_results_table);
         setContextVar(this);
-        ARTC = new ActivityResultsTableController();
-        ARTC.start();
+        if (ARTC == null) {
+            ARTC = new ActivityResultsTableController();
+            ARTC.start();
+        }
+        else { ARTC.restart(); }
     }
 
     public void setContextVar(Context context) {
@@ -59,7 +61,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ARTC.start();
+        ARTC.restart();
     }
 
     @Override
@@ -92,7 +94,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ARTC.start();
+        ARTC.restart();
     }
 
 
@@ -152,7 +154,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
 
         public void stop() {
-            ServerTimer.cancel();
+            if (ServerTimer!=null) { ServerTimer.cancel(); }
             isStarted = false;
         }
         @Override
@@ -165,6 +167,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
             isStarted = true;
         }
 
+
         private void startTimeSync() {
             ServerTimer = new Timer(); // Создаем таймер
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
@@ -172,7 +175,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, TimerDelay, MainActivity.getTimerTimeout());
+            }, getTimerDelay(), getTimerTimeout());
 
         }
 

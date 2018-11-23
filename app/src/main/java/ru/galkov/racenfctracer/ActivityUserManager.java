@@ -4,8 +4,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.FormatException;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import android.widget.TextView;
 
 import com.yandex.mapkit.MapKitFactory;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Timer;
@@ -36,6 +41,7 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
+import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.fileType;
 import static ru.galkov.racenfctracer.MainActivity.getAltitude;
 import static ru.galkov.racenfctracer.MainActivity.getLatitude;
@@ -46,7 +52,6 @@ import static ru.galkov.racenfctracer.MainActivity.getMarkChekDelayTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.getMarkChekTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getRace_id;
 import static ru.galkov.racenfctracer.MainActivity.getStart_id;
-import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.getmASTER_MARK;
 import static ru.galkov.racenfctracer.MainActivity.getmASTER_MARK_Flag;
@@ -59,6 +64,7 @@ import static ru.galkov.racenfctracer.common.Utilites.messager;
 public class ActivityUserManager extends AppCompatActivity {
 
         private NfcAdapter nfcAdapter;
+        private Tag myTag;
         private Timer MarkChekDelayTimer;
         private PendingIntent pendingIntent;
         private IntentFilter writeTagFilters[];
@@ -72,8 +78,12 @@ public class ActivityUserManager extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_manager);
             setActivity(this);
-            AUMC = new ActivityUserManagereController();
-            AUMC.start();
+            if (AUMC==null) {
+                AUMC = new ActivityUserManagereController();
+                AUMC.start();
+            }
+            else { AUMC.restart(); }
+
             configureNFC();
         }
 
@@ -86,6 +96,7 @@ public class ActivityUserManager extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+//TODO в faceControllers присутствуют таймеры, которые не умирают при следующей new!!! нужно переписать это вся для корректного завершения!
         switch(id){
 
             case R.id.help:
@@ -98,19 +109,25 @@ public class ActivityUserManager extends AppCompatActivity {
 
             case  R.id.EventLog:
                 setContentView(R.layout.activity_race_events);
-                MLC = new MainLogController();
-                MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
-                MLC.setCaller(this.toString());
-                MLC.start();
+                if (MLC == null) {
+                    MLC = new MainLogController();
+                    MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
+                    MLC.setCaller(this.toString());
+                    MLC.start();
+                }
+                else { MLC.restart(); }
                 return true;
 
             case  R.id.GetResults:
                 setContentView(R.layout.activity_user_manager);
                 setActivity(this);
-                AUMC = new ActivityUserManagereController();
-                AUMC.start();
-                AUMC.setCurrentFace();
-                new AskResultsTable((TextView) findViewById(R.id.User_Monitor), fileType.Results, getActivity()).execute();
+                if (AUMC==null) {
+                    AUMC = new ActivityUserManagereController();
+                    AUMC.start();
+                    AUMC.setCurrentFace();
+                    new AskResultsTable((TextView) findViewById(R.id.User_Monitor), fileType.Results, getActivity()).execute();
+                }
+                else {   AUMC.restart(); }
                 return true;
 
             case R.id.map:
@@ -157,6 +174,9 @@ public class ActivityUserManager extends AppCompatActivity {
         protected void onNewIntent(Intent intent) {
             setIntent(intent);
             readFromIntent(intent);
+            if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
+                myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            }
         }
 
         @Override
@@ -208,6 +228,7 @@ public class ActivityUserManager extends AppCompatActivity {
         writeTagFilters = new IntentFilter[] { tagDetected };
     }
 
+        // **********************************Read From NFC Tag***************************
 
         private void readFromIntent(Intent intent) {
             String action = intent.getAction();
@@ -267,6 +288,7 @@ public class ActivityUserManager extends AppCompatActivity {
                     SendUserNFCDiscovery NFC = new SendUserNFCDiscovery(AUMC.getUser_Monitor());
                     NFC.setMasterMark(getmASTER_MARK());
                     NFC.setMarkDelta((dt2.getTime() - dt1.getTime())/1000);
+                    NFC.setGPS_System();
                     NFC.setMark(text);
                     NFC.setMasterAltitude(markMasterAltitude);
                     NFC.setMasterLatitude(markMasterLatitude);
@@ -280,17 +302,50 @@ public class ActivityUserManager extends AppCompatActivity {
 
             }
 
+        //   **********************************Write to NFC Tag****************************
+        private void write(String text, Tag tag) throws IOException, FormatException {
+            NdefRecord[] records = { createRecord(text) };
+            NdefMessage message = new NdefMessage(records);
+            // Get an instance of Ndef for the tag.
+            Ndef ndef = Ndef.get(tag);
+            // Enable I/O
+            ndef.connect();
+            // Write the message
+            ndef.writeNdefMessage(message);
+            // Close the connection
+            ndef.close();
+        }
+        private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
+            String lang       = "en";
+            byte[] textBytes  = text.getBytes();
+//            byte[] langBytes  = lang.getBytes("US-ASCII");
+            byte[] langBytes  = lang.getBytes("UTF-8");
+            int    langLength = langBytes.length;
+            int    textLength = textBytes.length;
+            byte[] payload    = new byte[1 + langLength + textLength];
+            payload[0] = (byte) langLength;
+
+            // copy langbytes and textbytes into payload
+            System.arraycopy(langBytes, 0, payload, 1,              langLength);
+            System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
+
+            return new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
+        }
+
+
+        //     **********************************Enable Write********************************
+
         private void WriteModeOn(){
+            //writeMode = true;
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
         }
 
+        // **********************************Disable Write*******************************
+
         private void WriteModeOff(){
+            //writeMode = false;
             nfcAdapter.disableForegroundDispatch(this);
         }
-
-
-
- // =============================================================================
 
     public class ActivityUserManagereController extends ActivityFaceController {
 
@@ -321,6 +376,7 @@ public class ActivityUserManager extends AppCompatActivity {
             return User_Monitor;
         }
 
+
         @Override
         protected void addListeners() {
 
@@ -346,12 +402,14 @@ public class ActivityUserManager extends AppCompatActivity {
                 constructStatusString();
         }
 
+
         private  void setCurrentFace() {
             String str = "Соревнование: " + getRace_id() + "\n Заезд: " + getStart_id();
             raceStart.setText(str);
             str = "Эталонная метка загружена: : " + getmASTER_MARK();
             master_mark.setText(str);
         }
+
 
         @Override
         public void start() {
@@ -362,9 +420,10 @@ public class ActivityUserManager extends AppCompatActivity {
 
         @Override
         public void stop() {
-            ServerTimer.cancel();
+            if (ServerTimer!=null) { ServerTimer.cancel(); }
             isStarted = false;
         }
+
 
         @Override
         public boolean isStarted() {
@@ -378,14 +437,16 @@ public class ActivityUserManager extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, getTimerDelay(), getTimerTimeout());
+            }, TimerDelay, getTimerTimeout());
 
         }
+
 
         private void constructStatusString() {
             String str = getLogin() + ":" + getLevel();
             loginInfo.setText(str) ;
         }
+
     }
 
     }

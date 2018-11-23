@@ -19,14 +19,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.yandex.mapkit.MapKitFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
@@ -360,9 +357,10 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
         @Override
         public void stop() {
-            ServerTimer.cancel();
+            if (ServerTimer!=null) { ServerTimer.cancel(); }
             isStarted = false;
         }
+
 
         private void constructStatusString() {
             String str = getLogin() + ":" + getLevel();

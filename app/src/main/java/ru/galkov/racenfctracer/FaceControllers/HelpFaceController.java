@@ -45,6 +45,11 @@ public class HelpFaceController extends ActivityFaceController {
         isStarted = false;
     }
 
+    public void restart() {
+        stop();
+        start();
+    }
+
     @Override
     public boolean isStarted() {
         return isStarted;

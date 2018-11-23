@@ -196,9 +196,11 @@ public class ActivityGuestManager  extends AppCompatActivity {
 
             @Override
             public void stop() {
-                ServerTimer.cancel();
+                if (ServerTimer!=null) { ServerTimer.cancel(); }
                 isStarted = false;
             }
+
+
 
 
             private void startTimeSync() {

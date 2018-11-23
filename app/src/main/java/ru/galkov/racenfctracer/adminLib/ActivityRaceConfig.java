@@ -142,6 +142,7 @@ public class ActivityRaceConfig extends AppCompatActivity {
 
         }
 
+
         @Override
         public boolean isStarted() {
             return false;

@@ -1,6 +1,6 @@
 package ru.galkov.racenfctracer.common;
 
-import android.content.Context;
+
 import android.os.AsyncTask;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
@@ -14,13 +14,18 @@ import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskMapPoints extends AsyncTask<String, Void, String> {
 
-    private Context activityContext;
-    private MapView mapView;
     private final String ASKER = "AskMapPoints";
+    private MapView mapView;
     private JSONObject outBoundJSON;
 
     public void setMapView(MapView mapview1) {
         mapView = mapview1;
+    }
+
+    private void Close() {
+        // защита от утечки памяти.
+        mapView = null;
+
     }
 
 
@@ -59,6 +64,7 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
 
             JSONArray arr = JOAnswer.getJSONArray(fieldsJSON.rows.toString());
             if (chkKey(JOAnswer.getString(fieldsJSON.key.toString()))) {
+
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
                 Double latitude = obj.getDouble(fieldsJSON.latitude.toString());
@@ -67,16 +73,17 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
                 mapView.getMap().getMapObjects().addPlacemark(point);
             }}
         } catch (JSONException e) {	e.printStackTrace();}
+        Close();
     }
 
     private  void makeOutBoundJSON(){
 //         {"asker":"AskUserTable", "key":"galkovvladimirandreevich"}
         try {
-            outBoundJSON = new JSONObject();
-            outBoundJSON.put(fieldsJSON.asker.toString(),ASKER);
-            outBoundJSON.put(fieldsJSON.key.toString(),KEY);
-            outBoundJSON.put(fieldsJSON.exec_login.toString(),getLogin());
-            outBoundJSON.put(fieldsJSON.exec_level.toString(),getLevel());
+            outBoundJSON = new JSONObject()
+                    .put(fieldsJSON.asker.toString(),ASKER)
+                    .put(fieldsJSON.key.toString(),KEY)
+                    .put(fieldsJSON.exec_login.toString(),getLogin())
+                    .put(fieldsJSON.exec_level.toString(),getLevel());
         } catch (JSONException e) {
             e.printStackTrace();
         }

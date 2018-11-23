@@ -21,7 +21,9 @@ public abstract class ActivityFaceController {
 
         public abstract boolean isStarted();
 
-        public abstract void restart();
-
+        public void restart() {
+            stop();
+            start();
+        }
     }
 

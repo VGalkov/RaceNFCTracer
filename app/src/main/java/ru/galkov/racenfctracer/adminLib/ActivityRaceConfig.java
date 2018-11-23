@@ -142,11 +142,6 @@ public class ActivityRaceConfig extends AppCompatActivity {
 
         }
 
-        @Override
-        public void restart() {
-            stop();
-            start();
-        }
 
         @Override
         public boolean isStarted() {

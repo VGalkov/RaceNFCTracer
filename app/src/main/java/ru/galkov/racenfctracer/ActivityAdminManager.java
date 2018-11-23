@@ -242,15 +242,11 @@ public class ActivityAdminManagerController extends ActivityFaceController {
 
     @Override
     public void stop() {
-        ServerTimer.cancel();
+        if (ServerTimer!=null) { ServerTimer.cancel(); }
         isStarted = false;
     }
 
-    @Override
-    public void restart() {
-        stop();
-        start();
-    }
+
 
     private void startTimeSync() {
         ServerTimer = new Timer();

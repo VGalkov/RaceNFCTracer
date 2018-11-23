@@ -22,6 +22,10 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
         TimeLabel = TimeLabel1;
     }
 
+    public AskServerTime() {
+        this.TimeLabel = null;
+    }
+
     private void Close() {
         // защита от утечки памяти.
         TimeLabel = null;
@@ -46,7 +50,7 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
         try {
             JSONObject JOAnswer = new JSONObject(result);
             if (chkKey((String) JOAnswer.get(fieldsJSON.key.toString()))) {
-                   TimeLabel.setText(JOAnswer.getString(fieldsJSON.date.toString()));
+                   if (TimeLabel != null) { TimeLabel.setText(JOAnswer.getString(fieldsJSON.date.toString())); }
             }
         }
         catch (JSONException e) {	e.printStackTrace();}

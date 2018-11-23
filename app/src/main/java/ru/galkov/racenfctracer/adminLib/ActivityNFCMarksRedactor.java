@@ -359,15 +359,10 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
 
         @Override
         public void stop() {
-            ServerTimer.cancel();
+            if (ServerTimer!=null) { ServerTimer.cancel(); }
             isStarted = false;
         }
 
-        @Override
-        public void restart() {
-            stop();
-            start();
-        }
 
         private void constructStatusString() {
             String str = getLogin() + ":" + getLevel();

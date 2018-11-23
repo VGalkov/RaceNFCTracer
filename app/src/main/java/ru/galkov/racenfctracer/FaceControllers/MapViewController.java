@@ -53,8 +53,4 @@ public class MapViewController extends ActivityFaceController {
         else { return true; }
     }
 
-    @Override
-    public void restart() {
-
-    }
 }

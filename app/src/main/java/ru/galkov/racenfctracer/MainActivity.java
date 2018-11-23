@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
 
+
     public static void setmASTER_MARK(String mASTER_MARK1) {
         mASTER_MARK = mASTER_MARK1;
     }
@@ -162,6 +163,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public static int getTimerTimeout() {
         return TimerTimeout;
+    }
+
+    public static int getTimerDelay() {
+        return TimerDelay;
     }
 
     public static void setMainLogTimeout(int timeout) {
@@ -205,8 +210,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         return res;
     }
-
-
 
 
     @Override
@@ -705,11 +708,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         private void startTimeSync() {
-            ServerTimer = new Timer(); // Создаем таймер
-            ServerTimer.schedule(new TimerTask() { // Определяем задачу
+            ServerTimer = new Timer();
+            ServerTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {new AskServerTime(ServerTime).execute();}
-            }, TimerDelay, getTimerTimeout());
+            }, getTimerDelay(), getTimerTimeout());
         }
 
         public void start() {

@@ -18,15 +18,14 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
-import ru.galkov.racenfctracer.MainActivity;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.fileType;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
+import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 
 public class ActivityResultsTable  extends AppCompatActivity {
@@ -155,7 +154,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
 
 
         public void stop() {
-            ServerTimer.cancel();
+            if (ServerTimer!=null) { ServerTimer.cancel(); }
             isStarted = false;
         }
         @Override
@@ -168,11 +167,6 @@ public class ActivityResultsTable  extends AppCompatActivity {
             isStarted = true;
         }
 
-        @Override
-        public void restart() {
-            stop();
-            start();
-        }
 
         private void startTimeSync() {
             ServerTimer = new Timer(); // Создаем таймер
@@ -181,7 +175,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, TimerDelay, MainActivity.getTimerTimeout());
+            }, getTimerDelay(), getTimerTimeout());
 
         }
 

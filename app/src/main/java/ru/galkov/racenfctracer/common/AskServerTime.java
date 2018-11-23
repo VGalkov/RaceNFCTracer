@@ -2,8 +2,12 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getAltitude;
 import static ru.galkov.racenfctracer.MainActivity.getLatitude;

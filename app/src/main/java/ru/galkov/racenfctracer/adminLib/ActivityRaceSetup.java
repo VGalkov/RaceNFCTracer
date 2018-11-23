@@ -38,11 +38,12 @@ import ru.galkov.racenfctracer.common.AskStartSructure;
 import ru.galkov.racenfctracer.common.SendActiveRaceStart;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
+import static ru.galkov.racenfctracer.MainActivity.setGPSMonitor;
 import static ru.galkov.racenfctracer.MainActivity.setStartDate;
 import static ru.galkov.racenfctracer.MainActivity.setStopDate;
 import static ru.galkov.racenfctracer.common.Utilites.messager;
@@ -59,11 +60,8 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_setup);
         setActivity(this);
-        if  (ARSController ==null) {
             ARSController = new ActivityRaceSetupController();
             ARSController.start();
-        }
-        else { ARSController.restart(); }
     }
     @Override
     protected void onStop() {
@@ -180,7 +178,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
                 @Override
                 public void run() {new AskServerTime(ServerTime).execute();}
             },
-                    TimerDelay, getTimerTimeout());
+                    getTimerDelay(), getTimerTimeout());
         }
 
 
@@ -324,7 +322,7 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         @Override
         public void start() {
             startTimeSync();
-            MainActivity.setGPSMonitor(gpsPosition);
+            setGPSMonitor(gpsPosition);
             isStarted = true;
         }
 
@@ -332,6 +330,11 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         public void stop() {
             if (ServerTimer!=null) { ServerTimer.cancel(); }
             isStarted = false;
+        }
+        @Override
+        public void restart() {
+            stop();
+            start();
         }
 
 

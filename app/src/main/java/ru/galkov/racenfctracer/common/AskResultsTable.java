@@ -3,16 +3,21 @@ package ru.galkov.racenfctracer.common;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
-import java.io.*;
 
-import ru.galkov.racenfctracer.MainActivity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.fileType;
+import ru.galkov.racenfctracer.MainActivity.writeMethod;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
-import ru.galkov.racenfctracer.MainActivity.writeMethod;
-import ru.galkov.racenfctracer.MainActivity.fileType;
 
 public class AskResultsTable extends AsyncTask<String, Void, String> {
 

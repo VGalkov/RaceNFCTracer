@@ -26,9 +26,9 @@ import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 import static ru.galkov.racenfctracer.MainActivity.setGPSMonitor;
@@ -200,6 +200,11 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 isStarted = false;
             }
 
+            @Override
+            public void restart() {
+                stop();
+                start();
+            }
 
 
 
@@ -209,7 +214,7 @@ public class ActivityGuestManager  extends AppCompatActivity {
                     @Override
                     public void run() {new AskServerTime(ServerTime).execute();}
                 },
-                        TimerDelay, getTimerTimeout());
+                        getTimerDelay(), getTimerTimeout());
             }
 
             private void constructStatusString() {

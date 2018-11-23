@@ -21,6 +21,7 @@ import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.R;
 import ru.galkov.racenfctracer.common.AskResultsTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
+
 import static ru.galkov.racenfctracer.MainActivity.fileType;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
@@ -38,11 +39,8 @@ public class ActivityResultsTable  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_results_table);
         setContextVar(this);
-        if (ARTC == null) {
             ARTC = new ActivityResultsTableController();
             ARTC.start();
-        }
-        else { ARTC.restart(); }
     }
 
     public void setContextVar(Context context) {
@@ -61,7 +59,8 @@ public class ActivityResultsTable  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ARTC.restart();
+        ARTC = new ActivityResultsTableController();
+        ARTC.start();
     }
 
     @Override
@@ -94,7 +93,8 @@ public class ActivityResultsTable  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ARTC.restart();
+        ARTC = new ActivityResultsTableController();
+        ARTC.start();
     }
 
 
@@ -165,6 +165,11 @@ public class ActivityResultsTable  extends AppCompatActivity {
         public void start() {
             startTimeSync();
             isStarted = true;
+        }
+        @Override
+        public void restart() {
+            stop();
+            start();
         }
 
 

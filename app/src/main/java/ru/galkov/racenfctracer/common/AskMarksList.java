@@ -2,14 +2,18 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 import ru.galkov.racenfctracer.MainActivity.writeMethod;
+
 import static ru.galkov.racenfctracer.MainActivity.DECIMAL_FORMAT;
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskMarksList extends AsyncTask<String, Void, String> {
 

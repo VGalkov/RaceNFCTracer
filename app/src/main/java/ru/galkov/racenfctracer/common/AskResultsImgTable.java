@@ -1,18 +1,28 @@
 package ru.galkov.racenfctracer.common;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.widget.*;
-import org.json.*;
-import java.io.*;
-import java.net.*;
+import android.widget.ImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.img_types;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.SERVER_URL;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
-import ru.galkov.racenfctracer.MainActivity.img_types;
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
 

@@ -2,22 +2,26 @@ package ru.galkov.racenfctracer.common;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
-import org.json.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
+
 import ru.galkov.racenfctracer.MainActivity;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.trigger;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.formatForDate;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
-import static ru.galkov.racenfctracer.MainActivity.writeMethod;
 import static ru.galkov.racenfctracer.MainActivity.setRace_id;
 import static ru.galkov.racenfctracer.MainActivity.setStartDate;
 import static ru.galkov.racenfctracer.MainActivity.setStart_id;
 import static ru.galkov.racenfctracer.MainActivity.setStopDate;
+import static ru.galkov.racenfctracer.MainActivity.writeMethod;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
-import ru.galkov.racenfctracer.MainActivity.trigger;
 
 public class AskCurrentRaceStart extends AsyncTask<String, Void, String> {
 

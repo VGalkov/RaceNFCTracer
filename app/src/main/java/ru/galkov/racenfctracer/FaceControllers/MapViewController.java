@@ -46,6 +46,11 @@ public class MapViewController extends ActivityFaceController {
 
     }
 
+    @Override
+    public void restart() {
+        stop();
+        start();
+    }
 
     @Override
     public boolean isStarted() {

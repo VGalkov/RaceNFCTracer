@@ -2,15 +2,20 @@ package ru.galkov.racenfctracer.common;
 
 
 import android.os.AsyncTask;
+
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
-import org.json.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
-
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskMapPoints extends AsyncTask<String, Void, String> {
 

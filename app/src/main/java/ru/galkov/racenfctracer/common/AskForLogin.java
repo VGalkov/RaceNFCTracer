@@ -2,16 +2,20 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import org.json.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity;
+import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+import ru.galkov.racenfctracer.MainActivity.registrationLevel;
+import ru.galkov.racenfctracer.MainActivity.trigger;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.LoginLength;
 import static ru.galkov.racenfctracer.MainActivity.PasswordLength;
 import static ru.galkov.racenfctracer.common.Utilites.chkKey;
 import static ru.galkov.racenfctracer.common.Utilites.messager;
-import ru.galkov.racenfctracer.MainActivity.trigger;
-import ru.galkov.racenfctracer.MainActivity.registrationLevel;
-import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
 
 public class AskForLogin extends AsyncTask<String, Void, String> {
 

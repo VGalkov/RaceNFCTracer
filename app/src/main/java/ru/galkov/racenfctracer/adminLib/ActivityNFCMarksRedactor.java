@@ -19,11 +19,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
@@ -35,9 +38,9 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.SendNewNFCMark;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
 import static ru.galkov.racenfctracer.MainActivity.setGPSMonitor;
@@ -361,6 +364,11 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
             isStarted = false;
         }
 
+        @Override
+        public void restart() {
+            stop();
+            start();
+        }
 
         private void constructStatusString() {
             String str = getLogin() + ":" + getLevel();
@@ -375,7 +383,7 @@ public class ActivityNFCMarksRedactor   extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, TimerDelay, getTimerTimeout());
+            }, getTimerDelay(), getTimerTimeout());
         }
     }
 }

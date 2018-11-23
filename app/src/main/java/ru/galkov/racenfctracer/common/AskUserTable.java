@@ -2,9 +2,15 @@ package ru.galkov.racenfctracer.common;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.*;
-import org.json.*;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.galkov.racenfctracer.MainActivity.fieldsJSON;
+
 import static ru.galkov.racenfctracer.MainActivity.KEY;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;

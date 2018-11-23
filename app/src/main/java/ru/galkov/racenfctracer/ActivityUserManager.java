@@ -41,7 +41,6 @@ import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.SendUserNFCDiscovery;
 
 import static ru.galkov.racenfctracer.MainActivity.MV;
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.fileType;
 import static ru.galkov.racenfctracer.MainActivity.getAltitude;
 import static ru.galkov.racenfctracer.MainActivity.getLatitude;
@@ -52,6 +51,7 @@ import static ru.galkov.racenfctracer.MainActivity.getMarkChekDelayTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.getMarkChekTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getRace_id;
 import static ru.galkov.racenfctracer.MainActivity.getStart_id;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.getmASTER_MARK;
 import static ru.galkov.racenfctracer.MainActivity.getmASTER_MARK_Flag;
@@ -78,12 +78,8 @@ public class ActivityUserManager extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_manager);
             setActivity(this);
-            if (AUMC==null) {
-                AUMC = new ActivityUserManagereController();
-                AUMC.start();
-            }
-            else { AUMC.restart(); }
-
+            AUMC = new ActivityUserManagereController();
+            AUMC.start();
             configureNFC();
         }
 
@@ -109,25 +105,21 @@ public class ActivityUserManager extends AppCompatActivity {
 
             case  R.id.EventLog:
                 setContentView(R.layout.activity_race_events);
-                if (MLC == null) {
                     MLC = new MainLogController();
                     MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
                     MLC.setCaller(this.toString());
                     MLC.start();
-                }
-                else { MLC.restart(); }
                 return true;
 
             case  R.id.GetResults:
                 setContentView(R.layout.activity_user_manager);
                 setActivity(this);
-                if (AUMC==null) {
+
                     AUMC = new ActivityUserManagereController();
                     AUMC.start();
                     AUMC.setCurrentFace();
                     new AskResultsTable((TextView) findViewById(R.id.User_Monitor), fileType.Results, getActivity()).execute();
-                }
-                else {   AUMC.restart(); }
+
                 return true;
 
             case R.id.map:
@@ -424,6 +416,11 @@ public class ActivityUserManager extends AppCompatActivity {
             isStarted = false;
         }
 
+        @Override
+        public void restart() {
+            stop();
+            start();
+        }
 
         @Override
         public boolean isStarted() {
@@ -437,7 +434,7 @@ public class ActivityUserManager extends AppCompatActivity {
                 public void run() {
                     new AskServerTime(ServerTime).execute();
                 }
-            }, TimerDelay, getTimerTimeout());
+            }, getTimerDelay(), getTimerTimeout());
 
         }
 

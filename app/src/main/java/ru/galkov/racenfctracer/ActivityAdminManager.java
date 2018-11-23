@@ -11,9 +11,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
@@ -26,12 +29,14 @@ import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
+
 import static ru.galkov.racenfctracer.MainActivity.MV;
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
 import static ru.galkov.racenfctracer.MainActivity.getLogin;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getTimerTimeout;
 import static ru.galkov.racenfctracer.MainActivity.mapview;
+import static ru.galkov.racenfctracer.MainActivity.setGPSMonitor;
 
 public class ActivityAdminManager  extends AppCompatActivity {
     private ActivityAdminManagerController AAMC;
@@ -42,9 +47,7 @@ public class ActivityAdminManager  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_manager);
         setActivity(this);
-        if (AAMC==null) {   AAMC = new ActivityAdminManagerController(); }
-        else { AAMC.restart(); }
-
+        AAMC = new ActivityAdminManagerController();
     }
 
 
@@ -107,11 +110,8 @@ public class ActivityAdminManager  extends AppCompatActivity {
             case R.id.exit:
                 setContentView(R.layout.activity_admin_manager);
                 setActivity(this);
-                if (AAMC==null) {
                     AAMC = new ActivityAdminManagerController();
                     AAMC.start();
-                }
-                else { AAMC.restart(); }
                 return true;
 
         }
@@ -127,11 +127,8 @@ public class ActivityAdminManager  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        if (AAMC==null) {
             AAMC = new ActivityAdminManagerController();
             AAMC.start();
-        }
-        else { AAMC.restart(); }
     }
 
     @Override
@@ -236,7 +233,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
     @Override
     public void start() {
         startTimeSync();
-        MainActivity.setGPSMonitor(gpsPosition);
+        setGPSMonitor(gpsPosition);
         isStarted = true;
     }
 
@@ -246,6 +243,11 @@ public class ActivityAdminManagerController extends ActivityFaceController {
         isStarted = false;
     }
 
+    @Override
+    public void restart() {
+        stop();
+        start();
+    }
 
 
     private void startTimeSync() {
@@ -254,7 +256,7 @@ public class ActivityAdminManagerController extends ActivityFaceController {
             @Override
             public void run() {new AskServerTime(AAMC.ServerTime).execute();       }
             },
-                TimerDelay, getTimerTimeout());
+                getTimerDelay(), getTimerTimeout());
     }
 
 

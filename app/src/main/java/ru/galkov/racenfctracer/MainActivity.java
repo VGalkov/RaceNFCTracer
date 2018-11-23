@@ -22,14 +22,17 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
@@ -37,6 +40,7 @@ import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
+
 import static ru.galkov.racenfctracer.common.Utilites.messager;
 import static ru.galkov.racenfctracer.common.Utilites.replace;
 
@@ -281,33 +285,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                if (HFC== null) {
-                    HFC = new HelpFaceController();
-                    HFC.setEkran((TextView) findViewById(R.id.ekran));
-                    HFC.setHelpTopic(getString(R.string.RegistratinHelp));
-                    HFC.start();
-                }
-                else {  HFC.restart();               }
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.RegistratinHelp));
+                HFC.start();
                 return true;
 
             case R.id.login:
                 setContentView(R.layout.activity_main);
-                if (MAFC == null) {
-                    MAFC = new MainActivityFaceController();
-                    MAFC.start();
-                }
-                else {  MAFC.restart();  }
+                MAFC = new MainActivityFaceController();
+                MAFC.start();
                 return true;
 
             case R.id.donate:
                 setContentView(R.layout.activity_help_system);
-                if (HFC==null) {
-                    HFC = new HelpFaceController();
-                    HFC.setEkran((TextView) findViewById(R.id.ekran));
-                    HFC.setHelpTopic(getString(R.string.donate));
-                    HFC.start();
-                }
-                else {   HFC.restart();   }
+                HFC = new HelpFaceController();
+                HFC.setEkran((TextView) findViewById(R.id.ekran));
+                HFC.setHelpTopic(getString(R.string.donate));
+                HFC.start();
                 return true;
 
 
@@ -542,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
     public class MainActivityFaceController extends ActivityFaceController {
-        private boolean isStarted = false;
+//        private boolean isStarted = false;
         private String              ERROR_MSG;
         private ImageButton         exitButton;
         private Button              registerButton;
@@ -575,7 +570,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         @Override
         public boolean isStarted() {
-            return isStarted;
+            return true;
         }
 
 
@@ -716,23 +711,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         public void start() {
-            if (!isStarted) {
                 startTimeSync();
                 setGPSMonitor(gpsPosition);
-                isStarted = true;
+//                isStarted = true;
                 dropRegistration();
-            }
-            else {
-                stop();
-                start();
-            }
         }
 
 
         @Override
         public void stop() {
             ServerTimer.cancel();
-            isStarted = false;
+  //          isStarted = false;
         }
 
         @Override

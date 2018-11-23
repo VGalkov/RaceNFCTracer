@@ -7,8 +7,8 @@ import java.util.TimerTask;
 
 import ru.galkov.racenfctracer.common.AskForMainLog;
 
-import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getMainLogTimeout;
+import static ru.galkov.racenfctracer.MainActivity.getTimerDelay;
 
 public class MainLogController extends ActivityFaceController {
 
@@ -48,7 +48,11 @@ public class MainLogController extends ActivityFaceController {
         isStarted = false;
     }
 
-
+    @Override
+    public void restart() {
+        stop();
+        start();
+    }
 
     @Override
     public boolean isStarted() {
@@ -67,7 +71,7 @@ public class MainLogController extends ActivityFaceController {
             public void run() {
                 new AskForMainLog(User_Monitor, caller).execute();
             }
-        }, TimerDelay, getMainLogTimeout());
+        }, getTimerDelay(), getMainLogTimeout());
 
     }
 

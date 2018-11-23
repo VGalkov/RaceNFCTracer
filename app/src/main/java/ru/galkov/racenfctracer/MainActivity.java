@@ -22,17 +22,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
@@ -40,7 +37,6 @@ import ru.galkov.racenfctracer.common.AskForLogin;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-
 import static ru.galkov.racenfctracer.common.Utilites.messager;
 import static ru.galkov.racenfctracer.common.Utilites.replace;
 
@@ -94,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static final Point TARGET_LOCATION = new Point(53.2, 50.14);
     public static final float DEFAULT_ZOOM = 17.0f;
     public static Double Longitude = 0.00, Latitude = 0.00, Altitude = 0.00;
-
+    private Timer               ServerTimer;
 
     // поля переменные м
     private Context activity;
@@ -186,24 +182,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         activateGPSSystem();
     }
 
+
     private void activateGPSSystem() {
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                ){
+        if (  ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+              ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ){
             String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
             ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_CODE_ACCESS_FINE_LOCATION);
-        } else {    PermissionGranted = true;     }
-        if (PermissionGranted) {
-            try {lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this); }
-            catch (NullPointerException e) { e.printStackTrace(); }
-        }
-        else {  messager(getActivity(),"Права на GPS!"); }
-        PermissionGranted = false;
+        } else {    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this); }
     }
 
-    String getMyPhoneNumber() {
+    private String getMyPhoneNumber() {
         String res = "";
         TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
@@ -211,12 +201,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[]{Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE};
             ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_CODE_READ_PHONE_NUMBERS);
-        } else {    PermissionGranted = true;     }
-        if (PermissionGranted) {   res = mTelephonyMgr.getLine1Number();  }
-        else { messager(getActivity(),"не смог прочитать номер телефона... логин придумывайте сами."); }
-        PermissionGranted = false;
+        } else {      res = mTelephonyMgr.getLine1Number();   }
+
         return res;
     }
+
+
 
 
     @Override
@@ -278,6 +268,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+//TODO в faceControllers присутствуют таймеры, которые не умирают при следующей new!!! нужно переписать это вся для корректного завершения!
+// для MAFC это реализовано, но не криво ли?!
         switch(id) {
             case R.id.settings:
                 setContentView(R.layout.activity_settings);
@@ -286,24 +278,33 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             case R.id.help:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
-                HFC.setEkran((TextView) findViewById(R.id.ekran));
-                HFC.setHelpTopic(getString(R.string.RegistratinHelp));
-                HFC.start();
+                if (HFC== null) {
+                    HFC = new HelpFaceController();
+                    HFC.setEkran((TextView) findViewById(R.id.ekran));
+                    HFC.setHelpTopic(getString(R.string.RegistratinHelp));
+                    HFC.start();
+                }
+                else {  HFC.restart();               }
                 return true;
 
             case R.id.login:
                 setContentView(R.layout.activity_main);
-                MAFC = new MainActivityFaceController();
-                MAFC.start();
+                if (MAFC == null) {
+                    MAFC = new MainActivityFaceController();
+                    MAFC.start();
+                }
+                else {  MAFC.restart();  }
                 return true;
 
             case R.id.donate:
                 setContentView(R.layout.activity_help_system);
-                HFC = new HelpFaceController();
-                HFC.setEkran((TextView) findViewById(R.id.ekran));
-                HFC.setHelpTopic(getString(R.string.donate));
-                HFC.start();
+                if (HFC==null) {
+                    HFC = new HelpFaceController();
+                    HFC.setEkran((TextView) findViewById(R.id.ekran));
+                    HFC.setHelpTopic(getString(R.string.donate));
+                    HFC.start();
+                }
+                else {   HFC.restart();   }
                 return true;
 
 
@@ -528,6 +529,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         public void stop() {
             isStarted = false;
         }
+
+        @Override
+        public void restart() {
+            stop();
+            start();
+        }
     }
 
 
@@ -542,7 +549,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         private TextView            phone;
         public  registrationLevel   REGLEVEL = registrationLevel.Guest;
         public TextView             ServerTime;
-        private Timer               ServerTimer;
         private TextView            gpsPosition;
 
         //      Constructor; ============================================
@@ -698,7 +704,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // =======================================================================================
 
 
-
         private void startTimeSync() {
             ServerTimer = new Timer(); // Создаем таймер
             ServerTimer.schedule(new TimerTask() { // Определяем задачу
@@ -706,6 +711,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 public void run() {new AskServerTime(ServerTime).execute();}
             }, TimerDelay, getTimerTimeout());
         }
+
         public void start() {
             if (!isStarted) {
                 startTimeSync();
@@ -713,10 +719,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 isStarted = true;
                 dropRegistration();
             }
+            else {
+                stop();
+                start();
+            }
         }
+
+
+        @Override
         public void stop() {
             ServerTimer.cancel();
             isStarted = false;
+        }
+
+        @Override
+        public void restart() {
+            stop();
+            start();
         }
 
         private void setTextFields(TextView tv1, boolean trigger2) {

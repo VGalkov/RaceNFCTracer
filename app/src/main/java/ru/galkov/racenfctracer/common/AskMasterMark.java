@@ -20,6 +20,12 @@ public class AskMasterMark extends AsyncTask<String, Void, String> {
     private final String ASKER = "AskMasterMark";
     private JSONObject outBoundJSON;
 
+    private void Close() {
+        // защита от утечки памяти.
+        master_mark = null;
+
+    }
+
     public AskMasterMark(TextView master_mark1)     {
         master_mark = master_mark1;
     }
@@ -48,6 +54,7 @@ public class AskMasterMark extends AsyncTask<String, Void, String> {
                     master_mark.setText(str);
                 }
             } catch (JSONException e) {	e.printStackTrace();}
+            Close();
         }
 
 

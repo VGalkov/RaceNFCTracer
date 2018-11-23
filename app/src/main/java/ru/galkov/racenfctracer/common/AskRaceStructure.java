@@ -25,6 +25,11 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     public Spinner raceSpiner;
 
 
+    private void Close() {
+        // защита от утечки памяти.
+        raceSpiner = null;
+        activityContext = null;
+    }
 
     public AskRaceStructure() {
         super();
@@ -107,6 +112,7 @@ public class AskRaceStructure extends AsyncTask<String, Void, String> {
     } catch (JSONException e) {
         e.printStackTrace();
     }
+    Close();
     }
 
 

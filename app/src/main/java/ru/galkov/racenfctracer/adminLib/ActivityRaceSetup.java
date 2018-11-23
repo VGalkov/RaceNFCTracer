@@ -59,8 +59,11 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_setup);
         setActivity(this);
-        ARSController = new ActivityRaceSetupController();
-        ARSController.start();
+        if  (ARSController ==null) {
+            ARSController = new ActivityRaceSetupController();
+            ARSController.start();
+        }
+        else { ARSController.restart(); }
     }
     @Override
     protected void onStop() {
@@ -337,6 +340,12 @@ public class ActivityRaceSetup  extends AppCompatActivity {
         public void stop() {
             ServerTimer.cancel();
             isStarted = false;
+        }
+
+        @Override
+        public void restart() {
+            stop();
+            start();
         }
 
         private void constructStatusString() {

@@ -28,6 +28,14 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
         this.ekran = start_config3;
     }
 
+    private void Close() {
+        // защита от утечки памяти.
+        ekran = null;
+        context = null;
+        tableLayout = null;
+
+    }
+
     @Override
     protected void onPreExecute() {
         makeOutBoundJSON();
@@ -100,6 +108,7 @@ public class AskRaceConfig  extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Close();
     }
 
     private TableRow drawRow(TempUser usr1, JSONObject JOAnswer2) {

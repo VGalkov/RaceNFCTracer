@@ -33,6 +33,12 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
         setCaller(caller1);
     }
 
+    private void Close() {
+        // защита от утечки памяти.
+        ResultEkran = null;
+
+    }
+
 
     private void setCaller(String caller) {
         this.caller = caller;
@@ -89,6 +95,7 @@ public class AskForMainLog extends AsyncTask<String, Void, String> {
             if (method == writeMethod.Append)  ResultEkran.append(sb.toString());
             else                               ResultEkran.setText(sb.toString());
         } catch (JSONException e) {	e.printStackTrace();}
+        Close();
     }
 }
 

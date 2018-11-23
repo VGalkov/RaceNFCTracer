@@ -78,9 +78,11 @@ public class ActivityUserManager extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_user_manager);
             setActivity(this);
-
-            AUMC = new ActivityUserManagereController();
-            AUMC.start();
+            if (AUMC==null) {
+                AUMC = new ActivityUserManagereController();
+                AUMC.start();
+            }
+            else { AUMC.restart(); }
 
             configureNFC();
         }
@@ -94,6 +96,7 @@ public class ActivityUserManager extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+//TODO в faceControllers присутствуют таймеры, которые не умирают при следующей new!!! нужно переписать это вся для корректного завершения!
         switch(id){
 
             case R.id.help:
@@ -106,19 +109,25 @@ public class ActivityUserManager extends AppCompatActivity {
 
             case  R.id.EventLog:
                 setContentView(R.layout.activity_race_events);
-                MLC = new MainLogController();
-                MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
-                MLC.setCaller(this.toString());
-                MLC.start();
+                if (MLC == null) {
+                    MLC = new MainLogController();
+                    MLC.setEkran((TextView) findViewById(R.id.User_Monitor));
+                    MLC.setCaller(this.toString());
+                    MLC.start();
+                }
+                else { MLC.restart(); }
                 return true;
 
             case  R.id.GetResults:
                 setContentView(R.layout.activity_user_manager);
                 setActivity(this);
-                AUMC = new ActivityUserManagereController();
-                AUMC.start();
-                AUMC.setCurrentFace();
-                new AskResultsTable((TextView) findViewById(R.id.User_Monitor), fileType.Results, getActivity()).execute();
+                if (AUMC==null) {
+                    AUMC = new ActivityUserManagereController();
+                    AUMC.start();
+                    AUMC.setCurrentFace();
+                    new AskResultsTable((TextView) findViewById(R.id.User_Monitor), fileType.Results, getActivity()).execute();
+                }
+                else {   AUMC.restart(); }
                 return true;
 
             case R.id.map:
@@ -414,6 +423,13 @@ public class ActivityUserManager extends AppCompatActivity {
             ServerTimer.cancel();
             isStarted = false;
         }
+
+        @Override
+        public void restart() {
+            stop();
+            start();
+        }
+
 
         @Override
         public boolean isStarted() {

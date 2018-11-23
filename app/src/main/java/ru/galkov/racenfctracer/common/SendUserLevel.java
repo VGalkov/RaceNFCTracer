@@ -22,6 +22,10 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     private String level, login, masterMark;
     private TextView userLogger;
 
+    private void Close() {
+        // защита от утечки памяти.
+        userLogger = null;
+    }
 
     public SendUserLevel(TextView userLogger1) {
         userLogger = userLogger1;
@@ -52,11 +56,11 @@ public class SendUserLevel extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         try {
             JSONObject JOAnswer = new JSONObject(result);
-            userLogger.setText("отработало! =>" + JOAnswer.get("login") + "/" + JOAnswer.get("level"));
+            String str = "отработало! =>" + JOAnswer.get("login") + "/" + JOAnswer.get("level");
+            userLogger.setText(str);
         }
         catch (JSONException e) {	e.printStackTrace();}
-
-
+        Close();
     }
 
     public  void setMasterMark(String masterMark1) {

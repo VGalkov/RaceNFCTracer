@@ -22,14 +22,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.yandex.mapkit.MapKitFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MapViewController;
@@ -38,7 +35,6 @@ import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskServerTime;
 import ru.galkov.racenfctracer.common.AskUserTable;
 import ru.galkov.racenfctracer.common.SendUserLevel;
-
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
@@ -59,15 +55,16 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_loginers_rights_redactor);
         setActivity(this);
-        ALRRC = new ActivityLoginersRightsRedactorController();
-        ALRRC.start();
-
+        if (ALRRC==null) {
+            ALRRC = new ActivityLoginersRightsRedactorController();
+            ALRRC.start();
+        }
+        else { ALRRC.restart(); }
         configureNFC();
     }
 
@@ -88,8 +85,11 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ALRRC = new ActivityLoginersRightsRedactorController();
-        ALRRC.start();
+        if (ALRRC==null) {
+            ALRRC = new ActivityLoginersRightsRedactorController();
+            ALRRC.start();
+        }
+        else { ALRRC.restart(); }
         WriteModeOn();
     }
 
@@ -383,6 +383,12 @@ public class ActivityLoginersRightsRedactor  extends AppCompatActivity {
         public void stop() {
             ServerTimer.cancel();
             isStarted = false;
+        }
+
+        @Override
+        public void restart() {
+            stop();
+            start();
         }
     }
 }

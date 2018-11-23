@@ -11,12 +11,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.yandex.mapkit.MapKitFactory;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 import ru.galkov.racenfctracer.FaceControllers.ActivityFaceController;
 import ru.galkov.racenfctracer.FaceControllers.HelpFaceController;
 import ru.galkov.racenfctracer.FaceControllers.MainLogController;
@@ -29,7 +26,6 @@ import ru.galkov.racenfctracer.adminLib.ActivityResultsTable;
 import ru.galkov.racenfctracer.common.AskMapPoints;
 import ru.galkov.racenfctracer.common.AskResultsImgTable;
 import ru.galkov.racenfctracer.common.AskServerTime;
-
 import static ru.galkov.racenfctracer.MainActivity.MV;
 import static ru.galkov.racenfctracer.MainActivity.TimerDelay;
 import static ru.galkov.racenfctracer.MainActivity.getLevel;
@@ -46,7 +42,8 @@ public class ActivityAdminManager  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_manager);
         setActivity(this);
-        AAMC = new ActivityAdminManagerController();
+        if (AAMC==null) {   AAMC = new ActivityAdminManagerController(); }
+        else { AAMC.restart(); }
 
     }
 
@@ -110,8 +107,11 @@ public class ActivityAdminManager  extends AppCompatActivity {
             case R.id.exit:
                 setContentView(R.layout.activity_admin_manager);
                 setActivity(this);
-                AAMC = new ActivityAdminManagerController();
-                AAMC.start();
+                if (AAMC==null) {
+                    AAMC = new ActivityAdminManagerController();
+                    AAMC.start();
+                }
+                else { AAMC.restart(); }
                 return true;
 
         }
@@ -127,8 +127,11 @@ public class ActivityAdminManager  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        AAMC = new ActivityAdminManagerController();
-        AAMC.start();
+        if (AAMC==null) {
+            AAMC = new ActivityAdminManagerController();
+            AAMC.start();
+        }
+        else { AAMC.restart(); }
     }
 
     @Override
@@ -241,6 +244,12 @@ public class ActivityAdminManagerController extends ActivityFaceController {
     public void stop() {
         ServerTimer.cancel();
         isStarted = false;
+    }
+
+    @Override
+    public void restart() {
+        stop();
+        start();
     }
 
     private void startTimeSync() {

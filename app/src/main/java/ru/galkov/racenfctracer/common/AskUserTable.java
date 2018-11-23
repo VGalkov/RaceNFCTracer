@@ -65,6 +65,7 @@ public class AskUserTable extends AsyncTask<String, Void, String> {
                     spinnerUsers.setAdapter(adapterUsers);
                 }
         } catch (JSONException e) {	e.printStackTrace();}
+        Close();
     }
 
     private  void makeOutBoundJSON(){

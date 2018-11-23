@@ -21,8 +21,12 @@ public class SendActiveRaceStart extends AsyncTask<String, Void, String> {
     private final String ASKER = "SendActiveRaceStart";
     private JSONObject outBoundJSON;
     private TextView ekran;
-    private long race_id =0L;
-    private long start_id =0L;
+    private long race_id =0L, start_id =0L;
+
+    private void Close() {
+        // защита от утечки памяти.
+        ekran = null;
+    }
 
 
     public void setRace_id(long race_id) {

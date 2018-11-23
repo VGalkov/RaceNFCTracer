@@ -39,8 +39,11 @@ public class ActivityResultsTable  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_results_table);
         setContextVar(this);
-        ARTC = new ActivityResultsTableController();
-        ARTC.start();
+        if (ARTC == null) {
+            ARTC = new ActivityResultsTableController();
+            ARTC.start();
+        }
+        else { ARTC.restart(); }
     }
 
     public void setContextVar(Context context) {
@@ -59,7 +62,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ARTC.start();
+        ARTC.restart();
     }
 
     @Override
@@ -92,7 +95,7 @@ public class ActivityResultsTable  extends AppCompatActivity {
             MapKitFactory.getInstance().onStart();
         }
         catch (NullPointerException e) { e.printStackTrace();}
-        ARTC.start();
+        ARTC.restart();
     }
 
 
@@ -163,6 +166,12 @@ public class ActivityResultsTable  extends AppCompatActivity {
         public void start() {
             startTimeSync();
             isStarted = true;
+        }
+
+        @Override
+        public void restart() {
+            stop();
+            start();
         }
 
         private void startTimeSync() {

@@ -200,6 +200,12 @@ public class ActivityGuestManager  extends AppCompatActivity {
                 isStarted = false;
             }
 
+            @Override
+            public void restart() {
+                stop();
+                start();
+            }
+
 
             private void startTimeSync() {
                 ServerTimer = new Timer();

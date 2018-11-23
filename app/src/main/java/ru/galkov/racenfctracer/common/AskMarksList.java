@@ -23,6 +23,12 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
         this.Ekran = Ekran1;
     }
 
+    private void Close() {
+        // защита от утечки памяти.
+        Ekran = null;
+
+    }
+
     @Override
     protected void onPreExecute(){
         makeOutBoundJSON();
@@ -60,6 +66,7 @@ public class AskMarksList extends AsyncTask<String, Void, String> {
 
         if (method == writeMethod.Append) Ekran.append(response.toString());
            else Ekran.setText(response.toString());
+        Close();
 
     }
 

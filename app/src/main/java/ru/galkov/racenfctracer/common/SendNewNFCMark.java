@@ -27,6 +27,11 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
     private writeMethod method = writeMethod.Set;
     private int PositionMethod = 1;
 
+    private void Close() {
+        // защита от утечки памяти.
+        NFC_ConfigurationLog = null;
+    }
+
     public SendNewNFCMark(TextView NFC_ConfigurationLog1) {
         this.NFC_ConfigurationLog = NFC_ConfigurationLog1;
     }
@@ -113,6 +118,7 @@ public class SendNewNFCMark extends AsyncTask<String, Void, String> {
 
             }
         catch (JSONException e) {	e.printStackTrace();}
+        Close();
     }
 
 

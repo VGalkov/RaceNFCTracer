@@ -1,6 +1,6 @@
 package ru.galkov.racenfctracer.common;
 
-import android.content.Context;
+
 import android.os.AsyncTask;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.mapview.MapView;
@@ -20,6 +20,12 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
 
     public void setMapView(MapView mapview1) {
         mapView = mapview1;
+    }
+
+    private void Close() {
+        // защита от утечки памяти.
+        mapView = null;
+
     }
 
 
@@ -67,6 +73,7 @@ public class AskMapPoints extends AsyncTask<String, Void, String> {
                 mapView.getMap().getMapObjects().addPlacemark(point);
             }}
         } catch (JSONException e) {	e.printStackTrace();}
+        Close();
     }
 
     private  void makeOutBoundJSON(){

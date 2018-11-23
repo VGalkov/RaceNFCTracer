@@ -107,6 +107,7 @@ public class SendUserNFCDiscovery extends AsyncTask<String, Void, String> {
                 }
         }
         catch (JSONException e) {	e.printStackTrace();}
+        Close();
     }
 
     // =============================================================

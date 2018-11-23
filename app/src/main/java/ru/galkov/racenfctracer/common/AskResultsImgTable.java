@@ -22,6 +22,10 @@ public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
     private ImageView image;
     private String IMGType = img_types.ALL.toString();
 
+    private void Close() {
+        // защита от утечки памяти.
+        image = null;
+    }
 
     public void setIMGType(String IMGType1) {
         this.IMGType = IMGType1;
@@ -55,14 +59,12 @@ public class  AskResultsImgTable  extends AsyncTask<String, Void, String> {
             byte [] b=baos.toByteArray();
             temp=Base64.encodeToString(b, Base64.DEFAULT);
             st.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
+        } catch (MalformedURLException | ProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Close();
         return temp;
     }
 

@@ -24,6 +24,12 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
     private writeMethod method = writeMethod.Set;
     private fileType fileType;
 
+    private void Close() {
+        // защита от утечки памяти.
+        context = null;
+        userLogger = null;
+    }
+
     public AskResultsTable(TextView userLogger1, fileType fileType2, Context context3) {
         this.userLogger = userLogger1;
         this.fileType = fileType2;
@@ -64,10 +70,7 @@ public class AskResultsTable extends AsyncTask<String, Void, String> {
             }catch (IOException ee) {
                 ee.printStackTrace();
             }
-
-
-        //}
-
+            Close();
     }
 
 

@@ -48,6 +48,12 @@ public class MainLogController extends ActivityFaceController {
         isStarted = false;
     }
 
+
+    public void restart() {
+        stop();
+        start();
+    }
+
     @Override
     public boolean isStarted() {
         return isStarted;

@@ -28,7 +28,6 @@ public class AskServerTime extends AsyncTask<String, Void, String> {
     }
 
 
-
     @Override
     protected void onPreExecute(){
         makeOutBoundJSON();
